@@ -1,0 +1,37 @@
+<navigation-bar title="历史问答" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="history-scroll" type="list" scroll-y>
+  <view class="history-page">
+    <view class="empty-box" wx:if="{{!records.length}}">还没有历史问答，先完成今天的问题吧</view>
+
+    <common-card wx:for="{{records}}" wx:key="recordId">
+      <view class="record-head" data-record-id="{{item.recordId}}" bindtap="onToggleDetail">
+        <view>
+          <view class="record-date">{{item.date}}</view>
+          <view class="record-meta-row">
+            <view class="record-tag">{{item.questionCategory}}</view>
+            <view class="record-source">{{item.questionSource === 'ai' ? 'AI 出题' : '题库出题'}}</view>
+          </view>
+          <view class="record-question">{{item.questionText}}</view>
+        </view>
+        <view class="record-toggle">{{activeRecordId === item.recordId ? '收起' : '展开'}}</view>
+      </view>
+
+      <view class="record-detail" wx:if="{{activeRecordId === item.recordId}}">
+        <view class="detail-title">我的回答</view>
+        <view class="detail-content">{{item.myAnswered ? item.myAnswer : '我还没有回答'}}</view>
+
+        <view class="detail-title detail-gap">TA 的回答</view>
+        <view class="detail-content">{{item.partnerAnswered ? item.partnerAnswer : 'TA 还没有回答'}}</view>
+
+        <view class="detail-title detail-gap">AI 小观察</view>
+        <view class="detail-content" wx:if="{{item.analysisReady}}">
+          相关性 {{item.relevanceScore}} 分（{{item.relevanceLevel}}）
+        </view>
+        <view class="detail-content" wx:if="{{item.analysisReady}}">{{item.analysisSummary}}</view>
+        <view class="detail-content" wx:if="{{item.analysisReady}}">{{item.analysisDifferences}}</view>
+        <view class="detail-content" wx:if="{{item.analysisReady}}">{{item.analysisSuggestion}}</view>
+        <view class="detail-content" wx:else>双方都回答后才会生成观察</view>
+      </view>
+    </common-card>
+  </view>
+</scroll-view>

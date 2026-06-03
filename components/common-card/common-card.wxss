@@ -1,0 +1,13 @@
+.common-card {
+  margin-top: 28rpx;
+  padding: 32rpx;
+  border-radius: 24rpx;
+  background: #ffffff;
+}
+
+.common-card-featured {
+  margin-top: 0;
+  padding: 44rpx 36rpx;
+  border-radius: 28rpx;
+  box-shadow: 0 16rpx 40rpx rgba(221, 119, 136, 0.12);
+}

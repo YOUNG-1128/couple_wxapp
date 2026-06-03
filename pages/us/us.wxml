@@ -1,0 +1,9 @@
+<navigation-bar title="我们" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="scroll-area" type="list" scroll-y>
+  <view class="page-content">
+    <view class="hero">
+      <view class="hero-title">关于我们</view>
+      <view class="hero-desc">以后这里可以展示恋爱天数、双方资料和小程序设置。</view>
+    </view>
+  </view>
+</scroll-view>

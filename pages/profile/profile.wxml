@@ -1,0 +1,88 @@
+<navigation-bar title="我们" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="profile-scroll" type="list" scroll-y>
+  <view class="profile-page">
+    <common-card featured="{{true}}">
+      <view class="profile-card-title">个人资料</view>
+      <view class="profile-card-desc">先接通真实微信登录，后续再继续做情侣绑定、站外提醒和双人同步。</view>
+
+      <view class="cloud-login-box">
+        <view class="cloud-login-copy">
+          <view class="cloud-login-title">{{cloudAuth.isCloudLoggedIn ? '已接通真实微信登录' : '还没有接通真实微信登录'}}</view>
+          <view class="cloud-login-desc" wx:if="{{cloudAuth.isCloudLoggedIn}}">
+            openid：{{cloudAuth.maskedOpenId}}
+          </view>
+          <view class="cloud-login-desc" wx:if="{{cloudAuth.isCloudLoggedIn && cloudAuth.cloudProfileSynced}}">
+            users 云集合已同步
+          </view>
+          <view class="cloud-login-desc" wx:if="{{cloudAuth.isCloudLoggedIn && !cloudAuth.cloudProfileSynced}}">
+            已登录，但 users 云集合还没同步成功
+          </view>
+          <view class="cloud-login-error" wx:if="{{cloudAuth.isCloudLoggedIn && cloudAuth.cloudProfileSyncError}}">
+            错误：{{cloudAuth.cloudProfileSyncError}}
+          </view>
+          <view class="cloud-login-desc" wx:if="{{!cloudAuth.isCloudLoggedIn}}">
+            先完成这一步，后面才能继续做账号绑定和站外消息提醒。
+          </view>
+        </view>
+        <button class="small-btn" bindtap="onWechatLogin" loading="{{loggingIn}}">
+          {{cloudAuth.isCloudLoggedIn ? '重新登录' : '微信登录'}}
+        </button>
+      </view>
+
+      <view class="binding-box">
+        <view class="binding-title">情侣绑定</view>
+        <view class="binding-status-chip {{bindingState.isBound ? 'binding-status-chip-bound' : (bindingState.hasInvite ? 'binding-status-chip-pending' : '')}}">{{bindingState.statusLabel}}</view>
+        <view class="binding-desc">{{bindingState.statusDesc}}</view>
+        <view class="binding-desc" wx:if="{{bindingState.hasInvite && !bindingState.isBound}}">
+          当前邀请码：{{bindingState.inviteCode}}
+        </view>
+        <view class="binding-partner" wx:if="{{bindingState.isBound && bindingState.partnerProfile}}">
+          <image class="binding-partner-avatar" src="{{bindingState.partnerProfile.avatarUrl}}" mode="aspectFill"></image>
+          <view class="binding-partner-copy">
+            <view class="binding-partner-name">{{bindingState.partnerProfile.nickName}}</view>
+            <view class="binding-partner-id">coupleId：{{bindingState.coupleId}}</view>
+          </view>
+        </view>
+        <view class="cloud-login-error" wx:if="{{bindingState.syncError}}">
+          错误：{{bindingState.syncError}}
+        </view>
+
+        <view class="binding-actions">
+          <button class="small-btn ghost" bindtap="onCreateInviteCode" loading="{{creatingInvite}}">生成邀请码</button>
+          <button class="small-btn ghost" bindtap="onOpenBindPage">输入邀请码</button>
+          <button class="small-btn ghost" wx:if="{{bindingState.hasInvite}}" bindtap="onCopyInviteCode">复制邀请码</button>
+          <button class="small-btn ghost" bindtap="onRefreshBindingStatus">刷新状态</button>
+        </view>
+      </view>
+
+      <view class="identity-switch">
+        <view
+          class="identity-chip {{currentUser.userId === item.userId ? 'identity-chip-active' : ''}}"
+          wx:for="{{users}}"
+          wx:key="userId"
+          data-user-id="{{item.userId}}"
+          bindtap="onSwitchUser"
+        >
+          {{item.nickName}}
+        </view>
+      </view>
+
+      <view class="current-profile">
+        <image class="profile-avatar" src="{{currentUser.avatarUrl}}" mode="aspectFill" bindtap="onChooseAvatar"></image>
+        <view class="profile-form">
+          <input class="nickname-input" value="{{nickNameDraft}}" maxlength="20" bindinput="onNickNameInput" />
+          <view class="profile-action-row">
+            <button class="small-btn ghost" bindtap="onChooseAvatar">更换头像</button>
+            <button class="small-btn" bindtap="onSaveNickName">保存昵称</button>
+          </view>
+        </view>
+      </view>
+    </common-card>
+
+    
+    <profile-status-stats list="{{recentStats}}"></profile-status-stats>
+    <profile-preferences list="{{preferences}}"></profile-preferences>
+    <profile-account-status account="{{account}}"></profile-account-status>
+    <profile-privacy-entry privacy="{{privacy}}" bind:privacytap="onPrivacyTap"></profile-privacy-entry>
+  </view>
+</scroll-view>

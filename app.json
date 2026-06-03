@@ -1,0 +1,70 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/hub/hub",
+    "pages/profile/profile",
+    "pages/couple-bind/couple-bind",
+    "pages/mailbox/mailbox",
+    "pages/letter/letter",
+    "pages/mailbox-compose/mailbox-compose",
+    "pages/mailbox-drafts/mailbox-drafts",
+    "pages/todo/todo",
+    "pages/album/album",
+    "pages/album-compose/album-compose",
+    "pages/album-drafts/album-drafts",
+    "pages/memory/memory",
+    "pages/footprint/footprint",
+    "pages/anniversary/anniversary",
+    "pages/anniversary-detail/anniversary-detail",
+    "pages/companion/companion",
+    "pages/mood/mood",
+    "pages/daily-question/daily-question",
+    "pages/question-history/question-history",
+    "pages/bucket-list/bucket-list",
+    "pages/checklist/checklist",
+    "pages/capsule/capsule"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "custom"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于识别当前城市，帮你快速记录共同足迹"
+    }
+  },
+  "tabBar": {
+    "color": "#8A8A8A",
+    "selectedColor": "#E85D75",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/hub/hub",
+        "text": "功能"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我们"
+      }
+    ]
+  },
+  "style": "v2",
+  "renderer": "skyline",
+  "rendererOptions": {
+    "skyline": {
+      "defaultDisplayBlock": true,
+      "defaultContentBox": true,
+      "disableABTest": true,
+      "sdkVersionBegin": "3.0.0",
+      "sdkVersionEnd": "15.255.255"
+    }
+  },
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

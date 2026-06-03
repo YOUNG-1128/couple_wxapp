@@ -1,0 +1,53 @@
+<navigation-bar title="写信" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="compose-scroll" type="list" scroll-y>
+  <view class="compose-page">
+    <common-card featured="{{true}}">
+      <view class="composer-head">
+        <image class="author-avatar" src="{{currentUser.avatarUrl}}" mode="aspectFill"></image>
+        <view class="author-meta">
+          <view class="author-name">{{currentUser.nickName || '我'}}</view>
+          <view class="author-target">收信人：{{partnerUser.nickName || 'TA'}}</view>
+        </view>
+      </view>
+
+      <input class="form-input" placeholder="标题（可选）" value="{{title}}" bindinput="onTitleInput" />
+      <textarea
+        class="form-textarea"
+        placeholder="写下想说的话..."
+        value="{{content}}"
+        maxlength="2000"
+        bindinput="onContentInput"
+      ></textarea>
+
+      <view class="image-grid" wx:if="{{images.length}}">
+        <view class="image-item" wx:for="{{images}}" wx:key="*this">
+          <image class="picked-image" src="{{item}}" mode="aspectFill" data-src="{{item}}" bindtap="onPreviewImage"></image>
+          <view class="remove-image" data-index="{{index}}" bindtap="onRemoveImage">×</view>
+        </view>
+      </view>
+
+      <view class="send-mode-row">
+        <view class="mode-chip {{sendMode === 'now' ? 'mode-chip-active' : ''}}" data-mode="now" bindtap="onSelectSendMode">即时发送</view>
+        <view class="mode-chip {{sendMode === 'scheduled' ? 'mode-chip-active' : ''}}" data-mode="scheduled" bindtap="onSelectSendMode">定时发送</view>
+      </view>
+
+      <view class="schedule-row" wx:if="{{sendMode === 'scheduled'}}">
+        <picker mode="date" value="{{scheduleDate}}" bindchange="onScheduleDateChange">
+          <view class="picker-cell">{{scheduleDate || '选择日期'}}</view>
+        </picker>
+        <picker mode="time" value="{{scheduleTime}}" bindchange="onScheduleTimeChange">
+          <view class="picker-cell">{{scheduleTime || '选择时间'}}</view>
+        </picker>
+      </view>
+
+      <view class="notice-tip" wx:if="{{sendMode === 'now'}}">发送时会尝试通过微信订阅消息提醒 TA</view>
+      <view class="notice-tip" wx:if="{{sendMode === 'scheduled'}}">定时信件会先保存提醒意图，后续需配合云端定时任务发送站外提醒</view>
+
+      <view class="compose-action-row">
+        <button class="ghost-btn" bindtap="onChooseImages">添加图片</button>
+        <button class="ghost-btn" bindtap="onSaveDraft">存草稿</button>
+        <button class="send-btn" bindtap="onSend" loading="{{sending}}">发送</button>
+      </view>
+    </common-card>
+  </view>
+</scroll-view>

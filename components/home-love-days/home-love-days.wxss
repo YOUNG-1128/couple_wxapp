@@ -1,0 +1,37 @@
+.label {
+  color: #9c6b76;
+  font-size: 26rpx;
+}
+
+.days-row {
+  display: flex;
+  align-items: baseline;
+  margin-top: 12rpx;
+}
+
+.days {
+  color: #e85d75;
+  font-size: 88rpx;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.unit {
+  margin-left: 10rpx;
+  color: #4a3238;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.date {
+  margin-top: 20rpx;
+  color: #7c6770;
+  font-size: 26rpx;
+}
+
+.note {
+  margin-top: 20rpx;
+  color: #5b464e;
+  font-size: 28rpx;
+  line-height: 1.6;
+}

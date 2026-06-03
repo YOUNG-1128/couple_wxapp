@@ -1,0 +1,28 @@
+page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #fff8f6;
+}
+
+.placeholder-scroll {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.placeholder-page {
+  padding: 32rpx;
+}
+
+.placeholder-title {
+  color: #2b2024;
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.placeholder-desc {
+  margin-top: 14rpx;
+  color: #7c6770;
+  font-size: 26rpx;
+  line-height: 1.6;
+}

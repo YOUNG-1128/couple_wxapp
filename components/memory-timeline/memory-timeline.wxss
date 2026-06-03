@@ -1,0 +1,33 @@
+.card-title {
+  color: #2b2024;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.footprint-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+}
+
+.entry-copy {
+  flex: 1;
+}
+
+.item-desc {
+  margin-top: 12rpx;
+  color: #7c6770;
+  font-size: 26rpx;
+  line-height: 1.55;
+}
+
+.entry-action {
+  flex: 0 0 auto;
+  padding: 14rpx 24rpx;
+  border-radius: 999rpx;
+  color: #e85d75;
+  font-size: 24rpx;
+  font-weight: 600;
+  background: #fff0f3;
+}

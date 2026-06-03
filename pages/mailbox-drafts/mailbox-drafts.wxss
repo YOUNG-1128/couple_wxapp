@@ -1,0 +1,95 @@
+page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #fff8f6;
+}
+
+.drafts-scroll {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.drafts-page {
+  padding: 32rpx;
+}
+
+.entry-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.entry-title {
+  color: #2b2024;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.entry-action {
+  color: #e85d75;
+  font-size: 25rpx;
+}
+
+.empty-box {
+  margin-top: 24rpx;
+  padding: 34rpx 28rpx;
+  border-radius: 20rpx;
+  color: #9b7f87;
+  font-size: 26rpx;
+  text-align: center;
+  background: #fff1f4;
+}
+
+.draft-title {
+  color: #4f3c43;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+.draft-content {
+  margin-top: 6rpx;
+  color: #8e6f78;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.draft-meta {
+  margin-top: 10rpx;
+  color: #9a7b84;
+  font-size: 23rpx;
+}
+
+.draft-action-row {
+  display: flex;
+  gap: 12rpx;
+  margin-top: 16rpx;
+}
+
+.delete-btn,
+.edit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 150rpx;
+  height: 56rpx;
+  margin: 0;
+  padding: 0 18rpx;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+}
+
+.delete-btn {
+  color: #8d6d77;
+  background: #f2e4e8;
+}
+
+.edit-btn {
+  color: #ffffff;
+  background: #e85d75;
+}
+
+.delete-btn::after,
+.edit-btn::after {
+  border: 0;
+}

@@ -1,0 +1,88 @@
+page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #fff8f6;
+}
+
+.mood-scroll {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.mood-page {
+  padding: 32rpx;
+}
+
+.page-title {
+  color: #2b2024;
+  font-size: 38rpx;
+  font-weight: 700;
+}
+
+.page-desc {
+  margin-top: 12rpx;
+  color: #7c6770;
+  font-size: 25rpx;
+  line-height: 1.55;
+}
+
+.section-title {
+  margin-top: 16rpx;
+  color: #2b2024;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.mood-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 14rpx;
+}
+
+.mood-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 54rpx;
+  padding: 0 18rpx;
+  border-radius: 999rpx;
+  color: #8d6d77;
+  font-size: 24rpx;
+  background: #fff0f3;
+}
+
+.mood-chip-active {
+  color: #ffffff;
+  background: #e85d75;
+}
+
+.note-input {
+  width: 100%;
+  min-height: 150rpx;
+  margin-top: 12rpx;
+  padding: 16rpx;
+  border-radius: 16rpx;
+  color: #2b2024;
+  font-size: 26rpx;
+  line-height: 1.5;
+  background: #fff5f8;
+  box-sizing: border-box;
+}
+
+.save-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 68rpx;
+  margin-top: 18rpx;
+  border-radius: 999rpx;
+  color: #ffffff;
+  font-size: 26rpx;
+  background: #e85d75;
+}
+
+.save-btn::after {
+  border: 0;
+}

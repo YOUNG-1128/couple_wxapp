@@ -1,0 +1,36 @@
+.card-title {
+  color: #2b2024;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.preference-list {
+  margin-top: 22rpx;
+}
+
+.preference-item {
+  padding: 22rpx 0;
+  border-top: 1rpx solid #f5dde2;
+}
+
+.preference-item:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.preference-item:last-child {
+  padding-bottom: 0;
+}
+
+.preference-label {
+  color: #9a7b84;
+  font-size: 25rpx;
+}
+
+.preference-value {
+  margin-top: 8rpx;
+  color: #4f3c43;
+  font-size: 29rpx;
+  font-weight: 600;
+  line-height: 1.45;
+}

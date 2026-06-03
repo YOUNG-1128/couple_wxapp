@@ -1,0 +1,106 @@
+<navigation-bar title="待办清单" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="todo-scroll" type="list" scroll-y>
+  <view class="todo-page">
+    <common-card featured="{{true}}">
+      <view class="page-title">{{pageTitle}}</view>
+      <view class="page-subtitle">{{pageSubtitle}}</view>
+      <view class="stats-grid">
+        <view class="stats-item">
+          <view class="stats-value">{{todayPendingCount}}</view>
+          <view class="stats-label">今日待完成</view>
+        </view>
+        <view class="stats-item">
+          <view class="stats-value">{{totalPendingCount}}</view>
+          <view class="stats-label">总未完成</view>
+        </view>
+        <view class="stats-item">
+          <view class="stats-value">{{couplePendingCount}}</view>
+          <view class="stats-label">情侣待办</view>
+        </view>
+      </view>
+    </common-card>
+
+    <view class="filter-row">
+      <view
+        class="filter-chip {{activeFilter === item.key ? 'filter-chip-active' : ''}}"
+        wx:for="{{filters}}"
+        wx:key="key"
+        data-filter="{{item.key}}"
+        bindtap="onFilterTap"
+      >
+        {{item.label}}
+      </view>
+    </view>
+
+    <button class="new-todo-btn" bindtap="onOpenCreator">+ 新建待办</button>
+
+    <view class="empty-box" wx:if="{{!todos.length}}">这里还没有待办，先写下一件想一起完成的小事吧</view>
+
+    <view class="todo-card {{item.completed ? 'todo-card-completed' : ''}} {{item.isOverdue ? 'todo-card-overdue' : ''}}" wx:for="{{todos}}" wx:key="todoId">
+      <view class="todo-main-row">
+        <view class="avatar-wrap {{item.avatarMode === 'couple' ? 'avatar-wrap-couple' : ''}}">
+          <image
+            class="avatar {{item.avatarMode === 'couple' ? 'avatar-couple' : ''}}"
+            wx:for="{{item.avatarUsers}}"
+            wx:for-item="avatarUser"
+            wx:key="userId"
+            src="{{avatarUser.avatarUrl}}"
+            mode="aspectFill"
+          ></image>
+        </view>
+
+        <view class="todo-info">
+          <view class="todo-title-row">
+            <view class="todo-title">{{item.title}}</view>
+            <view class="status-tag status-tag-{{item.statusVariant}}">{{item.statusLabel}}</view>
+          </view>
+          <view class="todo-note" wx:if="{{item.note}}">{{item.note}}</view>
+          <view class="todo-meta-row">
+            <view class="todo-meta">{{item.typeLabel}} · 截止：{{item.dueDateLabel}}</view>
+            <view class="due-today-tag" wx:if="{{item.dueHint}}">{{item.dueHint}}</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="todo-action-row">
+        <button class="toggle-btn {{item.completed ? 'toggle-btn-done' : ''}}" data-todo-id="{{item.todoId}}" bindtap="onToggleTodo">
+          {{item.completed ? '取消完成' : '完成'}}
+        </button>
+        <button class="delete-btn" data-todo-id="{{item.todoId}}" bindtap="onDeleteTodo">删除</button>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+
+<view class="creator-mask" wx:if="{{showCreator}}" bindtap="onCloseCreator">
+  <view class="creator-panel" catchtap="noop">
+    <view class="panel-title">新增待办</view>
+
+    <input class="form-input" value="{{formTitle}}" placeholder="待办标题" maxlength="40" bindinput="onTitleInput" />
+    <textarea class="form-textarea" value="{{formNote}}" placeholder="备注（可选）" maxlength="200" bindinput="onNoteInput"></textarea>
+
+    <view class="target-row">
+      <view class="target-chip {{formTarget === currentUser.userId ? 'target-chip-active' : ''}}" data-target="{{currentUser.userId}}" bindtap="onSelectTarget">
+        {{currentUser.nickName || '我'}}的待办
+      </view>
+      <view class="target-chip {{formTarget === partnerUser.userId ? 'target-chip-active' : ''}}" data-target="{{partnerUser.userId}}" bindtap="onSelectTarget">
+        {{partnerUser.nickName || 'TA'}}的待办
+      </view>
+      <view class="target-chip {{formTarget === 'couple' ? 'target-chip-active' : ''}}" data-target="couple" bindtap="onSelectTarget">
+        情侣待办
+      </view>
+    </view>
+
+    <view class="due-row">
+      <picker mode="date" value="{{formDueDate}}" bindchange="onDueDateChange">
+        <view class="due-picker">{{formDueDate || '选择截止日期（可选）'}}</view>
+      </picker>
+      <button class="clear-due" wx:if="{{formDueDate}}" bindtap="onClearDueDate">清除</button>
+    </view>
+
+    <view class="panel-actions">
+      <button class="panel-btn ghost" bindtap="onCloseCreator">取消</button>
+      <button class="panel-btn" bindtap="onSaveTodo">保存</button>
+    </view>
+  </view>
+</view>

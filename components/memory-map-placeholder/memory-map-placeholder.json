@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "common-card": "/components/common-card/common-card"
+  }
+}

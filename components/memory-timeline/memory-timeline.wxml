@@ -1,0 +1,9 @@
+<common-card featured="{{true}}">
+  <view class="footprint-entry" bindtap="onTap">
+    <view class="entry-copy">
+      <view class="card-title">{{entry.title || '我们的足迹'}}</view>
+      <view class="item-desc">{{entry.desc}}</view>
+    </view>
+    <view class="entry-action">去看看</view>
+  </view>
+</common-card>

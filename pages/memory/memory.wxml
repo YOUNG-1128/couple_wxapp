@@ -1,0 +1,10 @@
+<navigation-bar title="回忆" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="memory-scroll" type="list" scroll-y>
+  <view class="memory-page">
+    <memory-timeline entry="{{footprintEntry}}" bind:footprinttap="onFootprintTap"></memory-timeline>
+    <memory-anniversary-list list="{{anniversaries}}"></memory-anniversary-list>
+    <memory-album-entry album="{{album}}" bind:albumtap="onAlbumTap"></memory-album-entry>
+    <memory-capsule-entry bind:capsuletap="onCapsuleTap"></memory-capsule-entry>
+    <memory-map-placeholder info="{{map}}"></memory-map-placeholder>
+  </view>
+</scroll-view>

@@ -1,0 +1,16 @@
+<common-card>
+  <view class="card-title">情侣打卡100件事</view>
+  <view class="progress-row">
+    <view class="progress-text">已完成 {{checklist.completed}} / {{checklist.total}}</view>
+    <view class="progress-percent">{{checklist.percent}}%</view>
+  </view>
+  <view class="progress-track">
+    <view class="progress-fill" style="width: {{checklist.percent}}%;"></view>
+  </view>
+  <view class="task-list">
+    <view class="task-item" wx:for="{{checklist.examples}}" wx:key="text" data-index="{{index}}" bindtap="onTaskTap">
+      <view class="check {{item.done ? 'check-done' : ''}}"></view>
+      <view class="task-text {{item.done ? 'task-done' : ''}}">{{item.text}}</view>
+    </view>
+  </view>
+</common-card>

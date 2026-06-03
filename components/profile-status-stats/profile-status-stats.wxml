@@ -1,0 +1,10 @@
+<common-card featured="{{true}}">
+  <view class="card-title">我们的最近状态</view>
+  <view class="stats-grid">
+    <view class="stat-item" wx:for="{{list}}" wx:key="title">
+      <view class="stat-value">{{item.value}}</view>
+      <view class="stat-title">{{item.title}}</view>
+      <view class="stat-desc">{{item.desc}}</view>
+    </view>
+  </view>
+</common-card>

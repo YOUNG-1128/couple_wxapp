@@ -1,0 +1,55 @@
+.card-title {
+  color: #2b2024;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.mood-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 160rpx;
+  margin-top: 24rpx;
+  padding: 24rpx;
+  border-radius: 22rpx;
+  color: #4f3c43;
+  font-size: 28rpx;
+  line-height: 1.5;
+  background: #fff8f6;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-top: 22rpx;
+}
+
+.mood-tag {
+  padding: 12rpx 22rpx;
+  border-radius: 999rpx;
+  color: #8b6470;
+  font-size: 25rpx;
+  background: #ffecef;
+}
+
+.mood-tag-active {
+  color: #ffffff;
+  background: #e85d75;
+}
+
+.submit-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 76rpx;
+  margin-top: 26rpx;
+  border-radius: 999rpx;
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 600;
+  background: #e85d75;
+}
+
+.submit-button::after {
+  border: 0;
+}

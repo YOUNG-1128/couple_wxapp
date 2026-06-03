@@ -1,0 +1,262 @@
+page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #fff8f6;
+}
+
+.profile-scroll {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.profile-page {
+  padding: 32rpx 32rpx 56rpx;
+}
+
+.profile-card-title {
+  color: #2b2024;
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.profile-card-desc {
+  margin-top: 12rpx;
+  color: #7c6770;
+  font-size: 25rpx;
+  line-height: 1.55;
+}
+
+.cloud-login-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+  margin-top: 20rpx;
+  padding: 20rpx;
+  border-radius: 20rpx;
+  background: #fff1f4;
+}
+
+.cloud-login-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.cloud-login-title {
+  color: #2b2024;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.cloud-login-desc {
+  margin-top: 8rpx;
+  color: #8d6d77;
+  font-size: 23rpx;
+  line-height: 1.5;
+}
+
+.cloud-login-error {
+  margin-top: 8rpx;
+  color: #c6586d;
+  font-size: 22rpx;
+  line-height: 1.5;
+}
+
+.identity-switch {
+  display: flex;
+  gap: 14rpx;
+  margin-top: 18rpx;
+}
+
+.binding-box {
+  margin-top: 18rpx;
+  padding: 20rpx;
+  border-radius: 20rpx;
+  background: #fff5f8;
+}
+
+.binding-title {
+  color: #2b2024;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.binding-status-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140rpx;
+  height: 52rpx;
+  margin-top: 12rpx;
+  padding: 0 18rpx;
+  border-radius: 999rpx;
+  color: #8d6d77;
+  font-size: 23rpx;
+  background: #fff0f3;
+}
+
+.binding-status-chip-bound {
+  color: #ffffff;
+  background: #e85d75;
+}
+
+.binding-status-chip-pending {
+  color: #c6586d;
+  background: #ffe3ea;
+}
+
+.binding-desc {
+  margin-top: 8rpx;
+  color: #8d6d77;
+  font-size: 23rpx;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.binding-partner {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  margin-top: 16rpx;
+}
+
+.binding-partner-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #ffecef;
+}
+
+.binding-partner-copy {
+  min-width: 0;
+}
+
+.binding-partner-name {
+  color: #2b2024;
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.binding-partner-id {
+  margin-top: 6rpx;
+  color: #8d6d77;
+  font-size: 22rpx;
+  word-break: break-all;
+}
+
+.binding-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 16rpx;
+}
+
+.identity-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120rpx;
+  height: 58rpx;
+  padding: 0 18rpx;
+  border-radius: 999rpx;
+  color: #8d6d77;
+  font-size: 24rpx;
+  background: #fff4f6;
+}
+
+.identity-chip-active {
+  color: #ffffff;
+  background: #e85d75;
+}
+
+.current-profile {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  margin-top: 20rpx;
+}
+
+.profile-avatar {
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 50%;
+  background: #ffecef;
+}
+
+.profile-form {
+  flex: 1;
+  min-width: 0;
+}
+
+.nickname-input {
+  height: 64rpx;
+  padding: 0 20rpx;
+  border-radius: 999rpx;
+  color: #2b2024;
+  font-size: 26rpx;
+  background: #fff5f8;
+}
+
+.profile-action-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12rpx;
+  margin-top: 14rpx;
+}
+
+.small-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 136rpx;
+  height: 56rpx;
+  margin: 0;
+  padding: 0 18rpx;
+  border-radius: 999rpx;
+  color: #ffffff;
+  font-size: 24rpx;
+  background: #e85d75;
+}
+
+.small-btn.ghost {
+  color: #8d6d77;
+  background: #f9edf0;
+}
+
+.small-btn::after {
+  border: 0;
+}
+
+.todo-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+}
+
+.todo-entry-title {
+  color: #2b2024;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.todo-entry-desc {
+  margin-top: 8rpx;
+  color: #8a7079;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.todo-entry-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 108rpx;
+  height: 54rpx;
+  padding: 0 16rpx;
+  border-radius: 999rpx;
+  color: #ffffff;
+  font-size: 24rpx;
+  background: #e85d75;
+}

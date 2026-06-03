@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "navigation-bar": "/components/navigation-bar/navigation-bar",
+    "memory-timeline": "/components/memory-timeline/memory-timeline",
+    "memory-anniversary-list": "/components/memory-anniversary-list/memory-anniversary-list",
+    "memory-album-entry": "/components/memory-album-entry/memory-album-entry",
+    "memory-capsule-entry": "/components/memory-capsule-entry/memory-capsule-entry",
+    "memory-map-placeholder": "/components/memory-map-placeholder/memory-map-placeholder"
+  }
+}

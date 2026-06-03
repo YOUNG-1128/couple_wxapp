@@ -1,0 +1,28 @@
+.capsule-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+}
+
+.entry-title {
+  color: #2b2024;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.entry-desc {
+  margin-top: 10rpx;
+  color: #9a7b84;
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.entry-action {
+  flex: 0 0 auto;
+  padding: 10rpx 20rpx;
+  border-radius: 999rpx;
+  color: #ffffff;
+  font-size: 25rpx;
+  background: #e85d75;
+}

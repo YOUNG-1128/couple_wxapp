@@ -1,0 +1,10 @@
+<common-card>
+  <view class="entry-head">
+    <view>
+      <view class="entry-title">{{entry.title}}</view>
+      <view class="entry-question">{{entry.question}}</view>
+    </view>
+    <button class="entry-button" bindtap="onTap">去回答</button>
+  </view>
+  <view class="entry-desc">{{entry.desc}}</view>
+</common-card>

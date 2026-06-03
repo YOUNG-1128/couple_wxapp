@@ -1,0 +1,45 @@
+.entry-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24rpx;
+}
+
+.entry-title {
+  color: #2b2024;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.entry-question {
+  margin-top: 14rpx;
+  color: #4f3c43;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+.entry-button {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-width: 132rpx;
+  height: 64rpx;
+  margin: 0;
+  padding: 0 22rpx;
+  border-radius: 999rpx;
+  color: #ffffff;
+  font-size: 26rpx;
+  background: #e85d75;
+}
+
+.entry-button::after {
+  border: 0;
+}
+
+.entry-desc {
+  margin-top: 18rpx;
+  color: #9a7b84;
+  font-size: 26rpx;
+  line-height: 1.5;
+}

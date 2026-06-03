@@ -1,0 +1,98 @@
+page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #fff8f6;
+}
+
+.history-scroll {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.history-page {
+  padding: 32rpx;
+}
+
+.empty-box {
+  margin-top: 12rpx;
+  padding: 30rpx 26rpx;
+  border-radius: 20rpx;
+  color: #9b7f87;
+  font-size: 24rpx;
+  text-align: center;
+  background: #fff1f4;
+}
+
+.record-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14rpx;
+}
+
+.record-date {
+  color: #aa8993;
+  font-size: 23rpx;
+}
+
+.record-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  margin-top: 8rpx;
+}
+
+.record-tag,
+.record-source {
+  padding: 6rpx 14rpx;
+  border-radius: 999rpx;
+  font-size: 20rpx;
+  line-height: 1;
+}
+
+.record-tag {
+  color: #d85a72;
+  background: #fff0f4;
+}
+
+.record-source {
+  color: #8d6d77;
+  background: #fff6f8;
+}
+
+.record-question {
+  margin-top: 8rpx;
+  color: #2b2024;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+.record-toggle {
+  color: #e85d75;
+  font-size: 24rpx;
+}
+
+.record-detail {
+  margin-top: 14rpx;
+  border-top: 1rpx solid #f2e6ea;
+  padding-top: 14rpx;
+}
+
+.detail-title {
+  color: #6e5660;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.detail-gap {
+  margin-top: 14rpx;
+}
+
+.detail-content {
+  margin-top: 8rpx;
+  color: #5c4950;
+  font-size: 24rpx;
+  line-height: 1.75;
+  white-space: pre-wrap;
+}

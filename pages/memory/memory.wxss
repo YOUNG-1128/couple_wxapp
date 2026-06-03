@@ -1,0 +1,15 @@
+page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #fff8f6;
+}
+
+.memory-scroll {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.memory-page {
+  padding: 32rpx 32rpx 56rpx;
+}

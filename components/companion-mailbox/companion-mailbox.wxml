@@ -1,0 +1,16 @@
+<common-card featured="{{true}}">
+  <view class="card-title">{{mailbox.title}}</view>
+  <textarea class="mood-input" value="{{moodText}}" placeholder="{{mailbox.placeholder}}" maxlength="120" bindinput="onInput"></textarea>
+  <view class="tag-list">
+    <view
+      class="mood-tag {{activeTag === item ? 'mood-tag-active' : ''}}"
+      wx:for="{{mailbox.tags}}"
+      wx:key="*this"
+      data-tag="{{item}}"
+      bindtap="onTagTap"
+    >
+      {{item}}
+    </view>
+  </view>
+  <button class="submit-button" bindtap="onSubmit">提交心情</button>
+</common-card>

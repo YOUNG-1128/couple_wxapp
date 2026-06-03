@@ -1,0 +1,15 @@
+<common-card>
+  <view class="card-title">安慰模式</view>
+  <view class="comfort-desc">选一个此刻最需要的陪伴方式。</view>
+  <view class="mode-list">
+    <button
+      class="mode-button"
+      wx:for="{{modes}}"
+      wx:key="*this"
+      data-text="{{item}}"
+      bindtap="onModeTap"
+    >
+      {{item}}
+    </button>
+  </view>
+</common-card>

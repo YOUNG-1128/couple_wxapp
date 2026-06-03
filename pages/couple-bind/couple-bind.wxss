@@ -1,0 +1,46 @@
+page {
+  min-height: 100vh;
+  background: #fff8f6;
+}
+
+.bind-page {
+  padding: 32rpx;
+}
+
+.bind-title {
+  color: #2b2024;
+  font-size: 36rpx;
+  font-weight: 700;
+}
+
+.bind-desc {
+  margin-top: 12rpx;
+  color: #7c6770;
+  font-size: 25rpx;
+  line-height: 1.55;
+}
+
+.bind-input {
+  height: 88rpx;
+  margin-top: 24rpx;
+  padding: 0 24rpx;
+  border-radius: 24rpx;
+  color: #2b2024;
+  font-size: 28rpx;
+  background: #fff5f8;
+}
+
+.bind-btn {
+  flex: 1;
+  height: 80rpx;
+  margin-top: 24rpx;
+  border: 0;
+  border-radius: 999rpx;
+  color: #fff;
+  font-size: 28rpx;
+  background: #e85d75;
+}
+
+.bind-btn::after {
+  border: 0;
+}

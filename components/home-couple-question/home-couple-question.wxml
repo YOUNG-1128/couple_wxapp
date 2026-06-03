@@ -1,0 +1,25 @@
+<common-card>
+  <view class="card-title">今日情侣问答</view>
+  <view class="question">{{question.questionText}}</view>
+
+  <block wx:if="{{!question.myAnswered}}">
+    <textarea class="answer-input" value="{{answerText}}" placeholder="写下你的答案" maxlength="80" bindinput="onInput"></textarea>
+    <button class="answer-button" bindtap="onSubmit">提交答案</button>
+  </block>
+
+  <block wx:elif="{{question.myAnswered && !question.partnerAnswered}}">
+    <view class="hint">{{question.waitingText}}</view>
+  </block>
+
+  <block wx:else>
+    <view class="answer-box">
+      <view class="answer-label">我的答案</view>
+      <view class="answer-text">{{question.myAnswer}}</view>
+    </view>
+    <view class="answer-box">
+      <view class="answer-label">TA 的答案</view>
+      <view class="answer-text">{{question.partnerAnswer}}</view>
+    </view>
+    <view class="match-result">{{question.matchScore}} 分 · {{question.matchText}}</view>
+  </block>
+</common-card>

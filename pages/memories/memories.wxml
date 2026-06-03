@@ -1,0 +1,9 @@
+<navigation-bar title="回忆" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="scroll-area" type="list" scroll-y>
+  <view class="page-content">
+    <view class="hero">
+      <view class="hero-title">回忆相册</view>
+      <view class="hero-desc">以后这里可以放照片、纪念日和属于你们的时间线。</view>
+    </view>
+  </view>
+</scroll-view>

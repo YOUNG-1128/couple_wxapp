@@ -1,0 +1,37 @@
+.card-title {
+  color: #2b2024;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.comfort-desc {
+  margin-top: 12rpx;
+  color: #9a7b84;
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.mode-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-top: 22rpx;
+}
+
+.mode-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 156rpx;
+  height: 66rpx;
+  margin: 0;
+  padding: 0 24rpx;
+  border-radius: 999rpx;
+  color: #e85d75;
+  font-size: 26rpx;
+  background: #ffecef;
+}
+
+.mode-button::after {
+  border: 0;
+}

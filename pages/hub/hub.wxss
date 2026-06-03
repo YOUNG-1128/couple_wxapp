@@ -1,0 +1,64 @@
+page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #fff8f6;
+}
+
+.hub-scroll {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.hub-page {
+  padding: 32rpx;
+}
+
+.hub-title {
+  color: #2b2024;
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.hub-subtitle {
+  margin-top: 12rpx;
+  color: #7c6770;
+  font-size: 26rpx;
+  line-height: 1.55;
+}
+
+.hub-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 24rpx;
+}
+
+.hub-item {
+  width: calc(25% - 12rpx);
+  min-height: 182rpx;
+  margin-bottom: 16rpx;
+  padding: 18rpx 10rpx;
+  border-radius: 20rpx;
+  text-align: center;
+  background: #ffffff;
+}
+
+.hub-icon {
+  font-size: 36rpx;
+  line-height: 1;
+}
+
+.hub-name {
+  margin-top: 10rpx;
+  color: #2b2024;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.hub-desc {
+  margin-top: 8rpx;
+  color: #9a7b84;
+  font-size: 20rpx;
+  line-height: 1.35;
+}

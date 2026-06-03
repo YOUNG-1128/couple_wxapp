@@ -1,0 +1,17 @@
+<navigation-bar title="功能" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="hub-scroll" type="list" scroll-y>
+  <view class="hub-page">
+    <common-card featured="{{true}}">
+      <view class="hub-title">功能中心</view>
+      <view class="hub-subtitle">把常用功能都放在一个地方，找起来更轻松。</view>
+    </common-card>
+
+    <view class="hub-grid">
+      <view class="hub-item" wx:for="{{features}}" wx:key="key" data-target="{{item.target}}" bindtap="onFeatureTap">
+        <view class="hub-icon">{{item.icon}}</view>
+        <view class="hub-name">{{item.name}}</view>
+        <view class="hub-desc">{{item.desc}}</view>
+      </view>
+    </view>
+  </view>
+</scroll-view>

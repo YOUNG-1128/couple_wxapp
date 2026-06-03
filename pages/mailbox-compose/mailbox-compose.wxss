@@ -1,0 +1,174 @@
+page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #fff8f6;
+}
+
+.compose-scroll {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.compose-page {
+  padding: 32rpx;
+}
+
+.composer-head {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.author-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #ffecef;
+}
+
+.author-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.author-name {
+  color: #2b2024;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.author-target {
+  color: #8f727b;
+  font-size: 23rpx;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  margin-top: 14rpx;
+  padding: 16rpx;
+  border-radius: 14rpx;
+  color: #2b2024;
+  font-size: 26rpx;
+  background: #fff5f8;
+  box-sizing: border-box;
+}
+
+.form-textarea {
+  min-height: 300rpx;
+}
+
+.image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-top: 12rpx;
+}
+
+.image-item {
+  position: relative;
+  width: 140rpx;
+  height: 140rpx;
+}
+
+.picked-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 12rpx;
+  background: #ffecef;
+}
+
+.remove-image {
+  position: absolute;
+  top: -10rpx;
+  right: -10rpx;
+  width: 34rpx;
+  height: 34rpx;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 34rpx;
+  color: #fff;
+  background: rgba(43, 32, 36, 0.6);
+}
+
+.send-mode-row {
+  display: flex;
+  gap: 12rpx;
+  margin-top: 14rpx;
+}
+
+.mode-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 50rpx;
+  padding: 0 16rpx;
+  border-radius: 999rpx;
+  color: #8d6d77;
+  font-size: 24rpx;
+  background: #f8edf0;
+}
+
+.mode-chip-active {
+  color: #fff;
+  background: #d78697;
+}
+
+.schedule-row {
+  display: flex;
+  gap: 10rpx;
+  margin-top: 12rpx;
+}
+
+.notice-tip {
+  margin-top: 14rpx;
+  color: #8d6d77;
+  font-size: 23rpx;
+  line-height: 1.5;
+}
+
+.picker-cell {
+  min-width: 180rpx;
+  height: 52rpx;
+  padding: 0 14rpx;
+  border-radius: 999rpx;
+  line-height: 52rpx;
+  color: #7f616b;
+  font-size: 24rpx;
+  background: #f8edf0;
+}
+
+.compose-action-row {
+  display: flex;
+  gap: 10rpx;
+  margin-top: 16rpx;
+}
+
+.ghost-btn,
+.send-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 56rpx;
+  margin: 0;
+  padding: 0 16rpx;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+}
+
+.ghost-btn {
+  color: #8d6d77;
+  background: #f2e4e8;
+}
+
+.send-btn {
+  color: #fff;
+  background: #d78697;
+}
+
+.ghost-btn::after,
+.send-btn::after {
+  border: 0;
+}

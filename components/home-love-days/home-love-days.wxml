@@ -1,0 +1,9 @@
+<common-card featured="{{true}}">
+  <view class="label">恋爱天数</view>
+  <view class="days-row">
+    <text class="days">{{info.days}}</text>
+    <text class="unit">天</text>
+  </view>
+  <view class="date">始于 {{info.startDate}}</view>
+  <view class="note">{{info.note}}</view>
+</common-card>

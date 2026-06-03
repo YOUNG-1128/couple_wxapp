@@ -1,0 +1,9 @@
+<common-card>
+  <view class="capsule-entry" bindtap="onTap">
+    <view>
+      <view class="entry-title">时光胶囊</view>
+      <view class="entry-desc">写一段话，留给未来某一天的 TA。</view>
+    </view>
+    <view class="entry-action">去封存</view>
+  </view>
+</common-card>

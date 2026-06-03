@@ -1,0 +1,151 @@
+page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #fff8f6;
+}
+
+.bucket-scroll {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.bucket-page {
+  padding: 32rpx 32rpx 56rpx;
+}
+
+.progress-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 8;
+  padding-top: 4rpx;
+  background: #fff8f6;
+}
+
+.page-title {
+  color: #2b2024;
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.page-subtitle {
+  margin-top: 10rpx;
+  color: #9a7b84;
+  font-size: 24rpx;
+}
+
+.progress-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14rpx;
+  color: #8c6f79;
+  font-size: 24rpx;
+}
+
+.progress-track {
+  height: 16rpx;
+  margin-top: 12rpx;
+  border-radius: 999rpx;
+  background: #f4e5ea;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f7a6b7, #e85d75);
+}
+
+.section-title {
+  margin-top: 28rpx;
+  color: #5b4650;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.section-title-done {
+  margin-top: 42rpx;
+}
+
+.empty-box {
+  margin-top: 12rpx;
+  padding: 30rpx 26rpx;
+  border-radius: 20rpx;
+  color: #9b7f87;
+  font-size: 24rpx;
+  text-align: center;
+  background: #fff1f4;
+}
+
+.bucket-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 18rpx;
+  margin-top: 14rpx;
+  padding: 22rpx 20rpx;
+  border-radius: 20rpx;
+  background: #ffffff;
+}
+
+.pending-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 2rpx;
+}
+
+.pending-item {
+  width: calc(50% - 10rpx);
+  margin-top: 12rpx;
+  min-height: 128rpx;
+  padding: 18rpx 16rpx;
+  box-sizing: border-box;
+}
+
+.bucket-item-done {
+  background: #fff5f8;
+}
+
+.item-left {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  flex: 0 0 auto;
+  width: 104rpx;
+}
+
+.item-icon {
+  font-size: 28rpx;
+}
+
+.item-seq {
+  color: #b08b96;
+  font-size: 24rpx;
+}
+
+.item-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-title {
+  color: #2b2024;
+  font-size: 27rpx;
+  line-height: 1.45;
+  word-break: break-all;
+}
+
+.bucket-item-done .item-title {
+  color: #9d7f88;
+}
+
+.item-time {
+  margin-top: 8rpx;
+  color: #b1949d;
+  font-size: 22rpx;
+}
+
+.empty-box-done {
+  background: #fff4f7;
+}

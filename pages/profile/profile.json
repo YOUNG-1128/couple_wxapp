@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "navigation-bar": "/components/navigation-bar/navigation-bar",
+    "common-card": "/components/common-card/common-card",
+    "profile-status-stats": "/components/profile-status-stats/profile-status-stats",
+    "profile-preferences": "/components/profile-preferences/profile-preferences",
+    "profile-account-status": "/components/profile-account-status/profile-account-status",
+    "profile-privacy-entry": "/components/profile-privacy-entry/profile-privacy-entry"
+  }
+}

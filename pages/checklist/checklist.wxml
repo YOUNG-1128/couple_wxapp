@@ -1,0 +1,9 @@
+<navigation-bar title="100件事" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="placeholder-scroll" type="list" scroll-y>
+  <view class="placeholder-page">
+    <common-card featured="{{true}}">
+      <view class="placeholder-title">{{title}}</view>
+      <view class="placeholder-desc">{{desc}}</view>
+    </common-card>
+  </view>
+</scroll-view>

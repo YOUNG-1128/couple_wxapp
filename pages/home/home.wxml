@@ -1,0 +1,81 @@
+<navigation-bar title="首页" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="home-scroll" type="list" scroll-y>
+  <view class="home-page">
+    <view class="hero-card">
+      <view class="hero-main">
+        <view class="hero-badge">恋爱天数</view>
+        <view class="hero-days-row">
+          <text class="hero-days">{{loveInfo.days}}</text>
+          <text class="hero-days-unit">天</text>
+        </view>
+        <view class="hero-line">{{heroLine}}</view>
+        <view class="hero-note">始于 {{loveInfo.startDate}}</view>
+      </view>
+
+      <view class="heart-action-row">
+        <button class="heart-btn" bindtap="onSendMissYou">
+          <text class="heart-icon">❤</text>
+          <text class="heart-text">想 TA</text>
+        </button>
+      </view>
+
+      <view class="avatar-row">
+        <view class="avatar-group" bindtap="onOpenMyStatusPanel">
+          <image class="avatar" src="{{myUser.avatarUrl}}" mode="aspectFill"></image>
+          <view class="avatar-name">{{myUser.nickName || '我'}}</view>
+          <view class="status-bubble {{hasMyStatus ? 'status-bubble-active' : ''}}">{{myStatusText}}</view>
+        </view>
+
+        <view class="avatar-group">
+          <image class="avatar" src="{{partnerUser.avatarUrl}}" mode="aspectFill"></image>
+          <view class="avatar-name">{{partnerUser.nickName || 'TA'}}</view>
+          <view class="status-bubble {{hasPartnerStatus ? 'status-bubble-active' : ''}}">{{partnerStatusText}}</view>
+        </view>
+      </view>
+    </view>
+
+    <common-card>
+      <view class="section-title">今天要做的事</view>
+      <view wx:if="{{todayTasks.length}}" class="task-list">
+        <view class="task-item" wx:for="{{todayTasks}}" wx:key="id">
+          <view class="task-main">
+            <view class="task-title">{{item.title}}</view>
+            <view class="task-subtitle">{{item.subtitle}}</view>
+          </view>
+          <button class="task-btn" data-target-page="{{item.targetPage}}" data-target-section="{{item.targetSection}}" bindtap="onTaskTap">{{item.actionText || '去处理'}}</button>
+        </view>
+      </view>
+      <view wx:else class="empty-text">今天要做的事已经完成了，去和 TA 说句话吧</view>
+    </common-card>
+
+    <common-card bindtap="onAnniversaryTap">
+      <view class="section-title">接下来值得期待的日子</view>
+      <view wx:if="{{monthAnniversaries.length}}" class="anniversary-list">
+        <view class="anniversary-item" wx:for="{{monthAnniversaries}}" wx:key="title">
+          <view class="item-title">{{item.title}}</view>
+          <view class="item-meta">{{item.date}} · 还有 {{item.daysLeft}} 天</view>
+        </view>
+      </view>
+      <view wx:else class="empty-text">未来 30 天暂时没有纪念日</view>
+    </common-card>
+  </view>
+</scroll-view>
+
+<view class="status-panel-mask" wx:if="{{showStatusPanel}}" bindtap="onCloseStatusPanel">
+  <view class="status-panel" catchtap="noop">
+    <view class="panel-title">设置今天的状态</view>
+    <view class="panel-subtitle">仅可设置“我的状态”</view>
+
+    <view class="status-options">
+      <view
+        class="status-chip {{selectedMyStatus === item.value ? 'status-chip-active' : ''}}"
+        wx:for="{{statusOptions}}"
+        wx:key="value"
+        data-status="{{item.value}}"
+        bindtap="onSelectMyStatus"
+      >
+        {{item.label}}
+      </view>
+    </view>
+  </view>
+</view>

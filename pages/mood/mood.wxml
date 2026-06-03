@@ -1,0 +1,29 @@
+<navigation-bar title="今日状态" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="mood-scroll" type="list" scroll-y>
+  <view class="mood-page">
+    <common-card featured="{{true}}">
+      <view class="page-title">记录今天的状态</view>
+      <view class="page-desc">每天一点点，后续可以汇总成每周和每月统计。</view>
+    </common-card>
+
+    <common-card>
+      <view class="section-title">选择状态</view>
+      <view class="mood-grid">
+        <view
+          class="mood-chip {{selectedMood === item.value ? 'mood-chip-active' : ''}}"
+          wx:for="{{options}}"
+          wx:key="value"
+          data-mood="{{item.value}}"
+          bindtap="onSelectMood"
+        >
+          {{item.label}}
+        </view>
+      </view>
+
+      <view class="section-title">备注（可选）</view>
+      <textarea class="note-input" value="{{note}}" maxlength="120" placeholder="例如：今天工作有点忙，但很想你" bindinput="onNoteInput"></textarea>
+
+      <button class="save-btn" bindtap="onSave">保存今天的状态</button>
+    </common-card>
+  </view>
+</scroll-view>

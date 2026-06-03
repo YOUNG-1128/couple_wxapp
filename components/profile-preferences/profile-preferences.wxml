@@ -1,0 +1,9 @@
+<common-card featured="{{true}}">
+  <view class="card-title">偏好记录</view>
+  <view class="preference-list">
+    <view class="preference-item" wx:for="{{list}}" wx:key="label">
+      <view class="preference-label">{{item.label}}</view>
+      <view class="preference-value">{{item.value}}</view>
+    </view>
+  </view>
+</common-card>

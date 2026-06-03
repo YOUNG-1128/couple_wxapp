@@ -1,0 +1,47 @@
+<navigation-bar title="时光胶囊" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="capsule-scroll" type="list" scroll-y>
+  <view class="capsule-page">
+    <common-card featured="{{true}}">
+      <view class="card-title">写给未来的 TA</view>
+      <input class="field-input" value="{{form.title}}" placeholder="胶囊标题" bindinput="onTitleInput"></input>
+      <textarea class="field-textarea" value="{{form.content}}" placeholder="写下想在未来某天被看到的话" maxlength="300" bindinput="onContentInput"></textarea>
+      <view class="type-list">
+        <view
+          class="type-item {{form.type === item.value ? 'type-item-active' : ''}}"
+          wx:for="{{types}}"
+          wx:key="value"
+          data-value="{{item.value}}"
+          bindtap="onTypeTap"
+        >
+          {{item.label}}
+        </view>
+      </view>
+      <input class="field-input" value="{{form.openAt}}" placeholder="开启日期，例如 2026-04-30" bindinput="onOpenAtInput"></input>
+      <button class="seal-button" bindtap="onSealTap">封存</button>
+    </common-card>
+
+    <common-card>
+      <view class="card-title">胶囊列表</view>
+      <view class="capsule-list">
+        <view class="capsule-item" wx:for="{{capsules}}" wx:key="id" data-id="{{item.id}}" bindtap="onCapsuleTap">
+          <view>
+            <view class="capsule-title">{{item.title}}</view>
+            <view class="capsule-time">创建 {{item.createdAt}} · 开启 {{item.openAt}}</view>
+          </view>
+          <view class="capsule-status capsule-status-{{item.status}}">
+            {{item.status === 'locked' ? '锁定' : item.status === 'available' ? '可开启' : '已开启'}}
+          </view>
+        </view>
+      </view>
+    </common-card>
+  </view>
+</scroll-view>
+
+<view class="detail-mask" wx:if="{{showDetail}}" bindtap="onCloseDetail">
+  <view class="detail-panel" catchtap="noop">
+    <view class="detail-title">{{selectedCapsule.title}}</view>
+    <view class="detail-time">创建 {{selectedCapsule.createdAt}} · 开启 {{selectedCapsule.openAt}}</view>
+    <view class="detail-content">{{selectedCapsule.content}}</view>
+    <button class="close-button" bindtap="onCloseDetail">收好</button>
+  </view>
+</view>

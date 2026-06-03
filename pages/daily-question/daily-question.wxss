@@ -1,0 +1,172 @@
+page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #fff8f6;
+}
+
+.question-scroll {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.question-page {
+  padding: 32rpx;
+}
+
+.question-date {
+  color: #aa8993;
+  font-size: 23rpx;
+}
+
+.question-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-top: 12rpx;
+}
+
+.question-tag,
+.question-source {
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  line-height: 1;
+}
+
+.question-tag {
+  color: #d85a72;
+  background: #fff0f4;
+}
+
+.question-source {
+  color: #8d6d77;
+  background: #fff6f8;
+}
+
+.question-title {
+  margin-top: 10rpx;
+  color: #2b2024;
+  font-size: 34rpx;
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.question-hint {
+  margin-top: 14rpx;
+  color: #8d6d77;
+  font-size: 24rpx;
+  line-height: 1.6;
+}
+
+.answer-input {
+  width: 100%;
+  min-height: 200rpx;
+  padding: 16rpx;
+  border-radius: 16rpx;
+  color: #2b2024;
+  font-size: 26rpx;
+  background: #fff5f8;
+  box-sizing: border-box;
+}
+
+.submit-btn,
+.analysis-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 66rpx;
+  margin-top: 16rpx;
+  border-radius: 999rpx;
+  color: #ffffff;
+  font-size: 26rpx;
+  background: #e85d75;
+}
+
+.submit-btn::after,
+.analysis-btn::after {
+  border: 0;
+}
+
+.section-title {
+  color: #6e5660;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.section-gap {
+  margin-top: 18rpx;
+}
+
+.answer-content {
+  margin-top: 10rpx;
+  color: #4b3b42;
+  font-size: 26rpx;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.wait-tip {
+  margin-top: 14rpx;
+  color: #a1838d;
+  font-size: 23rpx;
+}
+
+.analysis-title {
+  color: #6e5660;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.analysis-score-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12rpx;
+  margin-top: 12rpx;
+}
+
+.analysis-score {
+  color: #e85d75;
+  font-size: 44rpx;
+  font-weight: 700;
+}
+
+.analysis-score-meta {
+  color: #8d6d77;
+  font-size: 24rpx;
+}
+
+.analysis-block {
+  margin-top: 16rpx;
+}
+
+.analysis-block-title {
+  color: #6e5660;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.analysis-content {
+  margin-top: 10rpx;
+  color: #5d4951;
+  font-size: 25rpx;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+.history-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.history-title {
+  color: #2b2024;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.history-action {
+  color: #e85d75;
+  font-size: 24rpx;
+}

@@ -1,0 +1,74 @@
+<navigation-bar title="纪念日" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="ann-scroll" type="list" scroll-y>
+  <view class="ann-page">
+    <view class="top-row">
+      <view class="page-title">{{pageTitle}}</view>
+      <view class="new-icon-btn" bindtap="onOpenCreator">＋</view>
+    </view>
+
+    <view class="hero-card" wx:if="{{highlighted}}">
+      <view class="hero-label">下一个重要日子</view>
+      <view class="hero-main-row">
+        <view class="hero-title">{{highlighted.title}}</view>
+        <view class="hero-countdown">{{highlighted.countdownText}}</view>
+      </view>
+      <view class="hero-date">{{highlighted.nextDateShort || highlighted.nextDate}}</view>
+      <view class="hero-note">把重要的日子好好记住</view>
+    </view>
+
+    <view class="empty-box" wx:if="{{!list.length}}">还没有纪念日，先记录一个属于你们的重要日子吧</view>
+
+    <view class="ann-item" wx:for="{{list}}" wx:key="id" data-id="{{item.id}}" bindtap="onOpenDetail">
+      <view class="ann-head">
+        <view class="ann-title">{{item.title}}</view>
+        <view class="ann-countdown">{{item.countdownText}}</view>
+      </view>
+      <view class="ann-meta">{{item.nextDate}} · {{item.repeatType === 'yearly' ? '每年重复' : '一次性'}}</view>
+    </view>
+  </view>
+</scroll-view>
+
+<view class="creator-mask" wx:if="{{showCreator}}" bindtap="onCloseCreator">
+  <view class="creator-panel" catchtap="noop">
+    <view class="panel-title">新增纪念日</view>
+    <input class="form-input" value="{{formTitle}}" placeholder="标题（必填）" maxlength="40" bindinput="onTitleInput" />
+
+    <view class="form-row">
+      <view class="form-label">日期（必填）</view>
+      <picker mode="date" value="{{formDate}}" bindchange="onDateChange">
+        <view class="picker-view">{{formDate || '选择日期'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <view class="form-label">类型</view>
+      <picker mode="selector" range="{{typeOptions}}" bindchange="onTypeChange">
+        <view class="picker-view">{{formType}}</view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <view class="form-label">重复</view>
+      <view class="repeat-row">
+        <view class="repeat-chip {{formRepeatType === 'yearly' ? 'repeat-chip-active' : ''}}" data-repeat-type="yearly" bindtap="onRepeatChange">每年重复</view>
+        <view class="repeat-chip {{formRepeatType === 'none' ? 'repeat-chip-active' : ''}}" data-repeat-type="none" bindtap="onRepeatChange">不重复</view>
+      </view>
+    </view>
+
+    <view class="form-row">
+      <view class="form-label">封面图（可选）</view>
+      <view class="cover-row">
+        <button class="cover-btn" bindtap="onChooseCoverImage">选择图片</button>
+        <button class="cover-btn cover-btn-ghost" wx:if="{{formCoverImage}}" bindtap="onRemoveCoverImage">移除</button>
+      </view>
+      <image class="cover-preview" wx:if="{{formCoverImage}}" src="{{formCoverImage}}" mode="aspectFill" bindtap="onPreviewCoverImage"></image>
+    </view>
+
+    <textarea class="form-textarea" value="{{formNote}}" placeholder="备注（可选）" maxlength="200" bindinput="onNoteInput"></textarea>
+
+    <view class="panel-actions">
+      <button class="panel-btn ghost" bindtap="onCloseCreator">取消</button>
+      <button class="panel-btn" bindtap="onSaveAnniversary">保存</button>
+    </view>
+  </view>
+</view>

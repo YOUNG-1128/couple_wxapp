@@ -1,0 +1,7 @@
+<common-card>
+  <view class="map-placeholder">
+    <view class="map-pin"></view>
+    <view class="map-title">{{info.title}}</view>
+    <view class="map-desc">{{info.desc}}</view>
+  </view>
+</common-card>

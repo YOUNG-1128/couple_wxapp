@@ -1,0 +1,66 @@
+<navigation-bar title="书写动态" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="compose-scroll" type="list" scroll-y>
+  <view class="compose-page">
+    <common-card featured="{{true}}">
+      <view class="composer-head">
+        <image class="author-avatar" src="{{currentUser.avatarUrl}}" mode="aspectFill"></image>
+        <view class="author-name">{{currentUser.nickName}}</view>
+      </view>
+
+      <textarea
+        class="composer-textarea"
+        placeholder="写下今天的小瞬间..."
+        value="{{composeContent}}"
+        maxlength="500"
+        bindinput="onComposeInput"
+      ></textarea>
+
+      <view class="location-card">
+        <view class="location-head">
+          <view class="location-title">位置</view>
+          <view class="location-clear" wx:if="{{selectedLocation.city}}" bindtap="onClearLocation">清除</view>
+        </view>
+
+        <button class="location-btn" bindtap="onLocateCurrentCity" loading="{{selectedLocation.locating}}">自动识别当前城市</button>
+
+        <input
+          class="location-input"
+          value="{{selectedLocation.keyword}}"
+          placeholder="搜索并选择城市（可选）"
+          maxlength="40"
+          bindinput="onLocationKeywordInput"
+        />
+
+        <view class="location-selected" wx:if="{{selectedLocation.city}}">
+          {{selectedLocation.mode === 'auto' ? '已定位' : '已选择'}}：{{selectedLocation.city.name}} · {{selectedLocation.city.province}}
+        </view>
+
+        <view class="location-search-list" wx:if="{{selectedLocation.results.length}}">
+          <view
+            class="location-search-item"
+            wx:for="{{selectedLocation.results}}"
+            wx:key="code"
+            data-index="{{index}}"
+            bindtap="onSelectLocationCity"
+          >
+            <view class="location-search-title">{{item.name}}</view>
+            <view class="location-search-meta">{{item.province}} · {{item.country}}</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="compose-images" wx:if="{{composeImages.length}}">
+        <view class="compose-image-item" wx:for="{{composeImages}}" wx:key="*this">
+          <image class="compose-image" src="{{item}}" mode="aspectFill" data-current="{{item}}" bindtap="onPreviewComposeImage"></image>
+          <view class="remove-image" data-index="{{index}}" bindtap="onRemoveComposeImage">x</view>
+        </view>
+      </view>
+
+      <view class="composer-actions">
+        <button class="action-button ghost" bindtap="onChooseImages">选照片</button>
+        <button class="action-button ghost" bindtap="onSaveDraft">存草稿</button>
+        <button class="action-button" bindtap="onPublishPost">发布动态</button>
+      </view>
+    </common-card>
+  </view>
+</scroll-view>

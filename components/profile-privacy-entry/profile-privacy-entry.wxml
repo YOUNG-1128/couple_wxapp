@@ -1,0 +1,9 @@
+<common-card>
+  <view class="privacy-row" bindtap="onTap">
+    <view>
+      <view class="privacy-title">{{privacy.title}}</view>
+      <view class="privacy-desc">{{privacy.desc}}</view>
+    </view>
+    <view class="privacy-arrow">›</view>
+  </view>
+</common-card>

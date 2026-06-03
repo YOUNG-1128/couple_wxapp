@@ -1,0 +1,26 @@
+.privacy-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+}
+
+.privacy-title {
+  color: #2b2024;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.privacy-desc {
+  margin-top: 10rpx;
+  color: #9a7b84;
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.privacy-arrow {
+  flex: 0 0 auto;
+  color: #e85d75;
+  font-size: 48rpx;
+  line-height: 1;
+}

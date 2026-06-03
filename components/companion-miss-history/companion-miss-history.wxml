@@ -1,0 +1,13 @@
+<common-card>
+  <view class="history-list">
+    <view class="history-item" wx:for="{{list}}" wx:key="id">
+      <view>
+        <view class="history-text">{{item.message}}</view>
+        <view class="history-time">{{item.type === 'sent' ? '我发出的' : '我收到的'}} · {{item.time}}</view>
+      </view>
+      <view class="history-status {{item.type === 'received' ? 'history-status-received' : ''}}">
+        {{item.readStatus === 'unread' ? '未读' : '已读'}}
+      </view>
+    </view>
+  </view>
+</common-card>

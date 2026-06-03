@@ -1,0 +1,23 @@
+<navigation-bar title="草稿箱" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="drafts-scroll" type="list" scroll-y>
+  <view class="drafts-page">
+    <common-card>
+      <view class="entry-row" bindtap="onNewCompose">
+        <view class="entry-title">写新信</view>
+        <view class="entry-action">去书写</view>
+      </view>
+    </common-card>
+
+    <view class="empty-box" wx:if="{{!drafts.length}}">草稿箱还是空的，先写一封想说的话吧。</view>
+
+    <common-card wx:for="{{drafts}}" wx:key="letterId">
+      <view class="draft-title">{{item.title || '无标题草稿'}}</view>
+      <view class="draft-content">{{item.content || '这是一封图片草稿'}}</view>
+      <view class="draft-meta">更新时间：{{item.previewTime}} · 图片 {{item.images.length}} 张</view>
+      <view class="draft-action-row">
+        <button class="delete-btn" data-id="{{item.letterId}}" bindtap="onDeleteDraft">删除草稿</button>
+        <button class="edit-btn" data-id="{{item.letterId}}" bindtap="onEditDraft">继续编辑</button>
+      </view>
+    </common-card>
+  </view>
+</scroll-view>

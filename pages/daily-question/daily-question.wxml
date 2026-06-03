@@ -1,0 +1,65 @@
+<navigation-bar title="每日问答" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="question-scroll" type="list" scroll-y>
+  <view class="question-page" wx:if="{{pageData}}">
+    <common-card featured="{{true}}">
+      <view class="question-date">{{pageData.date}}</view>
+      <view class="question-meta-row">
+        <view class="question-tag">{{pageData.questionCategory}}</view>
+        <view class="question-source">{{pageData.questionSource === 'ai' ? 'AI 今日出题' : '题库今日话题'}}</view>
+      </view>
+      <view class="question-title">{{pageData.questionText}}</view>
+      <view class="question-hint">{{pageData.waitingText}}</view>
+    </common-card>
+
+    <common-card wx:if="{{!pageData.myAnswered}}">
+      <textarea class="answer-input" placeholder="写下今天的回答..." value="{{answerDraft}}" maxlength="500" bindinput="onInput"></textarea>
+      <button class="submit-btn" bindtap="onSubmit">提交回答</button>
+    </common-card>
+
+    <common-card wx:if="{{pageData.myAnswered && !pageData.bothAnswered}}">
+      <view class="section-title">我的回答</view>
+      <view class="answer-content">{{pageData.myAnswer}}</view>
+      <view class="wait-tip">已记录你的答案，等 TA 回答后就能一起看啦</view>
+    </common-card>
+
+    <common-card wx:if="{{pageData.bothAnswered}}">
+      <view class="section-title">我的回答</view>
+      <view class="answer-content">{{pageData.myAnswer}}</view>
+      <view class="section-title section-gap">TA 的回答</view>
+      <view class="answer-content">{{pageData.partnerAnswer}}</view>
+    </common-card>
+
+    <common-card wx:if="{{pageData.analysisReady}}">
+      <view class="analysis-title">AI 小观察</view>
+      <view class="analysis-score-row">
+        <view class="analysis-score">{{pageData.relevanceScore}}</view>
+        <view class="analysis-score-meta">相关性 · {{pageData.relevanceLevel}}</view>
+      </view>
+      <view class="analysis-block">
+        <view class="analysis-block-title">共同点</view>
+        <view class="analysis-content">{{pageData.analysisSummary}}</view>
+      </view>
+      <view class="analysis-block">
+        <view class="analysis-block-title">差异点</view>
+        <view class="analysis-content">{{pageData.analysisDifferences}}</view>
+      </view>
+      <view class="analysis-block">
+        <view class="analysis-block-title">小建议</view>
+        <view class="analysis-content">{{pageData.analysisSuggestion}}</view>
+      </view>
+    </common-card>
+
+    <common-card wx:if="{{pageData.bothAnswered && !pageData.analysisReady}}">
+      <view class="analysis-title">AI 小观察</view>
+      <view class="analysis-content">你们都回答后，我会给出今天的温柔观察。</view>
+      <button class="analysis-btn" bindtap="onGenerateAnalysis">生成观察</button>
+    </common-card>
+
+    <common-card>
+      <view class="history-entry" bindtap="onOpenHistory">
+        <view class="history-title">历史问答</view>
+        <view class="history-action">查看过往记录</view>
+      </view>
+    </common-card>
+  </view>
+</scroll-view>

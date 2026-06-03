@@ -1,0 +1,3 @@
+<view class="common-card {{featured ? 'common-card-featured' : ''}}">
+  <slot></slot>
+</view>

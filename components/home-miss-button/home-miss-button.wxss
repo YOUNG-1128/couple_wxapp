@@ -1,0 +1,30 @@
+.miss-section {
+  margin-top: 28rpx;
+  padding: 32rpx;
+  border-radius: 24rpx;
+  background: #ffecef;
+}
+
+.miss-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 88rpx;
+  border-radius: 999rpx;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 600;
+  background: #e85d75;
+}
+
+.miss-button::after {
+  border: 0;
+}
+
+.miss-text {
+  margin-top: 18rpx;
+  color: #8b6470;
+  font-size: 26rpx;
+  line-height: 1.5;
+  text-align: center;
+}

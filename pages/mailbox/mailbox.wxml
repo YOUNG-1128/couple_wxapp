@@ -1,0 +1,85 @@
+<navigation-bar title="信箱" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="mailbox-scroll" type="list" scroll-y>
+  <view class="mailbox-page">
+    <view class="mailbox-entry-row">
+      <view class="mailbox-slogan">记录我们的来信与回信～</view>
+      <view class="entry-actions">
+        <view class="entry-icon compose-entry" bindtap="onOpenCompose">＋</view>
+        <view class="entry-icon draft-entry" bindtap="onOpenDrafts">
+          🗂
+          <view class="entry-red-dot" wx:if="{{hasDrafts}}"></view>
+        </view>
+      </view>
+    </view>
+
+    <common-card>
+      <view class="section-head">
+        <view class="section-placeholder"></view>
+        <view class="section-badge" wx:if="{{unreadIncomingCount > 0}}">{{unreadIncomingCount}}</view>
+      </view>
+
+      <view wx:if="{{history.length}}">
+        <view
+          class="letter-item {{item.isIncoming ? 'letter-item-incoming' : 'letter-item-outgoing'}}"
+          wx:for="{{history}}"
+          wx:key="letterId"
+          data-id="{{item.letterId}}"
+          bindtap="onOpenHistoryDetail"
+        >
+          <view class="avatar-wrap">
+            <image class="letter-avatar" src="{{item.isIncoming ? item.fromUser.avatarUrl : currentUser.avatarUrl}}" mode="aspectFill"></image>
+            <view class="avatar-unread-dot" wx:if="{{item.isUnreadForMe}}"></view>
+          </view>
+
+          <view class="letter-main {{item.isIncoming ? 'letter-main-incoming' : 'letter-main-outgoing'}}">
+            <view class="letter-title {{item.isUnreadForMe ? 'letter-title-unread' : ''}}">{{item.title || '无标题信件'}}</view>
+            <view class="letter-subtitle">{{item.content}}</view>
+            <view class="letter-foot">
+              <view class="letter-time">{{item.listTime}}</view>
+              <view class="status-icon status-icon-{{item.readState}}">{{item.readIcon}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view wx:else class="empty-text">还没有历史信件，第一封信等你来写</view>
+    </common-card>
+  </view>
+</scroll-view>
+
+<view class="reader-mask" wx:if="{{showReader}}" bindtap="onCloseReader">
+  <view class="reader-wrap" catchtap="noop">
+    <view class="reader-paper {{readerReady ? 'reader-paper-ready' : ''}}">
+      <view class="reader-paper-edge reader-paper-edge-top"></view>
+      <view class="reader-paper-edge reader-paper-edge-bottom"></view>
+      <view class="reader-paper-edge reader-paper-edge-left"></view>
+      <view class="reader-paper-edge reader-paper-edge-right"></view>
+      <view class="reader-paper-corner"></view>
+      <view class="reader-paper-corner-inner"></view>
+      <view class="reader-lines"></view>
+      <view class="reader-title" wx:if="{{readerLetter.title}}">{{readerLetter.title}}</view>
+      <view class="reader-content" wx:if="{{readerLetter.visible}}">{{readerLetter.content}}</view>
+      <view class="reader-content" wx:else>这封信还没有到可阅读时间，等约定时间到了再来看吧。</view>
+
+      <view class="reader-images" wx:if="{{readerLetter.visible && readerLetter.images.length}}">
+        <image
+          class="reader-image"
+          wx:for="{{readerLetter.images}}"
+          wx:key="*this"
+          src="{{item}}"
+          mode="aspectFill"
+          data-src="{{item}}"
+          bindtap="onPreviewReaderImage"
+        ></image>
+      </view>
+
+      <view class="reader-footer">
+        <view class="reader-sign" wx:if="{{readerLetter.visible}}">
+          {{readerSign}}
+          <text class="reader-sign-note" wx:if="{{readerLetter.fromUser && readerLetter.fromUser.userId === 'partner'}}"> 来自TA的小心意</text>
+        </view>
+        <view class="reader-date">{{readerDate}}</view>
+      </view>
+    </view>
+  </view>
+</view>

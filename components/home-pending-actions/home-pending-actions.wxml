@@ -1,0 +1,13 @@
+<common-card>
+  <view class="card-title">今日未回应消息</view>
+  <view wx:if="{{list.length}}" class="pending-list">
+    <view class="pending-item" wx:for="{{list}}" wx:key="id" data-item="{{item}}" bindtap="onItemTap">
+      <view class="pending-main">
+        <view class="pending-title">{{item.title}}</view>
+        <view class="pending-subtitle">{{item.subtitle}}</view>
+      </view>
+      <view class="pending-action">{{item.actionText}}</view>
+    </view>
+  </view>
+  <view wx:else class="empty-text">今天的互动都处理完啦 ❤️</view>
+</common-card>

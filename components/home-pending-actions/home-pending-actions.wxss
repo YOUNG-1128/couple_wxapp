@@ -1,0 +1,66 @@
+.card-title {
+  color: #2b2024;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.pending-list {
+  margin-top: 20rpx;
+}
+
+.pending-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+  padding: 22rpx 0;
+  border-top: 1rpx solid #f5dde2;
+}
+
+.pending-item:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.pending-item:last-child {
+  padding-bottom: 0;
+}
+
+.pending-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.pending-title {
+  color: #4f3c43;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.pending-subtitle {
+  display: -webkit-box;
+  margin-top: 8rpx;
+  color: #9a7b84;
+  font-size: 25rpx;
+  line-height: 1.45;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.pending-action {
+  flex: 0 0 auto;
+  padding: 10rpx 18rpx;
+  border-radius: 999rpx;
+  color: #ffffff;
+  font-size: 24rpx;
+  background: #e85d75;
+}
+
+.empty-text {
+  margin-top: 18rpx;
+  color: #9a7b84;
+  font-size: 26rpx;
+  line-height: 1.5;
+}

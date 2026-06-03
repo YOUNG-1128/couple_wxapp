@@ -1,0 +1,44 @@
+.card-title {
+  color: #2b2024;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.anniversary-list {
+  margin-top: 22rpx;
+}
+
+.anniversary-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 0;
+  border-top: 1rpx solid #f5dde2;
+}
+
+.anniversary-item:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.anniversary-item:last-child {
+  padding-bottom: 0;
+}
+
+.item-title {
+  color: #4f3c43;
+  font-size: 29rpx;
+  font-weight: 600;
+}
+
+.item-date {
+  margin-top: 8rpx;
+  color: #9a7b84;
+  font-size: 25rpx;
+}
+
+.days-left {
+  color: #e85d75;
+  font-size: 26rpx;
+  font-weight: 600;
+}

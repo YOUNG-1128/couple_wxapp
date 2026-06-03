@@ -1,0 +1,29 @@
+<navigation-bar title="纪念日详情" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="detail-scroll" type="list" scroll-y>
+  <view class="detail-page" wx:if="{{detail}}">
+    <view class="hero-card" bindtap="onPreviewCover">
+      <image class="hero-cover" wx:if="{{detail.coverImage}}" src="{{detail.coverImage}}" mode="aspectFill"></image>
+      <view class="hero-placeholder" wx:else></view>
+      <view class="hero-mask"></view>
+      <view class="hero-top-title">{{headerTitle}}</view>
+      <view class="hero-count-label">{{countLabel}}</view>
+      <view class="hero-count-number">{{countText}}</view>
+      <view class="hero-start-date">{{startDateLabel}}</view>
+    </view>
+
+    <common-card>
+      <view class="detail-title">{{detail.title}}</view>
+      <view class="detail-countdown">{{detail.countdownText}}</view>
+      <view class="detail-meta">日期：{{detail.displayDate}}</view>
+      <view class="detail-meta">下一次：{{detail.nextDate}}</view>
+      <view class="detail-meta">类型：{{detail.type}}</view>
+      <view class="detail-meta">重复：{{detail.repeatType === 'yearly' ? '每年重复' : '不重复'}}</view>
+      <view class="detail-note" wx:if="{{detail.note}}">{{detail.note}}</view>
+    </common-card>
+
+    <common-card>
+      <view class="memory-title">相关回忆</view>
+      <view class="memory-placeholder">这里会关联你们在这一天的照片、动态和留言，当前版本先保留这个温柔位置。</view>
+    </common-card>
+  </view>
+</scroll-view>

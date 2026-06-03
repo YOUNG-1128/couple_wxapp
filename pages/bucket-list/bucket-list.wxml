@@ -1,0 +1,45 @@
+<navigation-bar title="100件事" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="bucket-scroll" type="list" scroll-y>
+  <view class="bucket-page">
+    <view class="progress-sticky">
+      <common-card featured="{{true}}">
+        <view class="page-title">{{title}}</view>
+        <view class="page-subtitle">慢慢完成属于我们的100件小事</view>
+        <view class="progress-meta">
+          <view>已完成 {{completedCount}} / {{total}}</view>
+          <view>{{percent}}%</view>
+        </view>
+        <view class="progress-track">
+          <view class="progress-fill" style="width: {{percent}}%;"></view>
+        </view>
+      </common-card>
+    </view>
+
+    <view class="section-title">还想一起完成（{{pendingItems.length}}）</view>
+    <view class="empty-box" wx:if="{{!pendingItems.length}}">太棒啦，未完成清单已经清空了</view>
+    <view class="pending-grid" wx:if="{{pendingItems.length}}">
+      <view class="bucket-item pending-item" wx:for="{{pendingItems}}" wx:key="id" data-id="{{item.id}}" bindtap="onToggleItem">
+        <view class="item-left">
+          <view class="item-icon">{{item.icon}}</view>
+          <view class="item-seq">{{item.sequenceLabel}}</view>
+        </view>
+        <view class="item-main">
+          <view class="item-title">{{item.title}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-title section-title-done">已经一起完成（{{completedItems.length}}）</view>
+    <view class="empty-box empty-box-done" wx:if="{{!completedItems.length}}">还没有已完成的小事，先从第一件开始吧</view>
+    <view class="bucket-item bucket-item-done" wx:for="{{completedItems}}" wx:key="id" data-id="{{item.id}}" bindtap="onToggleItem">
+      <view class="item-left">
+        <view class="item-icon">{{item.icon}}</view>
+        <view class="item-seq">{{item.sequenceLabel}}</view>
+      </view>
+      <view class="item-main">
+        <view class="item-title">{{item.title}}</view>
+        <view class="item-time">完成于 {{item.completedAtLabel}}</view>
+      </view>
+    </view>
+  </view>
+</scroll-view>

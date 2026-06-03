@@ -1,0 +1,4 @@
+<view class="miss-section">
+  <button class="miss-button" bindtap="onTap">想你一下</button>
+  <view class="miss-text">轻轻点一下，把今天的心意送过去。</view>
+</view>

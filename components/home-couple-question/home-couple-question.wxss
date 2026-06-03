@@ -1,0 +1,76 @@
+.card-title {
+  color: #2b2024;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.question {
+  margin-top: 22rpx;
+  color: #4f3c43;
+  font-size: 30rpx;
+  line-height: 1.55;
+}
+
+.hint {
+  margin-top: 18rpx;
+  color: #9a7b84;
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.answer-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 128rpx;
+  margin-top: 22rpx;
+  padding: 22rpx;
+  border-radius: 20rpx;
+  color: #4f3c43;
+  font-size: 28rpx;
+  line-height: 1.5;
+  background: #fff8f6;
+}
+
+.answer-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 72rpx;
+  margin-top: 20rpx;
+  border-radius: 999rpx;
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 600;
+  background: #e85d75;
+}
+
+.answer-button::after {
+  border: 0;
+}
+
+.answer-box {
+  margin-top: 20rpx;
+  padding: 22rpx;
+  border-radius: 20rpx;
+  background: #fff8f6;
+}
+
+.answer-label {
+  color: #9a7b84;
+  font-size: 24rpx;
+}
+
+.answer-text {
+  margin-top: 8rpx;
+  color: #4f3c43;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+.match-result {
+  margin-top: 20rpx;
+  color: #e85d75;
+  font-size: 27rpx;
+  font-weight: 700;
+  line-height: 1.45;
+}

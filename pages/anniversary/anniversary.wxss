@@ -1,0 +1,272 @@
+page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #fff8f6;
+}
+
+.ann-scroll {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.ann-page {
+  padding: 32rpx;
+}
+
+.top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page-title {
+  color: #2b2024;
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.new-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58rpx;
+  height: 58rpx;
+  border-radius: 50%;
+  color: #b06779;
+  font-size: 36rpx;
+  line-height: 1;
+  background: #fff1f4;
+}
+
+.hero-card {
+  margin-top: 16rpx;
+  padding: 22rpx;
+  border-radius: 22rpx;
+  background: linear-gradient(145deg, #fff2f6 0%, #ffeaf1 100%);
+}
+
+.hero-label {
+  color: #b18592;
+  font-size: 22rpx;
+}
+
+.hero-main-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12rpx;
+  margin-top: 8rpx;
+}
+
+.hero-title {
+  color: #3f2d34;
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.hero-countdown {
+  flex: 0 0 auto;
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  color: #ffffff;
+  font-size: 23rpx;
+  background: #e88aa0;
+}
+
+.hero-date {
+  margin-top: 10rpx;
+  color: #7f626c;
+  font-size: 30rpx;
+  font-weight: 600;
+  letter-spacing: 1rpx;
+}
+
+.hero-note {
+  margin-top: 8rpx;
+  color: #9e8089;
+  font-size: 23rpx;
+}
+
+.empty-box {
+  margin-top: 22rpx;
+  padding: 34rpx 28rpx;
+  border-radius: 20rpx;
+  color: #9b7f87;
+  font-size: 25rpx;
+  text-align: center;
+  background: #fff1f4;
+}
+
+.ann-item {
+  margin-top: 14rpx;
+  padding: 22rpx;
+  border-radius: 20rpx;
+  background: #fff;
+}
+
+.ann-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10rpx;
+}
+
+.ann-title {
+  color: #2b2024;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.ann-countdown {
+  flex: 0 0 auto;
+  padding: 6rpx 14rpx;
+  border-radius: 999rpx;
+  color: #ffffff;
+  font-size: 22rpx;
+  background: #dd8ea1;
+}
+
+.ann-meta {
+  margin-top: 8rpx;
+  color: #927680;
+  font-size: 23rpx;
+}
+
+.creator-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(43, 32, 36, 0.34);
+}
+
+.creator-panel {
+  width: 100%;
+  padding: 30rpx 30rpx 42rpx;
+  border-radius: 28rpx 28rpx 0 0;
+  background: #fff;
+}
+
+.panel-title {
+  color: #2b2024;
+  font-size: 34rpx;
+  font-weight: 700;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  margin-top: 16rpx;
+  padding: 16rpx 18rpx;
+  border-radius: 16rpx;
+  color: #2b2024;
+  font-size: 26rpx;
+  background: #fff5f8;
+  box-sizing: border-box;
+}
+
+.form-textarea {
+  min-height: 130rpx;
+}
+
+.form-row {
+  margin-top: 14rpx;
+}
+
+.form-label {
+  color: #8d6d77;
+  font-size: 23rpx;
+}
+
+.picker-view {
+  margin-top: 8rpx;
+  padding: 14rpx 16rpx;
+  border-radius: 14rpx;
+  color: #5b444c;
+  font-size: 25rpx;
+  background: #fff5f8;
+}
+
+.repeat-row {
+  display: flex;
+  gap: 10rpx;
+  margin-top: 8rpx;
+}
+
+.repeat-chip {
+  height: 52rpx;
+  padding: 0 16rpx;
+  border-radius: 999rpx;
+  line-height: 52rpx;
+  color: #8d6d77;
+  font-size: 24rpx;
+  background: #fff0f3;
+}
+
+.repeat-chip-active {
+  color: #fff;
+  background: #e85d75;
+}
+
+.cover-row {
+  display: flex;
+  gap: 10rpx;
+  margin-top: 8rpx;
+}
+
+.cover-btn {
+  min-width: 140rpx;
+  height: 54rpx;
+  margin: 0;
+  padding: 0 16rpx;
+  border-radius: 999rpx;
+  color: #fff;
+  font-size: 24rpx;
+  line-height: 54rpx;
+  background: #e85d75;
+}
+
+.cover-btn-ghost {
+  color: #8d6d77;
+  background: #f2e4e8;
+}
+
+.cover-btn::after {
+  border: 0;
+}
+
+.cover-preview {
+  width: 100%;
+  height: 220rpx;
+  margin-top: 10rpx;
+  border-radius: 14rpx;
+  background: #ffecef;
+}
+
+.panel-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12rpx;
+  margin-top: 18rpx;
+}
+
+.panel-btn {
+  min-width: 128rpx;
+  height: 56rpx;
+  border-radius: 999rpx;
+  color: #fff;
+  font-size: 24rpx;
+  background: #e85d75;
+}
+
+.panel-btn.ghost {
+  color: #8d6d77;
+  background: #f2e4e8;
+}
+
+.panel-btn::after {
+  border: 0;
+}

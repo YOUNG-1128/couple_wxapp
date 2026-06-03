@@ -1,0 +1,18 @@
+<navigation-bar title="想你按钮历史" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="companion-scroll" type="list" scroll-y scroll-into-view="{{scrollIntoView}}">
+  <view class="companion-page">
+    <common-card featured="{{true}}">
+      <view class="hero-row">
+        <view class="hero-copy">
+          <view class="page-title">想你按钮历史</view>
+          <view class="page-subtitle">把那些想起对方的时刻，都轻轻留在这里。</view>
+        </view>
+        <button class="miss-send-btn" bindtap="onSendMissYou">再想一次</button>
+      </view>
+    </common-card>
+
+    <view id="miss-history-section">
+      <companion-miss-history list="{{missHistory}}"></companion-miss-history>
+    </view>
+  </view>
+</scroll-view>

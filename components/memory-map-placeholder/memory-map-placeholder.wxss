@@ -1,0 +1,34 @@
+.map-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 210rpx;
+  border: 2rpx dashed #f1c9d1;
+  border-radius: 22rpx;
+  background: #fff8f6;
+  text-align: center;
+}
+
+.map-pin {
+  width: 30rpx;
+  height: 30rpx;
+  border-radius: 50% 50% 50% 0;
+  background: #e85d75;
+  transform: rotate(-45deg);
+}
+
+.map-title {
+  margin-top: 24rpx;
+  color: #2b2024;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.map-desc {
+  max-width: 520rpx;
+  margin-top: 12rpx;
+  color: #9a7b84;
+  font-size: 26rpx;
+  line-height: 1.5;
+}

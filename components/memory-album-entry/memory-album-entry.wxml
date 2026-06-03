@@ -1,0 +1,15 @@
+<common-card>
+  <view class="album-entry" bindtap="onViewAll">
+  <view class="album-cover">
+    <view class="cover-text">{{album.coverText}}</view>
+    <view class="cover-count">{{album.count}} {{album.countUnit || '张'}}</view>
+  </view>
+  <view class="album-footer">
+    <view>
+      <view class="album-title">{{album.title}}</view>
+      <view class="album-desc">{{album.desc}}</view>
+    </view>
+    <button class="album-button" catchtap="onViewAll">进入</button>
+  </view>
+  </view>
+</common-card>

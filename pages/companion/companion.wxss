@@ -1,0 +1,55 @@
+page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #fff8f6;
+}
+
+.companion-scroll {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.companion-page {
+  padding: 32rpx 32rpx 56rpx;
+}
+
+.hero-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.hero-copy {
+  flex: 1;
+}
+
+.page-title {
+  color: #2b2024;
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.page-subtitle {
+  margin-top: 12rpx;
+  color: #7c6770;
+  font-size: 27rpx;
+  line-height: 1.5;
+}
+
+.miss-send-btn {
+  flex: 0 0 auto;
+  height: 64rpx;
+  margin: 0;
+  padding: 0 24rpx;
+  border-radius: 999rpx;
+  color: #ffffff;
+  font-size: 24rpx;
+  line-height: 64rpx;
+  background: #e85d75;
+}
+
+.miss-send-btn::after {
+  border: 0;
+}

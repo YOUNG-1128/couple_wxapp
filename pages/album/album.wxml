@@ -1,0 +1,158 @@
+<navigation-bar title="我们的动态" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="moments-scroll" type="list" scroll-y>
+  <view class="moments-page">
+    <view class="search-entry-row">
+      <view class="moments-slogan">记录我们的日常～</view>
+      <view class="entry-actions">
+        <view class="entry-icon compose-entry" bindtap="onOpenCompose">＋</view>
+        <view class="entry-icon draft-entry" bindtap="onOpenDrafts">
+          🗂
+          <view class="entry-red-dot" wx:if="{{hasDrafts}}"></view>
+        </view>
+        <view class="entry-icon search-entry {{hasActiveFilters ? 'search-entry-active' : ''}}" bindtap="onToggleSearch">
+          🔍
+          <view class="search-active-dot" wx:if="{{hasActiveFilters}}"></view>
+        </view>
+        <view class="entry-icon clear-filter-entry" wx:if="{{hasActiveFilters}}" bindtap="onClearAllFilters">✕</view>
+      </view>
+    </view>
+
+    <view class="search-box" wx:if="{{showSearchPanel}}">
+      <view class="search-label">按发布成员</view>
+      <view
+        class="author-chip {{draftAuthorId === item.key ? 'author-chip-active' : ''}}"
+        wx:for="{{authorFilters}}"
+        wx:key="key"
+        data-author-id="{{item.key}}"
+        bindtap="onAuthorFilterTap"
+      >
+        {{item.label}}
+      </view>
+
+      <view class="search-label">按关键词</view>
+      <input class="search-input" placeholder="搜索正文、昵称、留言" value="{{draftKeyword}}" bindinput="onSearchInput" />
+
+      <view class="date-filter-row">
+        <view class="search-label">按日期</view>
+        <view class="date-trigger" bindtap="onOpenDatePicker">{{draftDateValue || '选择日期（年 / 月 / 日）'}}</view>
+        <button class="clear-date" wx:if="{{draftDateValue}}" bindtap="onClearDate">清除</button>
+      </view>
+
+      <view class="date-inline-panel" wx:if="{{showDatePicker}}">
+        <scroll-view class="date-inline-scroll" scroll-y>
+          <view class="date-empty" wx:if="{{!yearOptions.length}}">还没有可筛选日期</view>
+
+          <view class="date-level-block" wx:if="{{yearOptions.length}}">
+            <view class="date-level-title">年份</view>
+            <view class="date-group-options">
+              <view
+                class="date-option {{selectedYear === item.year ? 'date-option-active' : ''}}"
+                wx:for="{{yearOptions}}"
+                wx:key="year"
+                data-year="{{item.year}}"
+                bindtap="onPickYear"
+              >
+                {{item.year}}（{{item.count}}）
+              </view>
+            </view>
+          </view>
+
+          <view class="date-level-block" wx:if="{{selectedYear}}">
+            <view class="date-level-title">月份</view>
+            <view class="date-group-options">
+              <view
+                class="date-option {{selectedMonth === item.month ? 'date-option-active' : ''}}"
+                wx:for="{{monthOptions}}"
+                wx:key="value"
+                data-year="{{selectedYear}}"
+                data-month="{{item.month}}"
+                data-value="{{item.value}}"
+                bindtap="onPickMonth"
+              >
+                {{item.month}}月（{{item.count}}）
+              </view>
+            </view>
+          </view>
+
+          <view class="date-level-block" wx:if="{{selectedYear && selectedMonth}}">
+            <view class="date-level-title">日期</view>
+            <view class="date-group-options">
+              <view
+                class="date-option {{draftDateValue === item.value ? 'date-option-active' : ''}}"
+                wx:for="{{dayOptions}}"
+                wx:key="value"
+                data-year="{{selectedYear}}"
+                data-month="{{selectedMonth}}"
+                data-value="{{item.value}}"
+                bindtap="onPickDay"
+              >
+                {{item.day}}日（{{item.count}}）
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+
+      <view class="search-actions">
+        <button class="action-button ghost small-action" bindtap="onResetSearchDraft">重置</button>
+        <button class="action-button small-action" bindtap="onConfirmSearch">确认筛选</button>
+      </view>
+    </view>
+
+    <view class="empty-box" wx:if="{{!feed.length}}">{{emptyText}}</view>
+
+    <view class="post-card" wx:for="{{feed}}" wx:key="postId">
+      <view class="post-head">
+        <image class="author-avatar" src="{{item.authorAvatar}}" mode="aspectFill"></image>
+        <view class="post-head-right">
+          <view class="author-name">{{item.authorName}}</view>
+          <view class="post-time">{{item.displayTime}}</view>
+        </view>
+      </view>
+
+      <view class="post-content" wx:if="{{item.content}}">{{item.content}}</view>
+
+      <view class="post-images" wx:if="{{item.images.length}}">
+        <view
+          class="post-image-item post-image-count-{{item.images.length}} {{item.images.length > 1 ? 'post-image-item-multi' : 'post-image-item-single'}}"
+          wx:for="{{item.images}}"
+          wx:for-item="imageUrl"
+          wx:key="*this"
+          data-current="{{imageUrl}}"
+          data-urls="{{item.images}}"
+          bindtap="onPreviewPostImage"
+        >
+          <image class="post-image {{item.images.length > 1 ? 'post-image-multi' : 'post-image-single'}}" src="{{imageUrl}}" mode="{{item.images.length > 1 ? 'aspectFill' : 'widthFix'}}"></image>
+        </view>
+      </view>
+
+      <view class="comment-list" wx:if="{{item.comments.length}}">
+        <view class="comment-item" wx:for="{{item.comments}}" wx:key="commentId" wx:for-item="comment">
+          <image class="comment-avatar" src="{{comment.userAvatar}}" mode="aspectFill"></image>
+          <view class="comment-body">
+            <view class="comment-meta">
+              <text class="comment-user">{{comment.userName}}</text>
+              <text class="comment-time">{{comment.displayTime}}</text>
+            </view>
+            <view class="comment-content">{{comment.content}}</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="comment-entry">
+        <view class="comment-toggle-icon" data-post-id="{{item.postId}}" bindtap="onOpenComment">💬</view>
+      </view>
+
+      <view class="comment-editor" wx:if="{{activeCommentPostId === item.postId}}">
+        <input
+          class="comment-input"
+          data-post-id="{{item.postId}}"
+          value="{{commentDraftMap[item.postId] || ''}}"
+          placeholder="给 TA 留一句话..."
+          bindinput="onCommentInput"
+        />
+        <button class="comment-submit" data-post-id="{{item.postId}}" bindtap="onSubmitComment">发送</button>
+      </view>
+    </view>
+  </view>
+</scroll-view>

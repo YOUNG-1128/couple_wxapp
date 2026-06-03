@@ -1,0 +1,113 @@
+<navigation-bar title="我们的足迹" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view class="footprint-scroll" type="list" scroll-y>
+  <view class="footprint-page">
+    <common-card featured="{{true}}">
+      <view class="hero-row">
+        <view class="hero-copy">
+          <view class="page-title">我们的足迹</view>
+          <view class="page-subtitle">把一起走过的地方都点亮</view>
+        </view>
+        <button class="new-btn" bindtap="onOpenCreator">新增足迹</button>
+      </view>
+
+      <view class="stats-grid">
+        <view class="stats-item">
+          <view class="stats-value">{{cityCount}}</view>
+          <view class="stats-label">已点亮城市</view>
+        </view>
+        <view class="stats-item">
+          <view class="stats-value">{{footprintCount}}</view>
+          <view class="stats-label">已记录足迹</view>
+        </view>
+      </view>
+    </common-card>
+
+    <common-card>
+      <view class="section-title">地图点亮</view>
+      <map
+        class="footprint-map"
+        latitude="{{mapCenter.latitude}}"
+        longitude="{{mapCenter.longitude}}"
+        scale="{{mapScale}}"
+        markers="{{markers}}"
+        bindmarkertap="onMarkerTap"
+      ></map>
+      <view class="map-tip">可以手动缩放和拖动地图，点击 marker 查看对应城市的足迹。</view>
+    </common-card>
+
+    <common-card>
+      <view class="list-head">
+        <view class="section-title">{{listTitle}}</view>
+        <view class="view-all" wx:if="{{activeCity}}" bindtap="onViewAll">查看全部</view>
+      </view>
+
+      <view class="empty-box" wx:if="{{!footprints.length}}">{{emptyText}}</view>
+
+      <view wx:else>
+        <view class="footprint-item" wx:for="{{footprints}}" wx:key="footprintId">
+          <view class="item-head">
+            <view class="item-title">{{item.title || (item.city + '的足迹')}}</view>
+            <view class="item-date" wx:if="{{item.date}}">{{item.date}}</view>
+          </view>
+          <view class="item-place">{{item.city}}{{item.placeName ? (' · ' + item.placeName) : ''}}</view>
+          <view class="item-note" wx:if="{{item.note}}">{{item.note}}</view>
+          <view class="item-address" wx:if="{{item.province || item.address}}">{{item.address || item.province}}</view>
+        </view>
+      </view>
+    </common-card>
+
+    <common-card wx:if="{{activeCity}}">
+      <view class="list-head">
+        <view class="section-title">{{relatedPostsTitle}}</view>
+      </view>
+
+      <view class="empty-box" wx:if="{{!relatedPosts.length}}">这座城市还没有关联的朋友圈记录</view>
+
+      <view wx:else>
+        <view class="post-item" wx:for="{{relatedPosts}}" wx:key="postId">
+          <view class="item-head">
+            <view class="item-title">{{item.content || '这一天发了一条朋友圈'}}</view>
+            <view class="item-date">{{item.displayTime}}</view>
+          </view>
+          <view class="post-meta">{{item.city}}{{item.placeName ? (' · ' + item.placeName) : ''}}</view>
+          <view class="post-author" wx:if="{{item.authorName}}">{{item.authorName}}</view>
+        </view>
+      </view>
+    </common-card>
+  </view>
+</scroll-view>
+
+<view class="creator-mask" wx:if="{{showCreator}}" bindtap="onCloseCreator">
+  <view class="creator-panel" catchtap="noop">
+    <view class="panel-title">新增足迹</view>
+
+    <button class="locate-btn" bindtap="onLocateCity" loading="{{locatingCity}}">自动识别当前城市</button>
+
+    <input class="form-input" value="{{formKeyword}}" placeholder="搜索并选择城市（必选）" maxlength="40" bindinput="onKeywordInput" />
+
+    <view class="selected-place" wx:if="{{selectedCity}}">
+      已选择：{{selectedCity.name}} · {{selectedCity.province}}
+    </view>
+
+    <view class="search-list" wx:if="{{searchResults.length}}">
+      <view class="search-item" wx:for="{{searchResults}}" wx:key="code" data-index="{{index}}" bindtap="onSelectCity">
+        <view class="search-title">{{item.name}}</view>
+        <view class="search-address">{{item.province}} · {{item.country}}</view>
+      </view>
+    </view>
+
+    <input class="form-input" value="{{formTitle}}" placeholder="标题（可选）" maxlength="40" bindinput="onTitleInput" />
+    <input class="form-input" value="{{formPlaceName}}" placeholder="地点名称（可选）" maxlength="40" bindinput="onPlaceNameInput" />
+
+    <picker mode="date" value="{{formDate}}" bindchange="onDateChange">
+      <view class="date-input">{{formDate || '选择日期（可选）'}}</view>
+    </picker>
+
+    <textarea class="form-textarea" value="{{formNote}}" maxlength="200" placeholder="备注（可选）" bindinput="onNoteInput"></textarea>
+
+    <view class="panel-actions">
+      <button class="panel-btn ghost" bindtap="onCloseCreator">取消</button>
+      <button class="panel-btn" bindtap="onSaveFootprint">保存</button>
+    </view>
+  </view>
+</view>

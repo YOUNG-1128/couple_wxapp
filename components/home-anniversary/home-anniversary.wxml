@@ -1,0 +1,12 @@
+<common-card>
+  <view class="card-title">最近纪念日</view>
+  <view class="anniversary-list">
+    <view class="anniversary-item" wx:for="{{list}}" wx:key="title">
+      <view>
+        <view class="item-title">{{item.title}}</view>
+        <view class="item-date">{{item.date}}</view>
+      </view>
+      <view class="days-left">还有 {{item.daysLeft}} 天</view>
+    </view>
+  </view>
+</common-card>
