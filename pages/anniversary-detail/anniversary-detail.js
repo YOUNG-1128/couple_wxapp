@@ -16,20 +16,24 @@ Page({
       return
     }
 
-    const detail = anniversaryService.getAnniversaryById(id)
+    anniversaryService.getAnniversaryByIdAsync(id).then((detail) => {
+      if (!detail) {
+        wx.showToast({
+          title: '纪念日不存在',
+          icon: 'none'
+        })
+        return
+      }
 
-    if (!detail) {
-      return
-    }
+      const countInfo = this.buildCountInfo(detail)
 
-    const countInfo = this.buildCountInfo(detail)
-
-    this.setData({
-      detail,
-      headerTitle: detail.title,
-      countText: String(countInfo.value),
-      countLabel: countInfo.label,
-      startDateLabel: `起始日：${detail.displayDate} ${this.getWeekdayLabel(detail.displayDate)}`
+      this.setData({
+        detail,
+        headerTitle: detail.title,
+        countText: String(countInfo.value),
+        countLabel: countInfo.label,
+        startDateLabel: `起始日：${detail.displayDate} ${this.getWeekdayLabel(detail.displayDate)}`
+      })
     })
   },
 

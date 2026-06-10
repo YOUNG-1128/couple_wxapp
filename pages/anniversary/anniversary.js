@@ -9,6 +9,7 @@ Page({
     list: [],
     highlighted: null,
     showCreator: false,
+    editingId: '',
     typeOptions: [],
     formTitle: '',
     formDate: '',
@@ -24,17 +25,38 @@ Page({
   },
 
   refreshData() {
-    const pageData = anniversaryService.getAnniversaryPageData()
-
-    this.setData({
-      list: pageData.list,
-      highlighted: pageData.highlighted,
-      typeOptions: pageData.types
+    return anniversaryService.getAnniversaryPageDataAsync().then((pageData) => {
+      this.setData({
+        list: pageData.list,
+        highlighted: pageData.highlighted,
+        typeOptions: pageData.types
+      })
     })
   },
 
   onOpenCreator() {
+    this.resetForm()
     this.setData({ showCreator: true })
+  },
+
+  onEditAnniversary(event) {
+    const id = event.currentTarget.dataset.id
+    const item = this.data.list.find((entry) => entry.id === id)
+
+    if (!item) {
+      return
+    }
+
+    this.setData({
+      showCreator: true,
+      editingId: item.id,
+      formTitle: item.title || '',
+      formDate: item.date || '',
+      formType: item.type || '自定义',
+      formRepeatType: item.repeatType || 'none',
+      formNote: item.note || '',
+      formCoverImage: item.coverImage || ''
+    })
   },
 
   onCloseCreator() {
@@ -149,7 +171,8 @@ Page({
       category: 'anniversaries',
       ownerId: currentUser.userId || 'anonymous'
     }).then((coverImage) => {
-      anniversaryService.createAnniversary({
+      return anniversaryService.saveAnniversaryAsync({
+        id: this.data.editingId,
         title,
         date,
         type: this.data.formType,
@@ -157,30 +180,70 @@ Page({
         note: (this.data.formNote || '').trim(),
         coverImage
       })
-
+    }).then(() => {
       this.setData({
         showCreator: false,
-        formTitle: '',
-        formDate: '',
-        formType: '恋爱纪念日',
-        formRepeatType: 'yearly',
-        formNote: '',
-        formCoverImage: '',
         saving: false
       })
 
-      this.refreshData()
-
-      wx.showToast({
-        title: '纪念日已保存',
-        icon: 'success'
+      this.resetForm()
+      return this.refreshData().then(() => {
+        wx.showToast({
+          title: '纪念日已保存',
+          icon: 'success'
+        })
       })
     }).catch(() => {
       this.setData({ saving: false })
       wx.showToast({
-        title: '封面上传失败',
+        title: '纪念日保存失败',
         icon: 'none'
       })
+    })
+  },
+
+  onRemoveAnniversary(event) {
+    const id = event.currentTarget.dataset.id
+
+    if (!id) {
+      return
+    }
+
+    wx.showModal({
+      title: '删除纪念日',
+      content: '删除后双方都将看不到这条纪念日，确定继续吗？',
+      success: (result) => {
+        if (!result.confirm) {
+          return
+        }
+
+        anniversaryService.removeAnniversaryAsync(id)
+          .then(() => this.refreshData())
+          .then(() => {
+            wx.showToast({
+              title: '已删除',
+              icon: 'success'
+            })
+          })
+          .catch(() => {
+            wx.showToast({
+              title: '删除失败',
+              icon: 'none'
+            })
+          })
+      }
+    })
+  },
+
+  resetForm() {
+    this.setData({
+      editingId: '',
+      formTitle: '',
+      formDate: '',
+      formType: '恋爱纪念日',
+      formRepeatType: 'yearly',
+      formNote: '',
+      formCoverImage: ''
     })
   },
 

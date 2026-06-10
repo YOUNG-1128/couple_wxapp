@@ -175,6 +175,10 @@
   - `createTodo`
   - `toggleTodoStatus`
   - `removeTodo`
+- 纪念日：
+  - `getAnniversaries`
+  - `upsertAnniversary`
+  - `removeAnniversary`
 - 想你信号：
   - `sendMissSignal`
   - `getMissSignalHistory`
@@ -197,6 +201,7 @@
 - `dailyQuestions`
 - `missSignals`
 - `footprints`
+- `anniversaries`
 
 ## 每日问答与 AI 分析
 
@@ -236,6 +241,20 @@
 - 在 CloudBase 控制台的云函数日志中确认每分钟执行成功。
 
 当前定时任务只负责到期投递，不负责站外订阅消息发送。站外提醒需要先完成正确的接收方订阅授权设计。
+
+## 纪念日云端同步
+
+纪念日模块在未登录或未绑定时继续使用本地 mock 数据；完成真实登录与情侣绑定后，自动切换到情侣共享的 `anniversaries` 云集合。
+
+相关云函数：
+
+- `getAnniversaries`：按当前用户的 `coupleId` 查询共享纪念日。
+- `upsertAnniversary`：新增或编辑纪念日，并在服务端校验输入。
+- `removeAnniversary`：删除当前情侣关系下的纪念日。
+
+客户端的纪念日列表、首页近期纪念日和详情页均可从云端刷新，列表支持新增、编辑、删除。封面图片会先上传到云存储，再将 `fileID` 保存到纪念日记录。
+
+部署时需要创建 `anniversaries` 集合，并建议建立 `coupleId` 索引。数据库权限应保持仅云函数或管理员可读写。
 
 `CLOUD_SETUP.md` 说明了订阅消息接入状态。当前需要注意：
 

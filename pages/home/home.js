@@ -230,9 +230,10 @@ Page({
     const partnerStatus = partnerUser ? todayStatusMap[partnerUser.userId] : null
 
     const todayTodoList = todoService.getTodayPendingTodos(2)
-    const upcomingAnniversaries = anniversaryService.getUpcomingForHome(30)
-
-    pendingService.getPendingActionsAsync().then((pendingActions) => {
+    Promise.all([
+      pendingService.getPendingActionsAsync(),
+      anniversaryService.getUpcomingForHomeAsync(30)
+    ]).then(([pendingActions, upcomingAnniversaries]) => {
       this.setData({
         myUser,
         partnerUser,

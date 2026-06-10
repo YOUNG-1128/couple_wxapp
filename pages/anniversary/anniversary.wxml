@@ -24,13 +24,17 @@
         <view class="ann-countdown">{{item.countdownText}}</view>
       </view>
       <view class="ann-meta">{{item.nextDate}} · {{item.repeatType === 'yearly' ? '每年重复' : '一次性'}}</view>
+      <view class="ann-actions">
+        <view class="ann-action" data-id="{{item.id}}" catchtap="onEditAnniversary">编辑</view>
+        <view class="ann-action ann-action-danger" data-id="{{item.id}}" catchtap="onRemoveAnniversary">删除</view>
+      </view>
     </view>
   </view>
 </scroll-view>
 
 <view class="creator-mask" wx:if="{{showCreator}}" bindtap="onCloseCreator">
   <view class="creator-panel" catchtap="noop">
-    <view class="panel-title">新增纪念日</view>
+    <view class="panel-title">{{editingId ? '编辑纪念日' : '新增纪念日'}}</view>
     <input class="form-input" value="{{formTitle}}" placeholder="标题（必填）" maxlength="40" bindinput="onTitleInput" />
 
     <view class="form-row">

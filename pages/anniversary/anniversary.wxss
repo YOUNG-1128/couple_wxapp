@@ -133,6 +133,22 @@ page {
   font-size: 23rpx;
 }
 
+.ann-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 24rpx;
+  margin-top: 14rpx;
+}
+
+.ann-action {
+  color: #a36e7b;
+  font-size: 23rpx;
+}
+
+.ann-action-danger {
+  color: #c65f69;
+}
+
 .creator-mask {
   position: fixed;
   inset: 0;
