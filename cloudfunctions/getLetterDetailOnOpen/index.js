@@ -35,6 +35,20 @@ function isVisible(letter) {
   return new Date(letter.visibleAt).getTime() <= Date.now()
 }
 
+function sanitizeLetterForUser(letter, currentUserId) {
+  if (letter.toUserId !== currentUserId || isVisible(letter)) {
+    return letter
+  }
+
+  return {
+    ...letter,
+    title: '',
+    content: '',
+    images: [],
+    lockedForUser: true
+  }
+}
+
 exports.main = async (event) => {
   const letterId = event && event.letterId ? event.letterId : ''
 
@@ -85,7 +99,7 @@ exports.main = async (event) => {
 
     return {
       success: true,
-      letter
+      letter: sanitizeLetterForUser(letter, currentUser.userId)
     }
   } catch (error) {
     return {

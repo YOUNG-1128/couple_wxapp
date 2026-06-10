@@ -27,6 +27,28 @@ async function getCurrentUser() {
   return user
 }
 
+function isVisible(letter) {
+  return !letter.visibleAt || new Date(letter.visibleAt).getTime() <= Date.now()
+}
+
+function sanitizeLetterForUser(letter, currentUserId) {
+  const lockedForUser = letter.toUserId === currentUserId
+    && letter.status !== 'draft'
+    && !isVisible(letter)
+
+  if (!lockedForUser) {
+    return letter
+  }
+
+  return {
+    ...letter,
+    title: '',
+    content: '',
+    images: [],
+    lockedForUser: true
+  }
+}
+
 exports.main = async () => {
   try {
     const currentUser = await getCurrentUser()
@@ -44,7 +66,7 @@ exports.main = async () => {
 
     return {
       success: true,
-      letters: letterRes.data || []
+      letters: (letterRes.data || []).map((letter) => sanitizeLetterForUser(letter, currentUser.userId))
     }
   } catch (error) {
     return {

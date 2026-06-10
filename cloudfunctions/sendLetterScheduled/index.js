@@ -62,6 +62,17 @@ exports.main = async (event) => {
 
     const partnerUserId = await getPartnerUserId(currentUser.coupleId, currentUser.userId)
     const now = new Date().toISOString()
+    const visibleAt = event && event.visibleAt ? event.visibleAt : ''
+    const visibleAtTime = new Date(visibleAt).getTime()
+
+    if (!visibleAt || Number.isNaN(visibleAtTime)) {
+      throw new Error('visible_at_invalid')
+    }
+
+    if (visibleAtTime <= Date.now()) {
+      throw new Error('visible_at_must_be_future')
+    }
+
     const data = {
       coupleId: currentUser.coupleId,
       fromUserId: currentUser.userId,
@@ -74,7 +85,9 @@ exports.main = async (event) => {
       sendMode: 'scheduled',
       updatedAt: now,
       sentAt: now,
-      visibleAt: event && event.visibleAt ? event.visibleAt : null,
+      visibleAt,
+      deliveredAt: null,
+      deliveryClaimedAt: null,
       openedAt: null,
       readAt: null,
       readByUserId: null,

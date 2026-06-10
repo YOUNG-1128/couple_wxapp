@@ -134,6 +134,7 @@
 - `cloudfunctions/createCoupleInviteCode`
 - `cloudfunctions/bindCoupleByInviteCode`
 - `cloudfunctions/getCoupleBindingStatus`
+- `cloudfunctions/processScheduledLetters`
 
 部署时在微信开发者工具中选择“上传并部署：云端安装依赖”。部署后使用两个真实微信账号验证登录、邀请码生成、绑定、重启后绑定状态恢复。
 
@@ -153,6 +154,7 @@
   - `removeDraft`
   - `sendLetterNow`
   - `sendLetterScheduled`
+  - `processScheduledLetters`
   - `getLetterDetailOnOpen`
   - `sendLetterSubscribeNotice`
   - `updateLetterNoticeStatus`
@@ -217,6 +219,23 @@
 - 草稿保存。
 - 已读/未读状态。
 - 站外订阅消息提醒。
+
+定时信投递：
+
+- `cloudfunctions/sendLetterScheduled` 会校验 `visibleAt` 必须是合法未来时间。
+- `cloudfunctions/processScheduledLetters` 配置了每分钟执行一次的定时触发器。
+- 到期信件会从 `scheduled` 幂等更新为 `delivered`，并记录 `deliveredAt`、`deliveryClaimedAt`。
+- 定时任务通过仅更新仍为 `scheduled` 且已经到期的记录，避免重复投递。
+- `getMailboxPageData` 和 `getLetterDetailOnOpen` 会对接收方隐藏未到期信件的标题、正文和图片；发信方仍可查看自己定时发送的内容。
+
+部署定时投递时，需要：
+
+- 创建或确认 `letters` 集合。
+- 为 `letters` 建立 `status + visibleAt` 组合索引。
+- 部署 `processScheduledLetters` 云函数，并确认其定时触发器已创建。
+- 在 CloudBase 控制台的云函数日志中确认每分钟执行成功。
+
+当前定时任务只负责到期投递，不负责站外订阅消息发送。站外提醒需要先完成正确的接收方订阅授权设计。
 
 `CLOUD_SETUP.md` 说明了订阅消息接入状态。当前需要注意：
 

@@ -173,7 +173,9 @@ function decorateLetter(letter, currentUserId) {
   const fromUser = getUserById(letter.fromUserId) || { nickName: '我', avatarUrl: '' }
   const toUser = getUserById(letter.toUserId) || { nickName: 'TA', avatarUrl: '' }
   const incoming = letter.toUserId === currentUserId
-  const unreadForMe = incoming && isVisible(letter) && !letter.readAt && letter.status !== 'draft'
+  const visible = isVisible(letter)
+  const lockedForMe = incoming && !visible && letter.status !== 'draft'
+  const unreadForMe = incoming && visible && !letter.readAt && letter.status !== 'draft'
   const readState = getReadState(letter, currentUserId)
   const readIcon = readState === 'read' ? '✔✔' : (readState === 'unread' ? '●' : '◌')
 
@@ -181,6 +183,9 @@ function decorateLetter(letter, currentUserId) {
 
   return {
     ...letter,
+    title: lockedForMe ? '一封等待送达的信' : (letter.title || ''),
+    content: lockedForMe ? '这封信还没有到约定的送达时间' : (letter.content || ''),
+    images: lockedForMe ? [] : (Array.isArray(letter.images) ? letter.images : []),
     previewTime: formatPostTime(displayTime),
     listTime: formatListTime(displayTime),
     statusText: getStatusText(letter),
@@ -189,6 +194,8 @@ function decorateLetter(letter, currentUserId) {
     toUser,
     directionText: incoming ? `${fromUser.nickName} 发给我` : `我发给 ${toUser.nickName}`,
     isIncoming: incoming,
+    visible,
+    lockedForMe,
     isUnreadForMe: unreadForMe,
     readState,
     readIcon,
@@ -654,9 +661,13 @@ function getLetterDetailOnOpen(letterId) {
   const fromUser = getUserById(targetLetter.fromUserId) || { nickName: '我', avatarUrl: '' }
   const toUser = getUserById(targetLetter.toUserId) || { nickName: 'TA', avatarUrl: '' }
   const visible = isVisible(targetLetter)
+  const lockedForMe = targetLetter.toUserId === currentUser.userId && !visible
 
   return {
     ...decorateLetter(targetLetter, currentUser.userId),
+    title: lockedForMe ? '' : (targetLetter.title || ''),
+    content: lockedForMe ? '' : (targetLetter.content || ''),
+    images: lockedForMe ? [] : (Array.isArray(targetLetter.images) ? targetLetter.images : []),
     fromUser,
     toUser,
     visible,

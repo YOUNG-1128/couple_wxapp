@@ -1,0 +1,9 @@
+{
+  "triggers": [
+    {
+      "name": "deliver-scheduled-letters-every-minute",
+      "type": "timer",
+      "config": "0 */1 * * * * *"
+    }
+  ]
+}
