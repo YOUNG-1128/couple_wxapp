@@ -234,9 +234,21 @@
 - 首页使用多个模块组件，例如 `home-love-days`、`home-anniversary`、`home-pending-actions`、`home-miss-button`、`home-couple-question`。
 - 组件与页面样式使用 `.wxss`，项目未使用 npm 前端构建链。
 
+## 云存储图片
+
+图片上传统一通过 `services/cloud-storage.js`：
+
+- 本地临时图片会通过 `wx.cloud.uploadFile` 上传到当前云环境。
+- 已经是 `cloud://`、`http://` 或 `https://` 的图片地址会直接复用，避免重复上传。
+- 云存储路径按业务、用户、年月组织，例如 `moments/{userId}/2026/06/...jpg`。
+- 当前已接入头像、动态/相册草稿与发布、信件草稿与发送、纪念日封面。
+- 云数据库应保存上传后返回的 `fileID`，不要保存 `wx.chooseImage` 返回的临时路径。
+- 删除业务数据时尚未自动清理无引用云文件，后续需要补充文件清理策略。
+
 ## 开发注意事项
 
 - 不要假设所有功能都已经完全云端化。很多服务仍以 `mock/` 和 `services/local-state.js` 为基础。
+- 新增图片选择功能时，应在写入云数据库前调用 `services/cloud-storage.js`，保证另一台设备可以访问图片。
 - 修改业务逻辑时，优先在对应 `services/` 中改数据与云函数衔接，页面层尽量只处理交互和展示。
 - 新增云函数后，需要：
   - 在 `cloudfunctions/` 下新增独立目录。

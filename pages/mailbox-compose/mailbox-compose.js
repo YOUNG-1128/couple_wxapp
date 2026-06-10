@@ -1,4 +1,5 @@
 const mailboxService = require('../../services/mailbox')
+const cloudStorageService = require('../../services/cloud-storage')
 
 const MAX_IMAGE_COUNT = 9
 const MAX_CONTENT_LENGTH = 2000
@@ -182,9 +183,10 @@ Page({
       return Promise.resolve(null)
     }
 
-    const payload = this.buildDraftPayload()
-
-    return mailboxService.saveDraftAsync(payload).then((draft) => {
+    return this.uploadLetterImages().then(() => {
+      const payload = this.buildDraftPayload()
+      return mailboxService.saveDraftAsync(payload)
+    }).then((draft) => {
       this.syncSavedDraftState({
         draftId: draft.letterId
       })
@@ -267,6 +269,18 @@ Page({
       sending: true
     })
 
+    this.uploadLetterImages().then(() => {
+      this.sendPreparedLetter(content)
+    }).catch(() => {
+      this.setData({ sending: false })
+      wx.showToast({
+        title: '图片上传失败',
+        icon: 'none'
+      })
+    })
+  },
+
+  sendPreparedLetter(content) {
     if (this.data.sendMode === 'scheduled') {
       const visibleAt = this.combineScheduleAt()
 
@@ -348,11 +362,23 @@ Page({
           }, 240)
         })
     }).catch(() => {
-        this.setData({ sending: false })
-        wx.showToast({
-          title: '发送失败',
-          icon: 'none'
-        })
+      this.setData({ sending: false })
+      wx.showToast({
+        title: '发送失败',
+        icon: 'none'
+      })
+    })
+  },
+
+  uploadLetterImages() {
+    const currentUser = this.data.currentUser || {}
+
+    return cloudStorageService.uploadFiles(this.data.images || [], {
+      category: 'letters',
+      ownerId: currentUser.userId || 'anonymous'
+    }).then((images) => {
+      this.setData({ images })
+      return images
     })
   },
 

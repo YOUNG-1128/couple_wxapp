@@ -1,5 +1,6 @@
 const momentsService = require('../../services/moments')
 const footprintService = require('../../services/footprint')
+const cloudStorageService = require('../../services/cloud-storage')
 
 const MAX_IMAGE_COUNT = 4
 
@@ -20,7 +21,8 @@ Page({
     currentUser: {},
     composeContent: '',
     composeImages: [],
-    selectedLocation: createEmptyLocationState()
+    selectedLocation: createEmptyLocationState(),
+    submitting: false
   },
 
   onLoad(options) {
@@ -278,6 +280,10 @@ Page({
   },
 
   onSaveDraft() {
+    if (this.data.submitting) {
+      return
+    }
+
     const content = (this.data.composeContent || '').trim()
     const images = this.data.composeImages || []
 
@@ -289,14 +295,17 @@ Page({
       return
     }
 
-    momentsService.saveMomentDraftAsync({
+    this.setData({ submitting: true })
+
+    this.uploadComposeImages().then((uploadedImages) => momentsService.saveMomentDraftAsync({
       draftId: this.data.draftId,
       content,
-      images,
+      images: uploadedImages,
       location: this.buildLocationPayload()
-    }).then((draft) => {
+    })).then((draft) => {
       this.setData({
-        draftId: draft.draftId
+        draftId: draft.draftId,
+        submitting: false
       })
 
       wx.showToast({
@@ -308,14 +317,19 @@ Page({
         this.goBackToAlbum()
       }, 220)
     }).catch(() => {
+      this.setData({ submitting: false })
       wx.showToast({
-        title: '草稿保存失败',
+        title: '图片上传或草稿保存失败',
         icon: 'none'
       })
     })
   },
 
   onPublishPost() {
+    if (this.data.submitting) {
+      return
+    }
+
     const content = (this.data.composeContent || '').trim()
     const images = this.data.composeImages || []
     const location = this.buildLocationPayload()
@@ -328,13 +342,16 @@ Page({
       return
     }
 
-    momentsService.publishMomentAsync({
+    this.setData({ submitting: true })
+
+    this.uploadComposeImages().then((uploadedImages) => momentsService.publishMomentAsync({
       draftId: this.data.draftId,
       content,
-      images,
+      images: uploadedImages,
       location,
       shouldCreateFootprint: location.enabled === true
-    }).then(() => {
+    })).then(() => {
+      this.setData({ submitting: false })
       wx.showToast({
         title: '发布成功',
         icon: 'success'
@@ -344,10 +361,23 @@ Page({
         this.goBackToAlbum()
       }, 260)
     }).catch(() => {
+      this.setData({ submitting: false })
       wx.showToast({
-        title: '发布失败',
+        title: '图片上传或发布失败',
         icon: 'none'
       })
+    })
+  },
+
+  uploadComposeImages() {
+    const currentUser = this.data.currentUser || {}
+
+    return cloudStorageService.uploadFiles(this.data.composeImages || [], {
+      category: 'moments',
+      ownerId: currentUser.userId || 'anonymous'
+    }).then((images) => {
+      this.setData({ composeImages: images })
+      return images
     })
   },
 

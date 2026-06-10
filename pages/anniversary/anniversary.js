@@ -1,4 +1,6 @@
 const anniversaryService = require('../../services/anniversary')
+const relationshipService = require('../../services/relationship')
+const cloudStorageService = require('../../services/cloud-storage')
 
 Page({
   data: {
@@ -13,7 +15,8 @@ Page({
     formType: '恋爱纪念日',
     formRepeatType: 'yearly',
     formNote: '',
-    formCoverImage: ''
+    formCoverImage: '',
+    saving: false
   },
 
   onShow() {
@@ -114,6 +117,10 @@ Page({
   },
 
   onSaveAnniversary() {
+    if (this.data.saving) {
+      return
+    }
+
     const title = (this.data.formTitle || '').trim()
     const date = this.data.formDate
 
@@ -133,30 +140,47 @@ Page({
       return
     }
 
-    anniversaryService.createAnniversary({
-      title,
-      date,
-      type: this.data.formType,
-      repeatType: this.data.formRepeatType,
-      note: (this.data.formNote || '').trim(),
-      coverImage: this.data.formCoverImage
-    })
+    const relationship = relationshipService.getRelationshipContext()
+    const currentUser = relationship.currentUser || {}
 
-    this.setData({
-      showCreator: false,
-      formTitle: '',
-      formDate: '',
-      formType: '恋爱纪念日',
-      formRepeatType: 'yearly',
-      formNote: '',
-      formCoverImage: ''
-    })
+    this.setData({ saving: true })
 
-    this.refreshData()
+    cloudStorageService.uploadFile(this.data.formCoverImage, {
+      category: 'anniversaries',
+      ownerId: currentUser.userId || 'anonymous'
+    }).then((coverImage) => {
+      anniversaryService.createAnniversary({
+        title,
+        date,
+        type: this.data.formType,
+        repeatType: this.data.formRepeatType,
+        note: (this.data.formNote || '').trim(),
+        coverImage
+      })
 
-    wx.showToast({
-      title: '纪念日已保存',
-      icon: 'success'
+      this.setData({
+        showCreator: false,
+        formTitle: '',
+        formDate: '',
+        formType: '恋爱纪念日',
+        formRepeatType: 'yearly',
+        formNote: '',
+        formCoverImage: '',
+        saving: false
+      })
+
+      this.refreshData()
+
+      wx.showToast({
+        title: '纪念日已保存',
+        icon: 'success'
+      })
+    }).catch(() => {
+      this.setData({ saving: false })
+      wx.showToast({
+        title: '封面上传失败',
+        icon: 'none'
+      })
     })
   },
 

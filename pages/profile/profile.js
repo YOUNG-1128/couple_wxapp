@@ -3,6 +3,7 @@ const statsService = require('../../services/stats')
 const momentsService = require('../../services/moments')
 const authService = require('../../services/auth')
 const coupleService = require('../../services/couple')
+const cloudStorageService = require('../../services/cloud-storage')
 
 Page({
   data: {
@@ -263,16 +264,31 @@ Page({
           return
         }
 
-        momentsService.updateUserProfile(currentUser.userId, { avatarUrl })
+        cloudStorageService.uploadFile(avatarUrl, {
+          category: 'avatars',
+          ownerId: currentUser.userId
+        }).then((cloudAvatarUrl) => {
+          momentsService.updateUserProfile(currentUser.userId, { avatarUrl: cloudAvatarUrl })
 
-        this.setData({
-          users: momentsService.getUsers(),
-          currentUser: momentsService.getCurrentUser()
-        })
+          return this.data.cloudAuth.isCloudLoggedIn
+            ? authService.syncCloudCurrentUserProfile()
+            : null
+        }).then(() => {
+          this.setData({
+            users: momentsService.getUsers(),
+            currentUser: momentsService.getCurrentUser(),
+            cloudAuth: authService.getCloudAuthState()
+          })
 
-        wx.showToast({
-          title: '头像已更新',
-          icon: 'success'
+          wx.showToast({
+            title: '头像已更新',
+            icon: 'success'
+          })
+        }).catch(() => {
+          wx.showToast({
+            title: '头像上传失败',
+            icon: 'none'
+          })
         })
       },
       fail: (err) => {

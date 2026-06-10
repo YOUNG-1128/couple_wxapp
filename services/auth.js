@@ -189,5 +189,6 @@ function loginWithWeChat() {
 module.exports = {
   getCloudAuthState,
   getAccountStatus,
-  loginWithWeChat
+  loginWithWeChat,
+  syncCloudCurrentUserProfile
 }
