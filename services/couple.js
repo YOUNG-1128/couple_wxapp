@@ -1,4 +1,4 @@
-const { getState, updateState } = require('./local-state')
+const { getState, updateState, syncUserIdentity } = require('./local-state')
 
 function getSession() {
   return getState('session')
@@ -43,6 +43,8 @@ function formatBindingError(errorCode = '') {
 function saveBindingState(result = {}) {
   const session = getSession()
   const currentUser = getCurrentUser()
+  const localPartner = getPartnerUser(currentUser)
+  const localPartnerUserId = localPartner ? localPartner.userId : ''
   const previousCoupleId = session.coupleId || ''
   const previousInviteCode = session.inviteCode || ''
   const previousStatus = session.bindingStatus || 'unbound'
@@ -73,14 +75,24 @@ function saveBindingState(result = {}) {
 
       const partnerProfile = result.partnerProfile
       if (result.success === true && partnerProfile) {
-        const partner = users.find((item) => item.userId !== currentUser.userId)
+        const partner = users.find((item) => item.userId === partnerProfile.userId)
+          || users.find((item) => item.userId !== currentUser.userId)
 
         if (partner) {
+          partner.userId = partnerProfile.userId || partner.userId
           partner.nickName = partnerProfile.nickName || partner.nickName
           partner.avatarUrl = partnerProfile.avatarUrl || partner.avatarUrl
           partner.coupleId = result.coupleId || partner.coupleId
         }
       }
+    })
+  }
+
+  if (result.success === true && result.partnerProfile && localPartnerUserId && result.partnerProfile.userId) {
+    syncUserIdentity(localPartnerUserId, result.partnerProfile.userId, {
+      nickName: result.partnerProfile.nickName || '',
+      avatarUrl: result.partnerProfile.avatarUrl || '',
+      coupleId: result.coupleId || ''
     })
   }
 

@@ -1,7 +1,7 @@
 <navigation-bar title="首页" back="{{false}}" color="black" background="#FFF"></navigation-bar>
 <scroll-view class="home-scroll" type="list" scroll-y>
   <view class="home-page">
-    <view class="hero-card">
+    <view class="hero-card" bindlongpress="onReplayOpening">
       <view class="hero-main">
         <view class="hero-badge">恋爱天数</view>
         <view class="hero-days-row">
@@ -78,4 +78,48 @@
       </view>
     </view>
   </view>
+</view>
+
+<view
+  wx:if="{{showOpening}}"
+  class="opening opening-{{openingMode}} {{openingReady ? 'opening-ready' : ''}}"
+  bindtap="onSkipOpening"
+>
+  <block wx:if="{{openingReady}}">
+    <view class="opening-skip">轻触跳过</view>
+
+    <view class="opening-date">{{openingEyebrow}}</view>
+
+    <view class="opening-stage">
+      <view class="opening-track opening-track-rose">
+        <view class="opening-track-glow"></view>
+      </view>
+      <view class="opening-track opening-track-gold">
+        <view class="opening-track-glow"></view>
+      </view>
+
+      <view class="opening-orbit">
+        <view class="opening-loop opening-loop-left"></view>
+        <view class="opening-loop opening-loop-right"></view>
+        <view class="opening-knot"></view>
+      </view>
+
+      <view class="opening-point opening-point-rose">
+        <view class="opening-point-core"></view>
+        <view wx:if="{{showOpeningNames}}" class="opening-name">{{openingMyName}}</view>
+      </view>
+      <view class="opening-point opening-point-gold">
+        <view class="opening-point-core"></view>
+        <view wx:if="{{showOpeningNames}}" class="opening-name">{{openingPartnerName}}</view>
+      </view>
+
+      <view class="opening-pulse opening-pulse-one"></view>
+      <view class="opening-pulse opening-pulse-two"></view>
+    </view>
+
+    <view class="opening-copy">
+      <view class="opening-title">{{openingTitle}}</view>
+      <view class="opening-subtitle">{{openingSubtitle}}</view>
+    </view>
+  </block>
 </view>

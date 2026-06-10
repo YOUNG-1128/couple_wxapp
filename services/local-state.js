@@ -66,7 +66,89 @@ function updateState(key, updater) {
   return currentState
 }
 
+const IDENTITY_FIELDS = new Set([
+  'userId',
+  'authorId',
+  'ownerId',
+  'ownerUserId',
+  'partnerUserId',
+  'fromUserId',
+  'toUserId',
+  'readByUserId',
+  'senderUserId',
+  'receiverUserId',
+  'currentUserId',
+  'cloudUserId'
+])
+
+const IDENTITY_ARRAY_FIELDS = new Set([
+  'participants',
+  'userIds',
+  'resultViewedUserIds'
+])
+
+function replaceIdentityReferences(value, oldUserId, newUserId) {
+  if (!value || typeof value !== 'object') {
+    return
+  }
+
+  if (Array.isArray(value)) {
+    value.forEach((item) => replaceIdentityReferences(item, oldUserId, newUserId))
+    return
+  }
+
+  Object.keys(value).forEach((key) => {
+    const fieldValue = value[key]
+
+    if (IDENTITY_FIELDS.has(key) && fieldValue === oldUserId) {
+      value[key] = newUserId
+      return
+    }
+
+    if (IDENTITY_ARRAY_FIELDS.has(key) && Array.isArray(fieldValue)) {
+      value[key] = fieldValue.map((item) => item === oldUserId ? newUserId : item)
+      return
+    }
+
+    replaceIdentityReferences(fieldValue, oldUserId, newUserId)
+  })
+}
+
+function syncUserIdentity(oldUserId, newUserId, profile = {}) {
+  if (!oldUserId || !newUserId) {
+    return null
+  }
+
+  if (oldUserId !== newUserId) {
+    replaceIdentityReferences(state, oldUserId, newUserId)
+  }
+
+  const users = state.users || []
+  const matches = users.filter((user) => user.userId === newUserId)
+  const target = matches[0] || null
+
+  if (target) {
+    Object.assign(target, {
+      nickName: profile.nickName || target.nickName,
+      avatarUrl: profile.avatarUrl || target.avatarUrl,
+      openId: profile.openId || target.openId,
+      coupleId: profile.coupleId || target.coupleId || ''
+    })
+  }
+
+  if (matches.length > 1) {
+    for (let index = users.length - 1; index >= 0; index -= 1) {
+      if (users[index] !== target && users[index].userId === newUserId) {
+        users.splice(index, 1)
+      }
+    }
+  }
+
+  return target
+}
+
 module.exports = {
   getState,
-  updateState
+  updateState,
+  syncUserIdentity
 }

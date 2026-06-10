@@ -76,7 +76,7 @@
       <view class="reader-footer">
         <view class="reader-sign" wx:if="{{readerLetter.visible}}">
           {{readerSign}}
-          <text class="reader-sign-note" wx:if="{{readerLetter.fromUser && readerLetter.fromUser.userId === 'partner'}}"> 来自TA的小心意</text>
+          <text class="reader-sign-note" wx:if="{{readerLetter.isIncoming}}"> 来自TA的小心意</text>
         </view>
         <view class="reader-date">{{readerDate}}</view>
       </view>

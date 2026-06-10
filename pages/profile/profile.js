@@ -187,6 +187,10 @@ Page({
 
 
   onSwitchUser(event) {
+    if (this.data.cloudAuth.isCloudLoggedIn) {
+      return
+    }
+
     const userId = event.currentTarget.dataset.userId
 
     if (!userId) {

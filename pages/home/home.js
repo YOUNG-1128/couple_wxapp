@@ -3,10 +3,20 @@ const anniversaryService = require('../../services/anniversary')
 const companionService = require('../../services/companion')
 const pendingService = require('../../services/pending')
 const todoService = require('../../services/todo')
-const momentsService = require('../../services/moments')
 const dailyMoodService = require('../../services/dailyMood')
+const relationshipService = require('../../services/relationship')
+const coupleService = require('../../services/couple')
 
 const TAB_PAGES = ['/pages/home/home', '/pages/hub/hub', '/pages/profile/profile']
+const OPENING_STORAGE_KEY = 'couple-opening-v2-last-play-date'
+const OPENING_DURATION = 4100
+const OPENING_STATUS_WAIT = 1200
+const OPENING_LINES = [
+  '今天也是喜欢你的一天',
+  '很高兴，今天也有你',
+  '我们又一起收藏了一天',
+  '欢迎回到我们的小世界'
+]
 const STATUS_OPTIONS = [
   { value: 'happy', label: '开心' },
   { value: 'calm', label: '平静' },
@@ -42,17 +52,178 @@ Page({
     selectedMyStatus: '',
 
     todayTasks: [],
-    monthAnniversaries: []
+    monthAnniversaries: [],
+
+    showOpening: false,
+    openingReady: false,
+    openingMode: 'waiting',
+    openingEyebrow: '',
+    openingTitle: '',
+    openingSubtitle: '',
+    openingMyName: '',
+    openingPartnerName: '',
+    showOpeningNames: false
+  },
+
+  onLoad() {
+    this.openingDisposed = false
   },
 
   onShow() {
     this.refreshDashboard()
+    this.prepareOpening()
+  },
+
+  onUnload() {
+    this.openingDisposed = true
+    this.clearOpeningTimer()
+  },
+
+  prepareOpening(force = false) {
+    const today = this.getTodayKey()
+
+    if (
+      this.openingPreparing
+      || this.data.showOpening
+      || (!force && !this.shouldPlayOpening(today))
+    ) {
+      return
+    }
+
+    this.openingPreparing = true
+    this.setData({
+      showOpening: true,
+      openingReady: false
+    })
+
+    Promise.race([
+      coupleService.getBindingStatus(),
+      new Promise((resolve) => setTimeout(resolve, OPENING_STATUS_WAIT))
+    ]).then(() => {
+      this.openingPreparing = false
+      this.startOpening(today)
+    })
+  },
+
+  startOpening(today) {
+    if (this.openingDisposed || !this.data.showOpening) {
+      return
+    }
+
+    const relationship = relationshipService.getRelationshipContext()
+    const isBound = relationship.isBound
+    const myName = this.getOpeningName(relationship.currentUser)
+    const partnerName = this.getOpeningName(relationship.partnerUser)
+    const lineIndex = this.getDateNumber(today) % OPENING_LINES.length
+    const hasProfileDetails = Boolean(isBound && myName && partnerName)
+    const openingMode = !isBound ? 'waiting' : (hasProfileDetails ? 'story' : 'connected')
+
+    this.setData({
+      openingReady: true,
+      openingMode,
+      openingEyebrow: openingMode === 'story'
+        ? this.data.loveInfo.startDate
+        : (openingMode === 'connected' ? 'OUR STORY' : 'A PLACE FOR TWO'),
+      openingTitle: openingMode === 'story'
+        ? OPENING_LINES[lineIndex]
+        : (openingMode === 'connected' ? '从现在开始，收藏我们的每一天' : '这里会收藏两个人的故事'),
+      openingSubtitle: openingMode === 'story'
+        ? `我们已经一起走过 ${this.data.loveInfo.days} 天`
+        : (openingMode === 'connected' ? '两条轨迹，从此有了同一个方向' : '先找到那个特别的人吧'),
+      openingMyName: myName,
+      openingPartnerName: partnerName,
+      showOpeningNames: hasProfileDetails
+    })
+
+    wx.setStorageSync(OPENING_STORAGE_KEY, today)
+
+    this.openingTimer = setTimeout(() => {
+      this.finishOpening()
+    }, OPENING_DURATION)
+  },
+
+  shouldPlayOpening(today) {
+    if (this.isDevelopmentVersion()) {
+      return true
+    }
+
+    return wx.getStorageSync(OPENING_STORAGE_KEY) !== today
+  },
+
+  isDevelopmentVersion() {
+    if (typeof wx.getAccountInfoSync !== 'function') {
+      return true
+    }
+
+    try {
+      const accountInfo = wx.getAccountInfoSync()
+      const envVersion = accountInfo
+        && accountInfo.miniProgram
+        && accountInfo.miniProgram.envVersion
+
+      return !envVersion || envVersion === 'develop'
+    } catch (error) {
+      return true
+    }
+  },
+
+  getOpeningName(user) {
+    const name = String((user && user.nickName) || '').trim()
+
+    return name && name !== '我' && name.toUpperCase() !== 'TA' ? name : ''
+  },
+
+  getTodayKey() {
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = String(now.getMonth() + 1).padStart(2, '0')
+    const date = String(now.getDate()).padStart(2, '0')
+
+    return `${year}-${month}-${date}`
+  },
+
+  getDateNumber(dateKey) {
+    return Number(String(dateKey).replace(/-/g, '')) || 0
+  },
+
+  clearOpeningTimer() {
+    if (this.openingTimer) {
+      clearTimeout(this.openingTimer)
+      this.openingTimer = null
+    }
+  },
+
+  finishOpening() {
+    if (!this.data.showOpening) {
+      return
+    }
+
+    const shouldOpenBinding = this.data.openingReady && this.data.openingMode === 'waiting'
+
+    this.clearOpeningTimer()
+    this.openingPreparing = false
+    this.setData({
+      showOpening: false,
+      openingReady: false
+    })
+
+    if (shouldOpenBinding) {
+      wx.navigateTo({ url: '/pages/couple-bind/couple-bind' })
+    }
+  },
+
+  onSkipOpening() {
+    this.finishOpening()
+  },
+
+  onReplayOpening() {
+    this.prepareOpening(true)
   },
 
   refreshDashboard() {
-    const users = momentsService.getUsers()
-    const myUser = users.find((item) => item.userId === 'me') || users[0] || null
-    const partnerUser = users.find((item) => item.userId === 'partner') || users.find((item) => item.userId !== (myUser && myUser.userId)) || null
+    const relationship = relationshipService.getRelationshipContext()
+    const myUser = relationship.currentUser || null
+    const partnerUser = relationship.partnerUser || null
 
     const todayStatusMap = dailyMoodService.getTodayStatusMap()
     const myStatus = myUser ? todayStatusMap[myUser.userId] : null

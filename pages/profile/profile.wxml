@@ -55,7 +55,7 @@
         </view>
       </view>
 
-      <view class="identity-switch">
+      <view class="identity-switch" wx:if="{{!cloudAuth.isCloudLoggedIn}}">
         <view
           class="identity-chip {{currentUser.userId === item.userId ? 'identity-chip-active' : ''}}"
           wx:for="{{users}}"

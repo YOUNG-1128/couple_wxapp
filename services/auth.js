@@ -1,4 +1,4 @@
-const { getState, updateState } = require('./local-state')
+const { getState, updateState, syncUserIdentity } = require('./local-state')
 
 function getSession() {
   return getState('session')
@@ -88,7 +88,7 @@ function saveCloudLoginResult(result = {}) {
     session.openId = result.openid || result.openId || ''
     session.unionId = result.unionid || result.unionId || ''
     session.cloudLoginAt = now
-    session.cloudUserId = result.openid || result.openId || ''
+    session.cloudUserId = ''
     session.cloudRecordId = ''
     session.cloudProfileSynced = false
     session.cloudProfileSyncedAt = ''
@@ -100,12 +100,24 @@ function saveCloudLoginResult(result = {}) {
   return getCloudAuthState()
 }
 
-function saveCloudUserSyncResult(result = {}) {
+function saveCloudUserSyncResult(result = {}, localUserId = '') {
   const now = new Date().toISOString()
+  const cloudUser = result.user || {}
+  const cloudUserId = result.userId || cloudUser.userId || ''
+
+  if (result.success === true && localUserId && cloudUserId) {
+    syncUserIdentity(localUserId, cloudUserId, {
+      nickName: cloudUser.nickName || '',
+      avatarUrl: cloudUser.avatarUrl || '',
+      openId: cloudUser.openId || getSession().openId || '',
+      coupleId: cloudUser.coupleId || ''
+    })
+  }
 
   updateState('session', (session) => {
     session.cloudRecordId = result.recordId || ''
-    session.cloudUserId = result.userId || session.cloudUserId || ''
+    session.cloudUserId = cloudUserId || session.cloudUserId || ''
+    session.currentUserId = cloudUserId || session.currentUserId
     session.cloudProfileSynced = result.success === true
     session.cloudProfileSyncedAt = result.success === true ? now : ''
     session.cloudProfileSyncError = result.success === true ? '' : (result.errorMessage || 'sync_failed')
@@ -126,10 +138,8 @@ function syncCloudCurrentUserProfile() {
     name: 'upsertCurrentUser',
     data: {
       profile: {
-        userId: currentUser.userId,
         nickName: currentUser.nickName || '',
-        avatarUrl: currentUser.avatarUrl || '',
-        role: currentUser.role || 'member'
+        avatarUrl: currentUser.avatarUrl || ''
       }
     }
   }).then((res) => {
@@ -138,14 +148,15 @@ function syncCloudCurrentUserProfile() {
     return saveCloudUserSyncResult({
       success: result.success === true,
       recordId: result.recordId || '',
-      userId: result.userId || currentUser.userId,
+      userId: result.userId || '',
+      user: result.user || null,
       errorMessage: result.errorMessage || ''
-    })
+    }, currentUser.userId)
   }).catch((error) => {
     return saveCloudUserSyncResult({
       success: false,
       errorMessage: (error && (error.message || error.errMsg)) || 'sync_failed'
-    })
+    }, currentUser.userId)
   })
 }
 
