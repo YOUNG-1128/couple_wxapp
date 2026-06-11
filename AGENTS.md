@@ -140,6 +140,8 @@
 
 主要云函数分组：
 
+- 数据库初始化：
+  - `initDb`
 - 登录与用户：
   - `login`
   - `upsertCurrentUser`
@@ -202,6 +204,8 @@
 - `missSignals`
 - `footprints`
 - `anniversaries`
+
+首次初始化云数据库时可部署并执行 `initDb`。该函数要求配置环境变量 `INIT_DB_TOKEN`，调用时传入相同的 `token`，只会创建缺失集合，不会清空或覆盖已有数据。执行完成后应删除 `initDb` 云函数或清除令牌；组合索引仍需在控制台手动确认。
 
 ## 每日问答与 AI 分析
 

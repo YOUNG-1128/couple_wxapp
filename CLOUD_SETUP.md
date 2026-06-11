@@ -1,5 +1,52 @@
 # 站外新信提醒接入说明
 
+## 首次初始化云数据库
+
+项目提供一次性云函数 `cloudfunctions/initDb`，用于创建当前代码需要的云数据库集合。它可以重复执行，不会清空、覆盖或删除已有数据。
+
+使用步骤：
+
+1. 在微信开发者工具中右键 `cloudfunctions/initDb`。
+2. 选择“上传并部署：云端安装依赖”。
+3. 在 CloudBase 云函数控制台中为 `initDb` 配置环境变量 `INIT_DB_TOKEN`，值使用你自己生成的一段随机字符串。
+4. 打开 `initDb` 的云端测试，输入：
+
+```json
+{
+  "token": "与 INIT_DB_TOKEN 完全相同的字符串"
+}
+```
+
+5. 调用成功后检查返回结果：
+
+```json
+{
+  "success": true,
+  "created": ["anniversaries"],
+  "existing": ["users", "couples"],
+  "failed": []
+}
+```
+
+6. 初始化完成后删除云端 `initDb` 函数，或清除 `INIT_DB_TOKEN` 环境变量。
+
+`initDb` 会处理这些集合：
+
+- `users`
+- `couples`
+- `letters`
+- `posts`
+- `todos`
+- `dailyQuestions`
+- `missSignals`
+- `footprints`
+- `anniversaries`
+
+集合索引仍需在 CloudBase 控制台手动确认，至少包括：
+
+- `anniversaries`：`coupleId` 升序索引。
+- `letters`：`status` 升序 + `visibleAt` 升序组合索引。
+
 ## 已完成
 
 - 已补 `login` 云函数，用于获取当前微信用户 `openid`
