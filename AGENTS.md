@@ -181,6 +181,9 @@
   - `getAnniversaries`
   - `upsertAnniversary`
   - `removeAnniversary`
+- 每日状态/心情：
+  - `getStatusRecords`
+  - `upsertStatusRecord`
 - 想你信号：
   - `sendMissSignal`
   - `getMissSignalHistory`
@@ -202,10 +205,11 @@
 - `todos`
 - `dailyQuestions`
 - `missSignals`
+- `statusRecords`
 - `footprints`
 - `anniversaries`
 
-首次初始化云数据库时可部署并执行 `initDb`。该函数要求配置环境变量 `INIT_DB_TOKEN`，调用时传入相同的 `token`，只会创建缺失集合，不会清空或覆盖已有数据。执行完成后应删除 `initDb` 云函数或清除令牌；组合索引仍需在控制台手动确认。
+首次初始化云数据库时可部署并执行 `initDb`。该函数要求配置环境变量 `INIT_DB_TOKEN`，调用时传入相同的 `token`，只会创建缺失集合，不会清空或覆盖已有数据。当前 `initDb` 尚未成功部署和执行，已暂时跳过；执行完成后应删除 `initDb` 云函数或清除令牌，组合索引仍需在控制台手动确认。
 
 ## 每日问答与 AI 分析
 
@@ -259,6 +263,12 @@
 客户端的纪念日列表、首页近期纪念日和详情页均可从云端刷新，列表支持新增、编辑、删除。封面图片会先上传到云存储，再将 `fileID` 保存到纪念日记录。
 
 部署时需要创建 `anniversaries` 集合，并建议建立 `coupleId` 索引。数据库权限应保持仅云函数或管理员可读写。
+
+## 每日状态/心情云端同步
+
+`services/dailyMood.js` 在真实登录并绑定后会通过 `getStatusRecords` 同步情侣双方的状态历史，通过 `upsertStatusRecord` 保存当前用户当天状态；未满足云端条件时继续使用本地 `statusRecords`。
+
+状态记录按香港时区生成 `date`，同一用户同一天只保留一条记录。首页会读取双方今日状态，心情页支持读取和更新当前用户今日状态。
 
 `CLOUD_SETUP.md` 说明了订阅消息接入状态。当前需要注意：
 

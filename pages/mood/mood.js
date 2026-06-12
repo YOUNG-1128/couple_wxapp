@@ -18,12 +18,19 @@ Page({
 
   onShow() {
     const currentUser = momentsService.getCurrentUser()
-    const todayMood = dailyMoodService.getTodayMood(currentUser.userId)
 
-    this.setData({
-      currentUser,
-      selectedMood: todayMood ? todayMood.mood : '',
-      note: todayMood ? todayMood.note : ''
+    if (!currentUser) {
+      return
+    }
+
+    dailyMoodService.getStatusRecordsAsync().then(() => {
+      const todayMood = dailyMoodService.getTodayMood(currentUser.userId)
+
+      this.setData({
+        currentUser,
+        selectedMood: todayMood ? todayMood.status : '',
+        note: todayMood ? todayMood.note : ''
+      })
     })
   },
 
@@ -52,19 +59,24 @@ Page({
       return
     }
 
-    dailyMoodService.saveTodayMood({
+    dailyMoodService.saveTodayStatusAsync({
       userId: currentUser.userId,
-      mood: selectedMood,
+      status: selectedMood,
       note: (this.data.note || '').trim()
-    })
+    }).then(() => {
+      wx.showToast({
+        title: '今日状态已保存',
+        icon: 'success'
+      })
 
-    wx.showToast({
-      title: '今日状态已保存',
-      icon: 'success'
+      setTimeout(() => {
+        wx.navigateBack()
+      }, 300)
+    }).catch(() => {
+      wx.showToast({
+        title: '状态保存失败',
+        icon: 'none'
+      })
     })
-
-    setTimeout(() => {
-      wx.navigateBack()
-    }, 300)
   }
 })

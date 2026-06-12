@@ -232,8 +232,12 @@ Page({
     const todayTodoList = todoService.getTodayPendingTodos(2)
     Promise.all([
       pendingService.getPendingActionsAsync(),
-      anniversaryService.getUpcomingForHomeAsync(30)
-    ]).then(([pendingActions, upcomingAnniversaries]) => {
+      anniversaryService.getUpcomingForHomeAsync(30),
+      dailyMoodService.getTodayStatusMapAsync()
+    ]).then(([pendingActions, upcomingAnniversaries, todayStatusMap]) => {
+      const myStatus = myUser ? todayStatusMap[myUser.userId] : null
+      const partnerStatus = partnerUser ? todayStatusMap[partnerUser.userId] : null
+
       this.setData({
         myUser,
         partnerUser,

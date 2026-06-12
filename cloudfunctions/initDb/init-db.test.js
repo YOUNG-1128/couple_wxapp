@@ -16,6 +16,7 @@ test('包含项目当前需要的全部云数据库集合', () => {
     'todos',
     'dailyQuestions',
     'missSignals',
+    'statusRecords',
     'footprints',
     'anniversaries'
   ])

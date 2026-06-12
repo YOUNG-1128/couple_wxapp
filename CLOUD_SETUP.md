@@ -39,6 +39,7 @@
 - `todos`
 - `dailyQuestions`
 - `missSignals`
+- `statusRecords`
 - `footprints`
 - `anniversaries`
 
