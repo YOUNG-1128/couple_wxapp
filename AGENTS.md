@@ -184,6 +184,13 @@
 - 每日状态/心情：
   - `getStatusRecords`
   - `upsertStatusRecord`
+- 100 件事：
+  - `getBucketListProgress`
+  - `toggleBucketListItem`
+- 记忆胶囊：
+  - `getCapsules`
+  - `createCapsule`
+  - `openCapsule`
 - 想你信号：
   - `sendMissSignal`
   - `getMissSignalHistory`
@@ -206,6 +213,8 @@
 - `dailyQuestions`
 - `missSignals`
 - `statusRecords`
+- `bucketListItems`
+- `capsules`
 - `footprints`
 - `anniversaries`
 
@@ -269,6 +278,16 @@
 `services/dailyMood.js` 在真实登录并绑定后会通过 `getStatusRecords` 同步情侣双方的状态历史，通过 `upsertStatusRecord` 保存当前用户当天状态；未满足云端条件时继续使用本地 `statusRecords`。
 
 状态记录按香港时区生成 `date`，同一用户同一天只保留一条记录。首页会读取双方今日状态，心情页支持读取和更新当前用户今日状态。
+
+## 100 件事云端同步
+
+100 件事的固定标题目录继续来自 `mock/bucketList.js`，云端 `bucketListItems` 集合只保存情侣共享的完成进度。`getBucketListProgress` 按当前用户的 `coupleId` 获取进度，`toggleBucketListItem` 保存完成状态、完成者与完成时间；未登录或未绑定时继续使用本地状态。
+
+## 记忆胶囊云端同步
+
+记忆胶囊通过 `getCapsules`、`createCapsule`、`openCapsule` 在情侣双方之间同步。尚未主动开启的胶囊由云函数隐藏 `content`，客户端在开启日期前无法取得正文；到期后调用 `openCapsule` 才会返回正文并记录开启者与开启时间。
+
+胶囊日期不再使用硬编码日期，本地默认开启日期按当前日期加七天生成，云端日期与解锁判断按香港时区执行。
 
 `CLOUD_SETUP.md` 说明了订阅消息接入状态。当前需要注意：
 

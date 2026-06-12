@@ -7,6 +7,8 @@ const COLLECTIONS = [
   'dailyQuestions',
   'missSignals',
   'statusRecords',
+  'bucketListItems',
+  'capsules',
   'footprints',
   'anniversaries'
 ]

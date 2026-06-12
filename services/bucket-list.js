@@ -1,4 +1,23 @@
 const { getState, updateState } = require('./local-state')
+const relationshipService = require('./relationship')
+
+function canUseCloudBucketList() {
+  const session = getState('session') || {}
+  const relationship = relationshipService.getRelationshipContext()
+
+  return Boolean(
+    typeof wx !== 'undefined'
+    && wx.cloud
+    && typeof wx.cloud.callFunction === 'function'
+    && session.isCloudLoggedIn === true
+    && relationship.isBound
+    && relationship.coupleId
+  )
+}
+
+function callCloudFunction(name, data = {}) {
+  return wx.cloud.callFunction({ name, data }).then((res) => (res && res.result) || {})
+}
 
 function pad(value) {
   return String(value).padStart(2, '0')
@@ -56,6 +75,42 @@ function getBucketListPageData() {
   }
 }
 
+function mergeCloudProgress(progressRecords = []) {
+  const progressMap = progressRecords.reduce((map, record) => {
+    map[Number(record.itemId)] = record
+    return map
+  }, {})
+
+  updateState('bucketList', (bucketList) => {
+    bucketList.forEach((item) => {
+      const progress = progressMap[item.id]
+      item.completed = Boolean(progress && progress.completed)
+      item.completedAt = item.completed ? progress.completedAt || null : null
+      item.completedByUserId = item.completed ? progress.completedByUserId || '' : ''
+      item.updatedAt = progress ? progress.updatedAt || '' : ''
+    })
+  })
+
+  return getState('bucketList') || []
+}
+
+function getBucketListPageDataAsync() {
+  if (!canUseCloudBucketList()) {
+    return Promise.resolve(getBucketListPageData())
+  }
+
+  return callCloudFunction('getBucketListProgress')
+    .then((result) => {
+      if (result.success !== true) {
+        throw new Error(result.errorMessage || 'get_bucket_list_progress_failed')
+      }
+
+      mergeCloudProgress(result.progressRecords || [])
+      return getBucketListPageData()
+    })
+    .catch(() => getBucketListPageData())
+}
+
 function toggleBucketItem(id) {
   let updated = null
 
@@ -74,7 +129,47 @@ function toggleBucketItem(id) {
   return updated
 }
 
+function toggleBucketItemAsync(id) {
+  const item = (getState('bucketList') || []).find((entry) => entry.id === id)
+
+  if (!item) {
+    return Promise.resolve(null)
+  }
+
+  if (!canUseCloudBucketList()) {
+    return Promise.resolve(toggleBucketItem(id))
+  }
+
+  return callCloudFunction('toggleBucketListItem', {
+    itemId: item.id,
+    title: item.title,
+    completed: !item.completed
+  }).then((result) => {
+    if (result.success !== true || !result.progressRecord) {
+      throw new Error(result.errorMessage || 'toggle_bucket_list_item_failed')
+    }
+
+    const progress = result.progressRecord
+    updateState('bucketList', (bucketList) => {
+      const target = bucketList.find((entry) => entry.id === id)
+
+      if (!target) {
+        return
+      }
+
+      target.completed = Boolean(progress.completed)
+      target.completedAt = progress.completedAt || null
+      target.completedByUserId = progress.completedByUserId || ''
+      target.updatedAt = progress.updatedAt || ''
+    })
+    return (getState('bucketList') || []).find((entry) => entry.id === id) || null
+  })
+}
+
 module.exports = {
   getBucketListPageData,
-  toggleBucketItem
+  getBucketListPageDataAsync,
+  mergeCloudProgress,
+  toggleBucketItem,
+  toggleBucketItemAsync
 }

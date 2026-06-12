@@ -12,7 +12,8 @@ Page({
     completedItems: [],
     completedCount: 0,
     total: 100,
-    percent: 0
+    percent: 0,
+    togglingItemId: 0
   },
 
   onLoad() {
@@ -24,45 +25,51 @@ Page({
   },
 
   refreshData() {
-    const pageData = bucketListService.getBucketListPageData()
-
-    this.setData({
-      pendingItems: pageData.pendingItems,
-      completedItems: pageData.completedItems,
-      completedCount: pageData.completedCount,
-      total: pageData.total,
-      percent: pageData.percent
+    return bucketListService.getBucketListPageDataAsync().then((pageData) => {
+      this.setData({
+        pendingItems: pageData.pendingItems,
+        completedItems: pageData.completedItems,
+        completedCount: pageData.completedCount,
+        total: pageData.total,
+        percent: pageData.percent
+      })
     })
   },
 
   onToggleItem(event) {
     const id = Number(event.currentTarget.dataset.id)
 
-    if (!id) {
+    if (!id || this.data.togglingItemId) {
       return
     }
 
-    const updated = bucketListService.toggleBucketItem(id)
+    this.setData({ togglingItemId: id })
+    bucketListService.toggleBucketItemAsync(id).then((updated) => {
+      if (!updated) {
+        return
+      }
 
-    if (!updated) {
-      return
-    }
+      return this.refreshData().then(() => {
+        if (updated.completed) {
+          const message = COMPLETE_TOASTS[Math.floor(Math.random() * COMPLETE_TOASTS.length)]
 
-    this.refreshData()
+          wx.showToast({
+            title: message,
+            icon: 'none'
+          })
+          return
+        }
 
-    if (updated.completed) {
-      const message = COMPLETE_TOASTS[Math.floor(Math.random() * COMPLETE_TOASTS.length)]
-
+        wx.showToast({
+          title: '已取消完成',
+          icon: 'none'
+        })
+      })
+    }).catch(() => {
       wx.showToast({
-        title: message,
+        title: '更新失败，请稍后重试',
         icon: 'none'
       })
-      return
-    }
-
-    wx.showToast({
-      title: '已取消完成',
-      icon: 'none'
-    })
+    }).finally(() => this.setData({ togglingItemId: 0 }))
   }
 })

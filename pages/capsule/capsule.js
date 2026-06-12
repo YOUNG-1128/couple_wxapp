@@ -6,7 +6,7 @@ Page({
     form: {
       title: '',
       content: '',
-      openAt: '2026-04-30',
+      openAt: capsuleService.getDefaultOpenDate(),
       type: 'week_later'
     },
     types: [
@@ -28,7 +28,19 @@ Page({
       }
     ],
     selectedCapsule: null,
-    showDetail: false
+    showDetail: false,
+    saving: false,
+    openingCapsuleId: ''
+  },
+
+  onShow() {
+    this.refreshData()
+  },
+
+  refreshData() {
+    return capsuleService.getCapsuleDataAsync().then((data) => {
+      this.setData({ capsules: data.capsules })
+    })
   },
 
   onTitleInput(event) {
@@ -58,7 +70,7 @@ Page({
   onSealTap() {
     const form = this.data.form
 
-    if (!form.title || !form.content || !form.openAt) {
+    if (!form.title || !form.content || !form.openAt || this.data.saving) {
       wx.showToast({
         title: '先把胶囊写完整',
         icon: 'none'
@@ -66,22 +78,28 @@ Page({
       return
     }
 
-    const result = capsuleService.createCapsule(form)
+    this.setData({ saving: true })
+    capsuleService.createCapsuleAsync(form).then((result) => {
+      this.setData({
+        capsules: result.capsules,
+        form: {
+          title: '',
+          content: '',
+          openAt: capsuleService.getDefaultOpenDate(),
+          type: 'week_later'
+        }
+      })
 
-    this.setData({
-      capsules: result.capsules,
-      form: {
-        title: '',
-        content: '',
-        openAt: '2026-04-30',
-        type: 'week_later'
-      }
-    })
-
-    wx.showToast({
-      title: '已封存到时光胶囊',
-      icon: 'none'
-    })
+      wx.showToast({
+        title: '已封存到时光胶囊',
+        icon: 'none'
+      })
+    }).catch(() => {
+      wx.showToast({
+        title: '胶囊封存失败',
+        icon: 'none'
+      })
+    }).finally(() => this.setData({ saving: false }))
   },
 
   onCapsuleTap(event) {
@@ -99,13 +117,23 @@ Page({
       return
     }
 
-    const opened = capsuleService.openCapsule(capsule.id)
+    if (this.data.openingCapsuleId) {
+      return
+    }
 
-    this.setData({
-      capsules: capsuleService.getCapsuleData().capsules,
-      selectedCapsule: opened,
-      showDetail: true
-    })
+    this.setData({ openingCapsuleId: capsule.id })
+    capsuleService.openCapsuleAsync(capsule.id).then((opened) => {
+      this.setData({
+        capsules: capsuleService.getCapsuleData().capsules,
+        selectedCapsule: opened,
+        showDetail: true
+      })
+    }).catch(() => {
+      wx.showToast({
+        title: '胶囊暂时无法开启',
+        icon: 'none'
+      })
+    }).finally(() => this.setData({ openingCapsuleId: '' }))
   },
 
   onCloseDetail() {
