@@ -25,5 +25,26 @@
 
       <button class="save-btn" bindtap="onSave">保存今天的状态</button>
     </common-card>
+
+    <common-card>
+      <view class="trend-head">
+        <view class="section-title trend-title">最近 7 天</view>
+        <view class="trend-count">已记录 {{trend.recordedDays}} 天</view>
+      </view>
+
+      <view class="trend-empty" wx:if="{{!trend.recordedDays}}">记录今天的状态后，这里会慢慢长出属于你的趋势。</view>
+
+      <view class="trend-list" wx:else>
+        <view class="trend-item" wx:for="{{trend.visibleItems}}" wx:key="value">
+          <view class="trend-meta">
+            <view class="trend-label">{{item.label}}</view>
+            <view class="trend-value">{{item.count}} 天 · {{item.percentage}}%</view>
+          </view>
+          <view class="trend-track">
+            <view class="trend-bar trend-bar-{{item.value}}" style="width: {{item.percentage}}%;"></view>
+          </view>
+        </view>
+      </view>
+    </common-card>
   </view>
 </scroll-view>
