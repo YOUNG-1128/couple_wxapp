@@ -42,6 +42,9 @@
 
       <view class="notice-tip" wx:if="{{sendMode === 'now'}}">发送时会尝试通过微信订阅消息提醒 TA</view>
       <view class="notice-tip" wx:if="{{sendMode === 'scheduled'}}">定时信件会先保存提醒意图，后续需配合云端定时任务发送站外提醒</view>
+      <view class="auto-save-status auto-save-status-{{autoSaveStatusView.tone}}" wx:if="{{autoSaveStatusView.text}}">
+        {{autoSaveStatusView.text}}
+      </view>
 
       <view class="compose-action-row">
         <button class="ghost-btn" bindtap="onChooseImages">添加图片</button>
