@@ -289,6 +289,8 @@
 
 胶囊日期不再使用硬编码日期，本地默认开启日期按当前日期加七天生成，云端日期与解锁判断按香港时区执行。
 
+`services/companion.js` 和 `services/pending.js` 中原有的固定业务日期已移除。陪伴心情与首页待处理项现在使用运行时真实日期和时间。
+
 `CLOUD_SETUP.md` 说明了订阅消息接入状态。当前需要注意：
 
 - `pages/mailbox-compose/mailbox-compose.js`

@@ -3,6 +3,10 @@ const mailboxService = require('./mailbox')
 const questionService = require('./question')
 const todoService = require('./todo')
 
+function getFallbackCreatedAt(date = new Date()) {
+  return date.toISOString()
+}
+
 function getPendingActions() {
   const companionData = companionService.getCompanionData()
   const questionData = questionService.getQuestionData()
@@ -47,7 +51,7 @@ function getPendingActions() {
       actionText: '去回答',
       targetPage: '/pages/daily-question/daily-question',
       targetSection: 'question',
-      createdAt: '2026-04-23 09:00'
+      createdAt: getFallbackCreatedAt()
     })
   }
 
@@ -114,7 +118,7 @@ function getPendingActionsAsync() {
         actionText: '去回答',
         targetPage: '/pages/daily-question/daily-question',
         targetSection: 'question',
-        createdAt: '2026-04-23 09:00'
+        createdAt: getFallbackCreatedAt()
       })
     } else if (questionData.partnerAnswered && questionData.analysisReady && questionData.hasUnreadResult) {
       actions.push({
@@ -126,7 +130,7 @@ function getPendingActionsAsync() {
         actionText: '去查看',
         targetPage: '/pages/daily-question/daily-question',
         targetSection: 'result',
-        createdAt: questionData.analysisGeneratedAt || '2026-04-23 09:00'
+        createdAt: questionData.analysisGeneratedAt || getFallbackCreatedAt()
       })
     }
 
@@ -149,5 +153,6 @@ function getPendingActionsAsync() {
 
 module.exports = {
   getPendingActions,
-  getPendingActionsAsync
+  getPendingActionsAsync,
+  getFallbackCreatedAt
 }

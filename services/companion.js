@@ -1,6 +1,6 @@
 const { getState, updateState } = require('./local-state')
 const relationshipService = require('./relationship')
-const { formatPostTime } = require('../utils/time')
+const { formatPostTime, toDateKey } = require('../utils/time')
 
 const DEFAULT_MOOD_TAG = '未选择'
 const DEFAULT_MISS_MESSAGE = '我想你了'
@@ -265,13 +265,14 @@ function markReceivedMissSignalsAsReadAsync(signalId = '') {
     .catch(() => markReceivedMissSignalsAsRead())
 }
 
-function submitMood(payload) {
+function submitMood(payload, now = new Date()) {
   const mood = {
     id: `mood-${Date.now()}`,
     content: payload.content,
     tag: payload.tag || DEFAULT_MOOD_TAG,
     time: '刚刚',
-    dateKey: '2026-04-23',
+    dateKey: toDateKey(now),
+    createdAt: now.toISOString(),
     weekTag: 'current'
   }
 
