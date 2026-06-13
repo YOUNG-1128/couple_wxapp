@@ -1,4 +1,10 @@
 const footprintService = require('../../services/footprint')
+const cloudStorageService = require('../../services/cloud-storage')
+const {
+  MAX_FOOTPRINT_IMAGE_COUNT,
+  appendFootprintImages,
+  removeFootprintImage
+} = require('../../utils/footprint-images')
 
 Page({
   data: {
@@ -24,9 +30,11 @@ Page({
     formPlaceName: '',
     formDate: '',
     formNote: '',
+    formImages: [],
     searchResults: [],
     selectedCity: null,
-    locatingCity: false
+    locatingCity: false,
+    savingFootprint: false
   },
 
   onShow() {
@@ -76,6 +84,7 @@ Page({
       formPlaceName: '',
       formDate: '',
       formNote: '',
+      formImages: [],
       searchResults: [],
       selectedCity: null,
       locatingCity: false
@@ -188,7 +197,54 @@ Page({
     })
   },
 
+  onChooseFootprintImages() {
+    const remain = MAX_FOOTPRINT_IMAGE_COUNT - this.data.formImages.length
+
+    if (remain <= 0) {
+      wx.showToast({
+        title: `最多选择${MAX_FOOTPRINT_IMAGE_COUNT}张图片`,
+        icon: 'none'
+      })
+      return
+    }
+
+    wx.chooseImage({
+      count: remain,
+      sizeType: ['compressed'],
+      sourceType: ['album'],
+      success: (res) => {
+        this.setData({
+          formImages: appendFootprintImages(this.data.formImages, res.tempFilePaths || [])
+        })
+      }
+    })
+  },
+
+  onRemoveFootprintImage(event) {
+    this.setData({
+      formImages: removeFootprintImage(this.data.formImages, event.currentTarget.dataset.index)
+    })
+  },
+
+  onPreviewFootprintImage(event) {
+    const current = event.currentTarget.dataset.src
+    const images = event.currentTarget.dataset.images || this.data.formImages
+
+    if (!current || !images.length) {
+      return
+    }
+
+    wx.previewImage({
+      current,
+      urls: images
+    })
+  },
+
   onSaveFootprint() {
+    if (this.data.savingFootprint) {
+      return
+    }
+
     const title = (this.data.formTitle || '').trim()
     const placeName = (this.data.formPlaceName || '').trim()
     const date = this.data.formDate
@@ -203,7 +259,11 @@ Page({
       return
     }
 
-    footprintService.createFootprintAsync({
+    this.setData({ savingFootprint: true })
+    cloudStorageService.uploadFiles(this.data.formImages, {
+      category: 'footprints',
+      ownerId: footprintService.getCurrentUserId()
+    }).then((images) => footprintService.createFootprintAsync({
       sourceType: 'manual',
       sourceId: '',
       title,
@@ -220,8 +280,8 @@ Page({
       address: '',
       date,
       note,
-      images: []
-    })
+      images
+    }))
       .then(() => {
         this.onCloseCreator()
         return this.refreshPageData(selectedCity.name)
@@ -237,6 +297,9 @@ Page({
           title: '保存失败，请稍后重试',
           icon: 'none'
         })
+      })
+      .finally(() => {
+        this.setData({ savingFootprint: false })
       })
   },
 

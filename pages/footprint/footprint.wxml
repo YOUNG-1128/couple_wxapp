@@ -52,6 +52,19 @@
           <view class="item-place">{{item.city}}{{item.placeName ? (' · ' + item.placeName) : ''}}</view>
           <view class="item-note" wx:if="{{item.note}}">{{item.note}}</view>
           <view class="item-address" wx:if="{{item.province || item.address}}">{{item.address || item.province}}</view>
+          <view class="footprint-images" wx:if="{{item.images && item.images.length}}">
+            <image
+              class="footprint-image"
+              wx:for="{{item.images}}"
+              wx:for-item="imageUrl"
+              wx:key="*this"
+              src="{{imageUrl}}"
+              mode="aspectFill"
+              data-src="{{imageUrl}}"
+              data-images="{{item.images}}"
+              bindtap="onPreviewFootprintImage"
+            ></image>
+          </view>
         </view>
       </view>
     </common-card>
@@ -105,9 +118,18 @@
 
     <textarea class="form-textarea" value="{{formNote}}" maxlength="200" placeholder="备注（可选）" bindinput="onNoteInput"></textarea>
 
+    <view class="creator-images" wx:if="{{formImages.length}}">
+      <view class="creator-image-item" wx:for="{{formImages}}" wx:key="*this">
+        <image class="creator-image" src="{{item}}" mode="aspectFill" data-src="{{item}}" data-images="{{formImages}}" bindtap="onPreviewFootprintImage"></image>
+        <view class="remove-image" data-index="{{index}}" bindtap="onRemoveFootprintImage">x</view>
+      </view>
+    </view>
+
+    <button class="locate-btn" bindtap="onChooseFootprintImages">添加图片（最多 4 张）</button>
+
     <view class="panel-actions">
       <button class="panel-btn ghost" bindtap="onCloseCreator">取消</button>
-      <button class="panel-btn" bindtap="onSaveFootprint">保存</button>
+      <button class="panel-btn" bindtap="onSaveFootprint" loading="{{savingFootprint}}">保存</button>
     </view>
   </view>
 </view>
