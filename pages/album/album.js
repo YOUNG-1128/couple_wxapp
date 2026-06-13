@@ -28,11 +28,15 @@ Page({
     emptyText: '还没有动态，发布第一条回忆吧。',
     currentUser: {},
     users: [],
+    targetPostId: '',
     activeCommentPostId: '',
     commentDraftMap: {}
   },
 
-  onLoad() {
+  onLoad(options) {
+    this.setData({
+      targetPostId: options && options.postId ? decodeURIComponent(options.postId) : ''
+    })
     this.refreshPageData()
   },
 
@@ -70,7 +74,8 @@ Page({
       keyword: this.data.keyword,
       dateType: this.data.filterDateType,
       dateValue: this.data.filterDateValue,
-      authorId: this.data.authorId
+      authorId: this.data.authorId,
+      postId: this.data.targetPostId
     })
 
     this.setData({
@@ -297,6 +302,7 @@ Page({
       authorId: 'all',
       filterDateType: 'all',
       filterDateValue: '',
+      targetPostId: '',
       draftKeyword: '',
       draftAuthorId: 'all',
       draftDateType: 'all',

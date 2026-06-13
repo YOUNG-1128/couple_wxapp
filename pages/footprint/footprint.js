@@ -1,4 +1,5 @@
 const footprintService = require('../../services/footprint')
+const { buildLinkedPostUrl } = require('../../utils/footprint-navigation')
 
 Page({
   data: {
@@ -253,5 +254,16 @@ Page({
 
   onViewAll() {
     this.refreshPageData('')
+  },
+
+  onOpenLinkedPost(event) {
+    const postId = event.currentTarget.dataset.postId
+    const url = buildLinkedPostUrl(postId)
+
+    if (!url) {
+      return
+    }
+
+    wx.navigateTo({ url })
   }
 })

@@ -52,6 +52,7 @@
           <view class="item-place">{{item.city}}{{item.placeName ? (' · ' + item.placeName) : ''}}</view>
           <view class="item-note" wx:if="{{item.note}}">{{item.note}}</view>
           <view class="item-address" wx:if="{{item.province || item.address}}">{{item.address || item.province}}</view>
+          <view class="view-all" wx:if="{{item.sourceType === 'post' && item.sourceId}}" data-post-id="{{item.sourceId}}" bindtap="onOpenLinkedPost">查看关联动态</view>
         </view>
       </view>
     </common-card>
@@ -64,13 +65,14 @@
       <view class="empty-box" wx:if="{{!relatedPosts.length}}">这座城市还没有关联的朋友圈记录</view>
 
       <view wx:else>
-        <view class="post-item" wx:for="{{relatedPosts}}" wx:key="postId">
+        <view class="post-item" wx:for="{{relatedPosts}}" wx:key="postId" data-post-id="{{item.postId}}" bindtap="onOpenLinkedPost">
           <view class="item-head">
             <view class="item-title">{{item.content || '这一天发了一条朋友圈'}}</view>
             <view class="item-date">{{item.displayTime}}</view>
           </view>
           <view class="post-meta">{{item.city}}{{item.placeName ? (' · ' + item.placeName) : ''}}</view>
           <view class="post-author" wx:if="{{item.authorName}}">{{item.authorName}}</view>
+          <view class="view-all">查看动态</view>
         </view>
       </view>
     </common-card>
