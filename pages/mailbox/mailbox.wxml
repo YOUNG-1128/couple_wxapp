@@ -1,12 +1,12 @@
-<navigation-bar title="信箱" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="信箱" back="{{true}}" color="black" background="#FFFAF8"></navigation-bar>
 <scroll-view class="mailbox-scroll" type="list" scroll-y>
   <view class="mailbox-page">
     <view class="mailbox-entry-row">
       <view class="mailbox-slogan">记录我们的来信与回信～</view>
       <view class="entry-actions">
-        <view class="entry-icon compose-entry" bindtap="onOpenCompose">＋</view>
+        <view class="entry-icon compose-entry" bindtap="onOpenCompose"><view class="ui-icon ui-icon-plus"></view></view>
         <view class="entry-icon draft-entry" bindtap="onOpenDrafts">
-          🗂
+          <view class="mini-draft-icon"></view>
           <view class="entry-red-dot" wx:if="{{hasDrafts}}"></view>
         </view>
       </view>
@@ -32,8 +32,7 @@
           </view>
 
           <view class="letter-main {{item.isIncoming ? 'letter-main-incoming' : 'letter-main-outgoing'}}">
-            <view class="letter-title {{item.isUnreadForMe ? 'letter-title-unread' : ''}}">{{item.title || '无标题信件'}}</view>
-            <view class="letter-subtitle">{{item.content}}</view>
+            <view class="letter-summary {{item.isUnreadForMe ? 'letter-summary-unread' : ''}}">{{item.listText}}</view>
             <view class="letter-foot">
               <view class="letter-time">{{item.listTime}}</view>
               <view class="status-icon status-icon-{{item.readState}}">{{item.readIcon}}</view>
@@ -58,6 +57,7 @@
       <view class="reader-paper-corner-inner"></view>
       <view class="reader-lines"></view>
       <view class="reader-title" wx:if="{{readerLetter.title}}">{{readerLetter.title}}</view>
+      <view class="reader-greeting" wx:if="{{readerLetter.visible && readerLetter.greeting}}">{{readerLetter.greeting}}</view>
       <view class="reader-content" wx:if="{{readerLetter.visible}}">{{readerLetter.content}}</view>
       <view class="reader-content" wx:else>这封信还没有到可阅读时间，等约定时间到了再来看吧。</view>
 
@@ -74,11 +74,8 @@
       </view>
 
       <view class="reader-footer">
-        <view class="reader-sign" wx:if="{{readerLetter.visible}}">
-          {{readerSign}}
-          <text class="reader-sign-note" wx:if="{{readerLetter.isIncoming}}"> 来自TA的小心意</text>
-        </view>
-        <view class="reader-date">{{readerDate}}</view>
+        <view class="reader-sign" wx:if="{{readerLetter.visible && readerLetter.signature}}">{{readerLetter.signature}}</view>
+        <view class="reader-date" wx:if="{{readerLetter.visible && readerLetter.letterDateText}}">{{readerLetter.letterDateText}}</view>
       </view>
     </view>
   </view>

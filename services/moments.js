@@ -78,6 +78,7 @@ function normalizeComment(comment) {
 
 function normalizePost(post) {
   const author = getUsers().find((user) => user.userId === post.authorId)
+  const currentUser = getCurrentUser()
 
   return {
     ...post,
@@ -85,7 +86,8 @@ function normalizePost(post) {
     authorAvatar: author ? author.avatarUrl : post.authorAvatar,
     displayTime: formatPostTime(post.createdAt),
     location: buildDefaultLocation(post.location),
-    comments: (post.comments || []).map(normalizeComment)
+    comments: (post.comments || []).map(normalizeComment),
+    canRemove: Boolean(currentUser && post.authorId === currentUser.userId)
   }
 }
 
@@ -212,6 +214,25 @@ function getMomentsFeedAsync(filters = {}) {
       return getMomentsFeed(filters)
     })
     .catch(() => getMomentsFeed(filters))
+}
+
+function getPostById(postId) {
+  const post = getState('posts').find((item) => item.postId === postId)
+  const currentUser = getCurrentUser()
+
+  if (!post || !currentUser || post.authorId !== currentUser.userId) {
+    return null
+  }
+
+  return normalizePost(post)
+}
+
+function getPostByIdAsync(postId) {
+  if (!postId) {
+    return Promise.resolve(null)
+  }
+
+  return getMomentsFeedAsync({}).then(() => getPostById(postId))
 }
 
 function buildDefaultLocation(location = {}) {
@@ -421,6 +442,157 @@ function removeMomentDraftAsync(draftId) {
     .catch(() => false)
 }
 
+function removePost(postId) {
+  const currentUser = getCurrentUser()
+  const post = getState('posts').find((item) => item.postId === postId)
+
+  if (!post || !currentUser || post.authorId !== currentUser.userId) {
+    return false
+  }
+
+  updateState('posts', (posts) => {
+    const index = posts.findIndex((item) => item.postId === postId)
+
+    if (index >= 0) {
+      posts.splice(index, 1)
+    }
+  })
+  updateState('footprints', (footprints) => {
+    for (let index = footprints.length - 1; index >= 0; index -= 1) {
+      if (footprints[index].sourceType === 'post' && footprints[index].sourceId === postId) {
+        footprints.splice(index, 1)
+      }
+    }
+  })
+
+  return true
+}
+
+function removePostAsync(postId) {
+  if (!canUseCloudMoments()) {
+    return Promise.resolve(removePost(postId))
+  }
+
+  return callCloudFunction('removePost', { postId })
+    .then((result) => {
+      if (result.success !== true) {
+        throw new Error(result.errorMessage || 'remove_post_failed')
+      }
+
+      return removePost(postId)
+    })
+}
+
+function syncLinkedFootprintForPost(post) {
+  const footprintPayload = createFootprintFromPost(post)
+  let linkedFootprint = null
+
+  updateState('footprints', (footprints) => {
+    const index = footprints.findIndex((item) => item.sourceType === 'post' && item.sourceId === post.postId)
+
+    if (!footprintPayload) {
+      if (index >= 0) {
+        footprints.splice(index, 1)
+      }
+      return
+    }
+
+    if (index >= 0) {
+      const existing = footprints[index]
+      linkedFootprint = {
+        ...existing,
+        ...footprintPayload,
+        footprintId: existing.footprintId,
+        createdAt: existing.createdAt,
+        updatedAt: new Date().toISOString()
+      }
+      footprints.splice(index, 1, linkedFootprint)
+      return
+    }
+
+    linkedFootprint = footprintPayload
+    footprints.unshift(linkedFootprint)
+  })
+
+  post.linkedFootprintId = linkedFootprint ? linkedFootprint.footprintId : null
+  return linkedFootprint
+}
+
+function syncCloudLinkedFootprint(postId, footprint) {
+  updateState('footprints', (footprints) => {
+    const index = footprints.findIndex((item) => item.sourceType === 'post' && item.sourceId === postId)
+
+    if (!footprint) {
+      if (index >= 0) {
+        footprints.splice(index, 1)
+      }
+      return
+    }
+
+    if (index >= 0) {
+      footprints.splice(index, 1, footprint)
+      return
+    }
+
+    footprints.unshift(footprint)
+  })
+}
+
+function updatePost(postId, payload = {}) {
+  const currentUser = getCurrentUser()
+  let targetPost = null
+
+  updateState('posts', (posts) => {
+    targetPost = posts.find((item) => item.postId === postId && item.authorId === currentUser.userId)
+
+    if (!targetPost) {
+      return
+    }
+
+    targetPost.content = String(payload.content || '').trim()
+    targetPost.images = Array.isArray(payload.images) ? payload.images.slice(0, 4) : []
+    targetPost.location = buildDefaultLocation(payload.location)
+    targetPost.shouldCreateFootprint = payload.shouldCreateFootprint === true
+    targetPost.updatedAt = new Date().toISOString()
+  })
+
+  if (!targetPost) {
+    return null
+  }
+
+  syncLinkedFootprintForPost(targetPost)
+  return normalizePost(targetPost)
+}
+
+function updatePostAsync(postId, payload) {
+  if (!canUseCloudMoments()) {
+    return Promise.resolve(updatePost(postId, payload))
+  }
+
+  return callCloudFunction('updatePost', {
+    postId,
+    ...payload
+  }).then((result) => {
+    if (result.success !== true || !result.post) {
+      throw new Error(result.errorMessage || 'update_post_failed')
+    }
+
+    const post = normalizeCloudPost(result.post)
+    updateState('posts', (posts) => {
+      const index = posts.findIndex((item) => item.postId === post.postId)
+
+      if (index >= 0) {
+        posts.splice(index, 1, post)
+      } else {
+        posts.unshift(post)
+      }
+    })
+
+    syncCloudLinkedFootprint(post.postId, result.footprint || null)
+    return normalizePost(post)
+  })
+}
+
 function createLinkedFootprintForPost(post) {
   const footprintPayload = createFootprintFromPost(post)
 
@@ -583,6 +755,8 @@ module.exports = {
   updateUserProfile,
   getMomentsFeed,
   getMomentsFeedAsync,
+  getPostById,
+  getPostByIdAsync,
   createPost,
   getMomentDrafts,
   getMomentDraftsAsync,
@@ -592,6 +766,10 @@ module.exports = {
   saveMomentDraftAsync,
   removeMomentDraft,
   removeMomentDraftAsync,
+  removePost,
+  removePostAsync,
+  updatePost,
+  updatePostAsync,
   publishMoment,
   publishMomentAsync,
   addComment

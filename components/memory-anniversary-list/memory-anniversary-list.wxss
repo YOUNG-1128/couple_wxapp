@@ -38,7 +38,7 @@
 }
 
 .days-left {
-  color: #e85d75;
+  color: #d86f83;
   font-size: 26rpx;
   font-weight: 600;
 }

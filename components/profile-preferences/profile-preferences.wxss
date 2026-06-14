@@ -1,36 +1,108 @@
+.about-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
 .card-title {
   color: #2b2024;
-  font-size: 32rpx;
+  font-size: 30rpx;
   font-weight: 700;
 }
 
-.preference-list {
+.card-desc {
+  margin-top: 7rpx;
+  color: #a18189;
+  font-size: 22rpx;
+  line-height: 1.5;
+}
+
+.edit-button {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 48rpx;
+  height: 48rpx;
+  border: 1rpx solid #ead6da;
+  border-radius: 10rpx;
+  color: #a96b79;
+  background: #fff9f8;
+}
+
+.edit-pencil {
+  width: 20rpx;
+  height: 3rpx;
+  border-radius: 3rpx;
+  background: currentColor;
+  transform: rotate(-42deg);
+}
+
+.note-list {
   margin-top: 22rpx;
 }
 
-.preference-item {
-  padding: 22rpx 0;
-  border-top: 1rpx solid #f5dde2;
+.note-item {
+  display: grid;
+  grid-template-columns: 42rpx 1fr;
+  gap: 12rpx;
+  padding: 15rpx 0;
+  border-top: 1rpx dashed #f0dce0;
 }
 
-.preference-item:first-child {
-  border-top: 0;
+.note-item:first-child {
   padding-top: 0;
+  border-top: 0;
 }
 
-.preference-item:last-child {
+.note-item:last-child {
   padding-bottom: 0;
 }
 
-.preference-label {
-  color: #9a7b84;
-  font-size: 25rpx;
+.note-index {
+  padding-top: 2rpx;
+  color: #d293a0;
+  font-size: 20rpx;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
-.preference-value {
-  margin-top: 8rpx;
+.note-text {
   color: #4f3c43;
-  font-size: 29rpx;
-  font-weight: 600;
+  font-size: 25rpx;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+.empty-guide {
+  margin-top: 20rpx;
+  padding: 18rpx;
+  border: 1rpx dashed #ead6da;
+  border-radius: 10rpx;
+  background: #fffaf9;
+}
+
+.empty-title {
+  color: #8d6d77;
+  font-size: 23rpx;
+  line-height: 1.5;
+}
+
+.guide-line {
+  position: relative;
+  margin-top: 10rpx;
+  padding-left: 24rpx;
+  color: #b49aa1;
+  font-size: 21rpx;
   line-height: 1.45;
+}
+
+.guide-line::before {
+  content: '';
+  position: absolute;
+  top: 12rpx;
+  left: 2rpx;
+  width: 10rpx;
+  border-top: 2rpx solid #deb9c1;
 }

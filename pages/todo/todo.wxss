@@ -2,7 +2,7 @@ page {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #fff8f6;
+  background: #fffaf8;
 }
 
 .todo-scroll {
@@ -11,7 +11,7 @@ page {
 }
 
 .todo-page {
-  padding: 32rpx 32rpx 56rpx;
+  padding: 36rpx 28rpx 64rpx;
 }
 
 .page-title {
@@ -43,7 +43,7 @@ page {
 }
 
 .stats-value {
-  color: #e85d75;
+  color: #d86f83;
   font-size: 32rpx;
   font-weight: 700;
 }
@@ -76,7 +76,7 @@ page {
 
 .filter-chip-active {
   color: #ffffff;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .new-todo-btn {
@@ -89,7 +89,7 @@ page {
   color: #ffffff;
   font-size: 27rpx;
   font-weight: 700;
-  background: #e85d75;
+  background: #d86f83;
   box-shadow: 0 10rpx 18rpx rgba(232, 93, 117, 0.22);
 }
 
@@ -252,7 +252,7 @@ page {
   border-radius: 999rpx;
   color: #ffffff;
   font-size: 24rpx;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .toggle-btn-done {
@@ -344,7 +344,7 @@ page {
 
 .target-chip-active {
   color: #ffffff;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .due-row {
@@ -376,7 +376,7 @@ page {
   margin: 0;
   padding: 0 16rpx;
   border-radius: 999rpx;
-  color: #e85d75;
+  color: #d86f83;
   font-size: 24rpx;
   background: #ffe9ee;
 }
@@ -399,7 +399,7 @@ page {
   border-radius: 999rpx;
   color: #ffffff;
   font-size: 24rpx;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .panel-btn.ghost {

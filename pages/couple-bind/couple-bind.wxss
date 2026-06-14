@@ -1,6 +1,6 @@
 page {
   min-height: 100vh;
-  background: #fff8f6;
+  background: #fffaf8;
 }
 
 .bind-page {
@@ -38,7 +38,7 @@ page {
   border-radius: 999rpx;
   color: #fff;
   font-size: 28rpx;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .bind-btn::after {

@@ -1,7 +1,7 @@
 const bucketListService = require('../../services/bucket-list')
 
 const COMPLETE_TOASTS = [
-  '又一起完成了一件小事 ❤️',
+  '又一起完成了一件小事',
   '我们的故事又多了一点点'
 ]
 

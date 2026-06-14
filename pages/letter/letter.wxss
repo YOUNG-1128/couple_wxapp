@@ -77,6 +77,22 @@ page {
   font-family: 'KaiTi', 'Kaiti SC', 'STKaiti', 'FangSong', cursive;
 }
 
+.paper-greeting {
+  position: relative;
+  z-index: 1;
+  margin-top: 22rpx;
+  color: #5d4630;
+  font-size: 29rpx;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-family: 'KaiTi', 'Kaiti SC', 'STKaiti', 'FangSong', cursive;
+}
+
+.paper-greeting + .paper-content {
+  margin-top: 12rpx;
+}
+
 .paper-images {
   position: relative;
   z-index: 1;

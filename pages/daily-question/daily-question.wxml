@@ -1,4 +1,4 @@
-<navigation-bar title="每日问答" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="每日问答" back="{{true}}" color="black" background="#FFFAF8"></navigation-bar>
 <scroll-view class="question-scroll" type="list" scroll-y>
   <view class="question-page" wx:if="{{pageData}}">
     <common-card featured="{{true}}">

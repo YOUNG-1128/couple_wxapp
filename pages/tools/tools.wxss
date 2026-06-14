@@ -1,9 +1,9 @@
-page { background: #fff8f6; }
+page { background: #fffaf8; }
 .tools-page { padding: 32rpx; }
 .page-title { color: #2b2024; font-size: 40rpx; font-weight: 700; }
 .page-subtitle { margin-top: 12rpx; color: #7c6770; font-size: 26rpx; }
 .feature-grid { display: flex; flex-wrap: wrap; justify-content: space-between; margin-top: 24rpx; }
 .feature-item { width: calc(25% - 12rpx); min-height: 170rpx; margin-bottom: 16rpx; padding: 16rpx 10rpx; border-radius: 20rpx; text-align: center; background: #ffffff; }
-.feature-icon { color: #e85d75; font-size: 28rpx; line-height: 1; }
+.feature-icon { color: #d86f83; font-size: 28rpx; line-height: 1; }
 .feature-name { margin-top: 10rpx; color: #2b2024; font-size: 24rpx; font-weight: 600; }
 .feature-desc { margin-top: 6rpx; color: #9a7b84; font-size: 20rpx; line-height: 1.35; }

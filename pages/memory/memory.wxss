@@ -2,7 +2,7 @@ page {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #fff8f6;
+  background: #fffaf8;
 }
 
 .memory-scroll {
@@ -11,5 +11,5 @@ page {
 }
 
 .memory-page {
-  padding: 32rpx 32rpx 56rpx;
+  padding: 36rpx 28rpx 64rpx;
 }

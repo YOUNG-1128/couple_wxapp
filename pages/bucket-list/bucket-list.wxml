@@ -1,4 +1,4 @@
-<navigation-bar title="100件事" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="100件事" back="{{true}}" color="black" background="#FFFAF8"></navigation-bar>
 <scroll-view class="bucket-scroll" type="list" scroll-y>
   <view class="bucket-page">
     <view class="progress-sticky">
@@ -20,7 +20,7 @@
     <view class="pending-grid" wx:if="{{pendingItems.length}}">
       <view class="bucket-item pending-item" wx:for="{{pendingItems}}" wx:key="id" data-id="{{item.id}}" bindtap="onToggleItem">
         <view class="item-left">
-          <view class="item-icon">{{item.icon}}</view>
+          <view class="item-check"></view>
           <view class="item-seq">{{item.sequenceLabel}}</view>
         </view>
         <view class="item-main">
@@ -33,7 +33,7 @@
     <view class="empty-box empty-box-done" wx:if="{{!completedItems.length}}">还没有已完成的小事，先从第一件开始吧</view>
     <view class="bucket-item bucket-item-done" wx:for="{{completedItems}}" wx:key="id" data-id="{{item.id}}" bindtap="onToggleItem">
       <view class="item-left">
-        <view class="item-icon">{{item.icon}}</view>
+        <view class="item-check item-check-done"><view class="ui-icon ui-icon-check"></view></view>
         <view class="item-seq">{{item.sequenceLabel}}</view>
       </view>
       <view class="item-main">

@@ -67,7 +67,11 @@ exports.main = async () => {
         success: true,
         coupleId: currentUser.coupleId,
         inviteCode: boundCouple ? (boundCouple.inviteCode || '') : '',
-        status: 'bound'
+        status: 'bound',
+        boundAt: boundCouple ? (boundCouple.boundAt || '') : '',
+        relationshipStartDate: boundCouple ? (boundCouple.relationshipStartDate || '') : '',
+        relationshipStartDateUpdatedAt: boundCouple ? (boundCouple.relationshipStartDateUpdatedAt || '') : '',
+        relationshipStartDateUpdatedBy: boundCouple ? (boundCouple.relationshipStartDateUpdatedBy || '') : ''
       }
     }
 
@@ -107,7 +111,10 @@ exports.main = async () => {
         status: 'pending',
         createdAt: now,
         updatedAt: now,
-        boundAt: ''
+        boundAt: '',
+        relationshipStartDate: '',
+        relationshipStartDateUpdatedAt: '',
+        relationshipStartDateUpdatedBy: ''
       }
     })
 

@@ -1,19 +1,19 @@
-<navigation-bar title="我们的动态" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="我们的动态" back="{{true}}" color="black" background="#FFFAF8"></navigation-bar>
 <scroll-view class="moments-scroll" type="list" scroll-y>
   <view class="moments-page">
     <view class="search-entry-row">
       <view class="moments-slogan">记录我们的日常～</view>
       <view class="entry-actions">
-        <view class="entry-icon compose-entry" bindtap="onOpenCompose">＋</view>
+        <view class="entry-icon compose-entry" bindtap="onOpenCompose"><view class="ui-icon ui-icon-plus"></view></view>
         <view class="entry-icon draft-entry" bindtap="onOpenDrafts">
-          🗂
+          <view class="mini-draft-icon"></view>
           <view class="entry-red-dot" wx:if="{{hasDrafts}}"></view>
         </view>
         <view class="entry-icon search-entry {{hasActiveFilters ? 'search-entry-active' : ''}}" bindtap="onToggleSearch">
-          🔍
+          <view class="mini-search-icon"></view>
           <view class="search-active-dot" wx:if="{{hasActiveFilters}}"></view>
         </view>
-        <view class="entry-icon clear-filter-entry" wx:if="{{hasActiveFilters}}" bindtap="onClearAllFilters">✕</view>
+        <view class="entry-icon clear-filter-entry" wx:if="{{hasActiveFilters}}" bindtap="onClearAllFilters"><view class="ui-icon ui-icon-close"></view></view>
       </view>
     </view>
 
@@ -140,6 +140,8 @@
       </view>
 
       <view class="comment-entry">
+        <view class="comment-toggle-icon" wx:if="{{item.canRemove}}" data-post-id="{{item.postId}}" bindtap="onEditPost">编</view>
+        <view class="comment-toggle-icon" wx:if="{{item.canRemove}}" data-post-id="{{item.postId}}" bindtap="onRemovePost">删</view>
         <view class="comment-toggle-icon" data-post-id="{{item.postId}}" bindtap="onOpenComment">💬</view>
       </view>
 

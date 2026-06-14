@@ -2,7 +2,7 @@ page {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #fff8f6;
+  background: #fffaf8;
 }
 
 .companion-scroll {
@@ -11,7 +11,7 @@ page {
 }
 
 .companion-page {
-  padding: 32rpx 32rpx 56rpx;
+  padding: 36rpx 28rpx 64rpx;
 }
 
 .hero-row {
@@ -47,7 +47,7 @@ page {
   color: #ffffff;
   font-size: 24rpx;
   line-height: 64rpx;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .miss-send-btn::after {

@@ -2,7 +2,7 @@ page {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #fff8f6;
+  background: #fffaf8;
 }
 
 .hub-scroll {
@@ -11,54 +11,482 @@ page {
 }
 
 .hub-page {
-  padding: 32rpx;
+  padding: 10rpx 28rpx 72rpx;
+}
+
+.hub-header {
+  padding: 4rpx 4rpx 24rpx;
 }
 
 .hub-title {
-  color: #2b2024;
-  font-size: 40rpx;
+  color: #41363a;
+  font-size: 31rpx;
   font-weight: 700;
+  line-height: 1.3;
 }
 
 .hub-subtitle {
-  margin-top: 12rpx;
-  color: #7c6770;
-  font-size: 26rpx;
-  line-height: 1.55;
+  margin-top: 6rpx;
+  color: #a28a90;
+  font-size: 23rpx;
 }
 
 .hub-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-top: 24rpx;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18rpx;
 }
 
 .hub-item {
-  width: calc(25% - 12rpx);
-  min-height: 182rpx;
-  margin-bottom: 16rpx;
-  padding: 18rpx 10rpx;
-  border-radius: 20rpx;
-  text-align: center;
-  background: #ffffff;
+  display: flex;
+  align-items: center;
+  min-height: 188rpx;
+  padding: 24rpx 20rpx;
+  border: 1rpx solid #f0e3e4;
+  border-radius: 16rpx;
+  background: rgba(255, 255, 255, 0.82);
+  transition: transform 160ms ease, background-color 160ms ease;
 }
 
-.hub-icon {
-  font-size: 36rpx;
-  line-height: 1;
+.hub-item:active {
+  background: #fff2f3;
+  transform: scale(0.98);
+}
+
+.hub-copy {
+  flex: 1;
+  min-width: 0;
+  margin-left: 14rpx;
 }
 
 .hub-name {
-  margin-top: 10rpx;
-  color: #2b2024;
-  font-size: 24rpx;
-  font-weight: 600;
+  color: #493b40;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
 .hub-desc {
   margin-top: 8rpx;
-  color: #9a7b84;
-  font-size: 20rpx;
-  line-height: 1.35;
+  color: #a18189;
+  font-size: 21rpx;
+  line-height: 1.45;
+}
+
+.doodle {
+  position: relative;
+  flex: 0 0 auto;
+  width: 104rpx;
+  height: 104rpx;
+  color: #514448;
+}
+
+.doodle::before {
+  content: '';
+  position: absolute;
+  top: 4rpx;
+  right: 3rpx;
+  width: 78rpx;
+  height: 78rpx;
+  border-radius: 50%;
+  background: #fff2f3;
+}
+
+.doodle-moments::before,
+.doodle-footprint::before,
+.doodle-missyou::before {
+  background: #fff6e9;
+}
+
+.doodle-heart {
+  position: absolute;
+  z-index: 3;
+  width: 17rpx;
+  height: 17rpx;
+  background: #e47a8e;
+  transform: rotate(45deg);
+}
+
+.doodle-heart::before,
+.doodle-heart::after {
+  content: '';
+  position: absolute;
+  width: 17rpx;
+  height: 17rpx;
+  border-radius: 50%;
+  background: #e47a8e;
+}
+
+.doodle-heart::before {
+  left: -9rpx;
+}
+
+.doodle-heart::after {
+  top: -9rpx;
+}
+
+.mail-body {
+  position: absolute;
+  top: 35rpx;
+  left: 12rpx;
+  z-index: 2;
+  width: 76rpx;
+  height: 50rpx;
+  border: 4rpx solid #514448;
+  border-radius: 14rpx;
+  background: #fffdfb;
+  transform: rotate(-4deg);
+}
+
+.mail-flap {
+  position: absolute;
+  top: 28rpx;
+  left: 18rpx;
+  z-index: 3;
+  width: 58rpx;
+  height: 42rpx;
+  border-right: 4rpx solid #514448;
+  border-bottom: 4rpx solid #514448;
+  border-radius: 4rpx 4rpx 12rpx 4rpx;
+  transform: rotate(45deg);
+}
+
+.doodle-mailbox .doodle-heart {
+  top: 35rpx;
+  left: 47rpx;
+}
+
+.doodle-face {
+  position: absolute;
+  top: 67rpx;
+  left: 44rpx;
+  z-index: 4;
+  display: flex;
+  gap: 12rpx;
+}
+
+.doodle-face view {
+  width: 4rpx;
+  height: 4rpx;
+  border-radius: 50%;
+  background: #514448;
+}
+
+.camera-body {
+  position: absolute;
+  top: 32rpx;
+  left: 12rpx;
+  z-index: 2;
+  width: 78rpx;
+  height: 58rpx;
+  border: 4rpx solid #514448;
+  border-radius: 16rpx;
+  background: #fffdfb;
+  transform: rotate(3deg);
+}
+
+.camera-lens {
+  position: absolute;
+  top: 44rpx;
+  left: 36rpx;
+  z-index: 3;
+  width: 30rpx;
+  height: 30rpx;
+  border: 4rpx solid #514448;
+  border-radius: 50%;
+  background: #f8d5d9;
+}
+
+.camera-top {
+  position: absolute;
+  top: 24rpx;
+  left: 24rpx;
+  z-index: 1;
+  width: 30rpx;
+  height: 18rpx;
+  border: 4rpx solid #514448;
+  border-radius: 8rpx 8rpx 0 0;
+  background: #fffdfb;
+}
+
+.doodle-moments .doodle-heart {
+  top: 26rpx;
+  right: 8rpx;
+}
+
+.todo-paper,
+.list-paper {
+  position: absolute;
+  top: 19rpx;
+  left: 23rpx;
+  z-index: 2;
+  width: 60rpx;
+  height: 76rpx;
+  border: 4rpx solid #514448;
+  border-radius: 13rpx;
+  background: #fffdfb;
+  transform: rotate(3deg);
+}
+
+.todo-line,
+.list-row {
+  position: absolute;
+  left: 38rpx;
+  z-index: 3;
+  width: 31rpx;
+  height: 4rpx;
+  border-radius: 999rpx;
+  background: #d9b0b7;
+}
+
+.todo-line-one,
+.list-row-one {
+  top: 39rpx;
+}
+
+.todo-line-two,
+.list-row-two {
+  top: 55rpx;
+}
+
+.todo-line-three,
+.list-row-three {
+  top: 71rpx;
+}
+
+.todo-check {
+  position: absolute;
+  top: 5rpx;
+  right: 4rpx;
+  z-index: 4;
+  color: #d5a466;
+  width: 38rpx;
+  height: 38rpx;
+  transform: rotate(-8deg);
+}
+
+.todo-check .ui-icon {
+  color: #d5a466;
+}
+
+.calendar-body {
+  position: absolute;
+  top: 25rpx;
+  left: 16rpx;
+  z-index: 2;
+  width: 74rpx;
+  height: 66rpx;
+  border: 4rpx solid #514448;
+  border-radius: 14rpx;
+  background: #fffdfb;
+  transform: rotate(-3deg);
+}
+
+.calendar-bar {
+  position: absolute;
+  top: 45rpx;
+  left: 19rpx;
+  z-index: 3;
+  width: 68rpx;
+  height: 4rpx;
+  background: #514448;
+  transform: rotate(-3deg);
+}
+
+.calendar-ring {
+  position: absolute;
+  top: 16rpx;
+  z-index: 4;
+  width: 7rpx;
+  height: 23rpx;
+  border: 4rpx solid #514448;
+  border-radius: 999rpx;
+  background: #fffdfb;
+}
+
+.calendar-ring-one {
+  left: 35rpx;
+}
+
+.calendar-ring-two {
+  right: 30rpx;
+}
+
+.doodle-anniversary .doodle-heart {
+  top: 61rpx;
+  left: 50rpx;
+}
+
+.footprint-path {
+  position: absolute;
+  top: 52rpx;
+  left: 14rpx;
+  z-index: 2;
+  width: 58rpx;
+  height: 29rpx;
+  border-top: 4rpx dashed #d5a466;
+  border-radius: 50%;
+  transform: rotate(-12deg);
+}
+
+.footprint-dot {
+  position: absolute;
+  z-index: 3;
+  width: 9rpx;
+  height: 13rpx;
+  border-radius: 50%;
+  background: #d5a466;
+}
+
+.footprint-dot-one {
+  top: 68rpx;
+  left: 21rpx;
+  transform: rotate(-20deg);
+}
+
+.footprint-dot-two {
+  top: 44rpx;
+  left: 43rpx;
+  transform: rotate(20deg);
+}
+
+.footprint-pin {
+  position: absolute;
+  top: 16rpx;
+  right: 10rpx;
+  z-index: 3;
+  width: 38rpx;
+  height: 48rpx;
+  border: 4rpx solid #514448;
+  border-radius: 50% 50% 50% 6rpx;
+  background: #fffdfb;
+  transform: rotate(45deg);
+}
+
+.footprint-pin::after {
+  content: '';
+  position: absolute;
+  top: 10rpx;
+  left: 10rpx;
+  width: 11rpx;
+  height: 11rpx;
+  border: 3rpx solid #e47a8e;
+  border-radius: 50%;
+}
+
+.doodle-star {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  z-index: 4;
+  width: 30rpx;
+  height: 30rpx;
+  transform: rotate(12deg);
+}
+
+.doodle-star::before,
+.doodle-star::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 999rpx;
+  background: #d5a466;
+  transform: translate(-50%, -50%);
+}
+
+.doodle-star::before {
+  width: 30rpx;
+  height: 5rpx;
+}
+
+.doodle-star::after {
+  width: 5rpx;
+  height: 30rpx;
+}
+
+.bubble {
+  position: absolute;
+  z-index: 2;
+  border: 4rpx solid #514448;
+  background: #fffdfb;
+}
+
+.bubble-one {
+  top: 22rpx;
+  left: 9rpx;
+  width: 63rpx;
+  height: 45rpx;
+  border-radius: 24rpx 24rpx 24rpx 8rpx;
+  transform: rotate(-5deg);
+}
+
+.bubble-two {
+  right: 7rpx;
+  bottom: 18rpx;
+  width: 61rpx;
+  height: 43rpx;
+  border-radius: 24rpx 24rpx 8rpx 24rpx;
+  transform: rotate(5deg);
+}
+
+.bubble-heart {
+  position: absolute;
+  top: 43rpx;
+  left: 46rpx;
+  z-index: 4;
+  color: #e47a8e;
+  width: 27rpx;
+  height: 27rpx;
+}
+
+.miss-heart {
+  position: absolute;
+  top: 21rpx;
+  left: 16rpx;
+  z-index: 3;
+  color: #e47a8e;
+  width: 62rpx;
+  height: 62rpx;
+  transform: rotate(-8deg);
+}
+
+.miss-heart.ui-icon-heart::before {
+  top: 10rpx;
+  left: 14rpx;
+  width: 34rpx;
+  height: 34rpx;
+  border-width: 5rpx;
+}
+
+.miss-wave {
+  position: absolute;
+  z-index: 2;
+  border: 4rpx solid #d5a466;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  transform: rotate(45deg);
+}
+
+.miss-wave-one {
+  top: 20rpx;
+  right: 19rpx;
+  width: 24rpx;
+  height: 24rpx;
+}
+
+.miss-wave-two {
+  top: 11rpx;
+  right: 9rpx;
+  width: 42rpx;
+  height: 42rpx;
+}
+
+.miss-wave-three {
+  top: 2rpx;
+  right: 0;
+  width: 60rpx;
+  height: 60rpx;
+  opacity: 0.5;
 }

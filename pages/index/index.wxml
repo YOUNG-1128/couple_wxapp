@@ -1,4 +1,4 @@
-<navigation-bar title="首页" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar back="{{false}}" color="black" background="#FFFAF8"></navigation-bar>
 <scroll-view class="scroll-area" type="list" scroll-y>
   <view class="page-content">
     <view class="hero">

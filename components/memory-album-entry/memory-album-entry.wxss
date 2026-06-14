@@ -49,15 +49,27 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  min-width: 156rpx;
-  height: 64rpx;
-  padding: 0 24rpx;
-  border-radius: 999rpx;
-  color: #ffffff;
-  font-size: 26rpx;
-  background: #e85d75;
+  min-width: 0;
+  height: 56rpx;
+  padding: 0 18rpx;
+  border: 1rpx solid #e6cbd0;
+  border-radius: 10rpx;
+  color: #9f5d6c;
+  font-size: 23rpx;
+  background: #fff9f8;
 }
 
 .album-button::after {
   border: 0;
+}
+
+.album-button::before {
+  content: '';
+  width: 11rpx;
+  height: 11rpx;
+  margin-right: 9rpx;
+  border-top: 3rpx solid currentColor;
+  border-right: 3rpx solid currentColor;
+  border-radius: 2rpx;
+  transform: rotate(45deg);
 }

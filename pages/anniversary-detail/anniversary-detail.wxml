@@ -1,29 +1,92 @@
-<navigation-bar title="纪念日详情" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="纪念日详情" back="{{true}}" color="black" background="#FFFAF8"></navigation-bar>
 <scroll-view class="detail-scroll" type="list" scroll-y>
   <view class="detail-page" wx:if="{{detail}}">
-    <view class="hero-card" bindtap="onPreviewCover">
+    <view class="hero-card" bindtap="onPreviewCover" style="background-color: {{detail.backgroundColor || '#F7E7C8'}};">
       <image class="hero-cover" wx:if="{{detail.coverImage}}" src="{{detail.coverImage}}" mode="aspectFill"></image>
-      <view class="hero-placeholder" wx:else></view>
       <view class="hero-mask"></view>
-      <view class="hero-top-title">{{headerTitle}}</view>
-      <view class="hero-count-label">{{countLabel}}</view>
-      <view class="hero-count-number">{{countText}}</view>
-      <view class="hero-start-date">{{startDateLabel}}</view>
+      <view class="background-btn" catchtap="onToggleBackgroundPanel">{{detail.coverImage ? '更换背景' : '设置背景'}}</view>
+      <view class="hero-content">
+        <view class="hero-glass-card">
+          <view class="hero-top-title">{{headerTitle}}</view>
+          <view class="hero-count-label">{{heroCountLabel}}</view>
+          <view class="hero-count-row">
+            <view class="hero-count-number">{{heroCountNumber}}</view>
+            <view class="hero-count-unit">天</view>
+          </view>
+          <view class="hero-start-date">起始日：{{startDateLabel}}{{detail.repeatType === 'none' ? ' · 一次性' : ''}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="detail-time-summary" wx:if="{{detail.elapsedText || detail.occurrenceText}}">
+      <view class="detail-time-primary" wx:if="{{detail.elapsedText}}">{{detail.elapsedText}}</view>
+      <view class="detail-time-secondary" wx:if="{{detail.occurrenceText}}">{{detail.occurrenceText}}</view>
+    </view>
+
+    <view class="background-panel" wx:if="{{showBackgroundPanel}}">
+      <view class="background-panel-head">
+        <view class="background-panel-title">设置背景</view>
+        <view class="background-panel-status" wx:if="{{backgroundSaving}}">正在保存...</view>
+      </view>
+      <view class="background-options">
+        <view
+          class="background-swatch {{detail.backgroundColor === item.color && !detail.coverImage ? 'background-swatch-active' : ''}}"
+          wx:for="{{backgroundOptions}}"
+          wx:key="color"
+          data-color="{{item.color}}"
+          style="background-color: {{item.color}};"
+          bindtap="onSelectBackgroundColor"
+        ></view>
+      </view>
+      <view class="background-actions">
+        <view class="background-action" bindtap="onChooseBackgroundImage">{{detail.coverImage ? '更换照片' : '从相册选择'}}</view>
+        <view class="background-action background-action-muted" wx:if="{{detail.coverImage}}" bindtap="onRemoveBackgroundImage">移除照片</view>
+      </view>
     </view>
 
     <common-card>
-      <view class="detail-title">{{detail.title}}</view>
-      <view class="detail-countdown">{{detail.countdownText}}</view>
-      <view class="detail-meta">日期：{{detail.displayDate}}</view>
-      <view class="detail-meta">下一次：{{detail.nextDate}}</view>
-      <view class="detail-meta">类型：{{detail.type}}</view>
-      <view class="detail-meta">重复：{{detail.repeatType === 'yearly' ? '每年重复' : '不重复'}}</view>
-      <view class="detail-note" wx:if="{{detail.note}}">{{detail.note}}</view>
+      <view class="memory-title">这一天的回忆</view>
+      <view class="memory-placeholder" wx:if="{{timelineLoading}}">正在翻找这一天的回忆...</view>
+      <view class="memory-placeholder" wx:elif="{{!timeline.length}}">以后在这一天发布的动态和信件，会自动来到这里。</view>
+      <view class="timeline" wx:else>
+        <view class="timeline-year" wx:for="{{timeline}}" wx:key="year">
+          <view class="timeline-year-label">{{item.year}}</view>
+          <view
+            class="timeline-item"
+            wx:for="{{item.items}}"
+            wx:for-item="memory"
+            wx:key="id"
+            data-id="{{memory.id}}"
+            data-type="{{memory.type}}"
+            data-date="{{memory.dateKey}}"
+            bindtap="onOpenMemory"
+          >
+            <view class="timeline-dot"></view>
+            <view class="timeline-content">
+              <view class="timeline-meta">{{memory.typeLabel}} · {{memory.dateLabel}}</view>
+              <view class="timeline-title">{{memory.title}}</view>
+              <view class="timeline-images" wx:if="{{memory.images.length}}">
+                <image
+                  class="timeline-image"
+                  wx:for="{{memory.images}}"
+                  wx:for-item="imageUrl"
+                  wx:key="*this"
+                  src="{{imageUrl}}"
+                  mode="aspectFill"
+                  data-current="{{imageUrl}}"
+                  data-urls="{{memory.images}}"
+                  catchtap="onPreviewMemoryImage"
+                ></image>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
     </common-card>
 
-    <common-card>
-      <view class="memory-title">相关回忆</view>
-      <view class="memory-placeholder">这里会关联你们在这一天的照片、动态和留言，当前版本先保留这个温柔位置。</view>
-    </common-card>
+    <view class="manage-actions">
+      <view class="manage-action" bindtap="onEditInfo">编辑信息</view>
+      <view class="manage-action manage-action-danger" bindtap="onRemoveAnniversary">删除纪念日</view>
+    </view>
   </view>
 </scroll-view>

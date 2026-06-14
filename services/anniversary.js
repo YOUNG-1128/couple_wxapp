@@ -4,6 +4,7 @@ const { createTempId } = require('../utils/id')
 const {
   sortAnniversariesByUpcoming,
   getUpcomingWithinDays,
+  groupAnniversaries,
   decorateAnniversary
 } = require('../utils/anniversary')
 
@@ -67,11 +68,14 @@ function getDecoratedList() {
 }
 
 function getAnniversaryPageData() {
-  const list = getDecoratedList()
+  const grouped = groupAnniversaries(getDecoratedList())
+  const list = [...grouped.upcoming, ...grouped.past]
 
   return {
     list,
-    highlighted: list[0] || null,
+    upcomingList: grouped.upcoming,
+    pastList: grouped.past,
+    highlighted: grouped.upcoming[0] || null,
     types: getAnniversaryTypes()
   }
 }
@@ -109,10 +113,15 @@ function createAnniversary(payload) {
     id: createTempId('anniversary'),
     title: payload.title,
     date: payload.date,
-    type: payload.type || '自定义',
-    repeatType: payload.repeatType || 'none',
+    calendarType: payload.calendarType || 'solar',
+    lunarMonth: Number(payload.lunarMonth) || 0,
+    lunarDay: Number(payload.lunarDay) || 0,
+    lunarIsLeapMonth: payload.lunarIsLeapMonth === true,
+    type: payload.type || 'custom',
+    repeatType: payload.repeatType || 'yearly',
     note: payload.note || '',
     coverImage: payload.coverImage || '',
+    backgroundColor: payload.backgroundColor || '',
     createdAt: now,
     updatedAt: now
   }
@@ -137,10 +146,15 @@ function updateAnniversary(id, payload) {
     Object.assign(target, {
       title: payload.title,
       date: payload.date,
-      type: payload.type || '自定义',
-      repeatType: payload.repeatType || 'none',
+      calendarType: payload.calendarType || 'solar',
+      lunarMonth: Number(payload.lunarMonth) || 0,
+      lunarDay: Number(payload.lunarDay) || 0,
+      lunarIsLeapMonth: payload.lunarIsLeapMonth === true,
+      type: payload.type || target.type || 'custom',
+      repeatType: payload.repeatType || target.repeatType || 'yearly',
       note: payload.note || '',
       coverImage: payload.coverImage || '',
+      backgroundColor: payload.backgroundColor || '',
       updatedAt: new Date().toISOString()
     })
     updated = target
@@ -158,10 +172,15 @@ function saveAnniversaryAsync(payload) {
     anniversaryId: payload.id || '',
     title: payload.title,
     date: payload.date,
-    type: payload.type,
-    repeatType: payload.repeatType,
+    calendarType: payload.calendarType || 'solar',
+    lunarMonth: Number(payload.lunarMonth) || 0,
+    lunarDay: Number(payload.lunarDay) || 0,
+    lunarIsLeapMonth: payload.lunarIsLeapMonth === true,
+    type: payload.type || 'custom',
+    repeatType: payload.repeatType || 'yearly',
     note: payload.note || '',
-    coverImage: payload.coverImage || ''
+    coverImage: payload.coverImage || '',
+    backgroundColor: payload.backgroundColor || ''
   }).then((result) => {
     if (result.success !== true || !result.anniversary) {
       throw new Error(result.errorMessage || 'save_anniversary_failed')

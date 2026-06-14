@@ -2,7 +2,7 @@ page {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #fff8f6;
+  background: #fffaf8;
 }
 
 .drafts-scroll {
@@ -27,7 +27,7 @@ page {
 }
 
 .entry-action {
-  color: #e85d75;
+  color: #d86f83;
   font-size: 25rpx;
 }
 
@@ -64,7 +64,7 @@ page {
   border-radius: 999rpx;
   color: #ffffff;
   font-size: 24rpx;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .edit-btn::after {
@@ -86,7 +86,7 @@ page {
   height: 56rpx;
   padding: 0 18rpx;
   border-radius: 999rpx;
-  color: #e85d75;
+  color: #d86f83;
   font-size: 24rpx;
   background: #fff1f4;
 }

@@ -11,7 +11,10 @@ Page({
     currentUser: null,
     partnerUser: null,
     title: '',
+    greeting: '',
     content: '',
+    signature: '',
+    letterDateText: '',
     images: [],
     sendMode: 'now',
     scheduleDate: '',
@@ -49,7 +52,10 @@ Page({
         currentUser,
         partnerUser,
         title: draft ? draft.title : '',
+        greeting: draft ? (draft.greeting || '') : '',
         content: draft ? draft.content : '',
+        signature: draft ? (draft.signature || '') : '',
+        letterDateText: draft ? (draft.letterDateText || '') : '',
         images: draft ? (draft.images || []) : [],
         sendMode: draft && draft.sendMode ? draft.sendMode : 'now',
         scheduleDate: schedule && !Number.isNaN(schedule.getTime()) ? this.formatDate(schedule) : '',
@@ -66,6 +72,10 @@ Page({
     this.setData({ title: event.detail.value })
   },
 
+  onGreetingInput(event) {
+    this.setData({ greeting: event.detail.value })
+  },
+
   onContentInput(event) {
     const raw = event.detail.value || ''
     const content = raw.slice(0, MAX_CONTENT_LENGTH)
@@ -73,6 +83,14 @@ Page({
     this.setData({
       content
     })
+  },
+
+  onSignatureInput(event) {
+    this.setData({ signature: event.detail.value })
+  },
+
+  onLetterDateInput(event) {
+    this.setData({ letterDateText: event.detail.value })
   },
 
   onSelectSendMode(event) {
@@ -136,7 +154,10 @@ Page({
   hasDraftContent() {
     return Boolean(
       (this.data.title || '').trim()
+      || (this.data.greeting || '').trim()
       || (this.data.content || '').trim()
+      || (this.data.signature || '').trim()
+      || (this.data.letterDateText || '').trim()
       || (Array.isArray(this.data.images) && this.data.images.length)
       || (this.data.sendMode === 'scheduled' && (this.data.scheduleDate || this.data.scheduleTime))
     )
@@ -146,7 +167,10 @@ Page({
     return {
       editingLetterId: this.data.draftId,
       title: (this.data.title || '').trim(),
+      greeting: (this.data.greeting || '').trim(),
       content: (this.data.content || '').trim(),
+      signature: (this.data.signature || '').trim(),
+      letterDateText: (this.data.letterDateText || '').trim(),
       images: this.data.images || [],
       sendMode: this.data.sendMode,
       visibleAt: this.data.sendMode === 'scheduled' ? this.combineScheduleAt() : '',
@@ -160,7 +184,10 @@ Page({
     return JSON.stringify({
       editingLetterId: payload.editingLetterId || '',
       title: payload.title,
+      greeting: payload.greeting,
       content: payload.content,
+      signature: payload.signature,
+      letterDateText: payload.letterDateText,
       images: payload.images,
       sendMode: payload.sendMode,
       visibleAt: payload.visibleAt,
@@ -194,7 +221,7 @@ Page({
       if (options.showToast) {
         wx.showToast({
           title: options.toastText || '草稿已保存',
-          icon: 'success'
+          icon: 'none'
         })
       }
 
@@ -305,7 +332,10 @@ Page({
       mailboxService.sendLetterScheduledAsync({
         editingLetterId: this.data.draftId,
         title: (this.data.title || '').trim(),
+        greeting: (this.data.greeting || '').trim(),
         content,
+        signature: (this.data.signature || '').trim(),
+        letterDateText: (this.data.letterDateText || '').trim(),
         images: this.data.images,
         visibleAt,
         toUserId: this.data.partnerUser ? this.data.partnerUser.userId : 'partner',
@@ -317,7 +347,7 @@ Page({
         this.skipAutoSave = true
         this.setData({ sending: false })
         wx.showToast({
-          title: '已设为定时发送',
+          title: '已经约好送达时间',
           icon: 'none'
         })
 
@@ -327,7 +357,7 @@ Page({
       }).catch(() => {
         this.setData({ sending: false })
         wx.showToast({
-          title: '定时发送设置失败',
+          title: '暂时没能约好时间',
           icon: 'none'
         })
       })
@@ -338,7 +368,10 @@ Page({
     mailboxService.sendLetterNowAsync({
       editingLetterId: this.data.draftId,
       title: (this.data.title || '').trim(),
+      greeting: (this.data.greeting || '').trim(),
       content,
+      signature: (this.data.signature || '').trim(),
+      letterDateText: (this.data.letterDateText || '').trim(),
       images: this.data.images,
       toUserId: this.data.partnerUser ? this.data.partnerUser.userId : 'partner',
       notice: {
@@ -353,8 +386,8 @@ Page({
         .finally(() => {
           this.setData({ sending: false })
           wx.showToast({
-            title: '已发送给 TA',
-            icon: 'success'
+            title: '信已经寄出',
+            icon: 'none'
           })
 
           setTimeout(() => {
@@ -364,7 +397,7 @@ Page({
     }).catch(() => {
       this.setData({ sending: false })
       wx.showToast({
-        title: '发送失败',
+        title: '信暂时没寄出去',
         icon: 'none'
       })
     })

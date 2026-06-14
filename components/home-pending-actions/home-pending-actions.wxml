@@ -9,5 +9,5 @@
       <view class="pending-action">{{item.actionText}}</view>
     </view>
   </view>
-  <view wx:else class="empty-text">今天的互动都处理完啦 ❤️</view>
+  <view wx:else class="empty-text">今天的互动都处理完啦</view>
 </common-card>

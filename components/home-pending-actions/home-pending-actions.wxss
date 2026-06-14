@@ -51,11 +51,24 @@
 
 .pending-action {
   flex: 0 0 auto;
-  padding: 10rpx 18rpx;
-  border-radius: 999rpx;
-  color: #ffffff;
+  padding: 10rpx 14rpx;
+  border: 1rpx solid #e6cbd0;
+  border-radius: 10rpx;
+  color: #9f5d6c;
   font-size: 24rpx;
-  background: #e85d75;
+  background: #fff9f8;
+}
+
+.pending-action::before {
+  content: '';
+  display: inline-block;
+  width: 11rpx;
+  height: 11rpx;
+  margin-right: 9rpx;
+  border-top: 3rpx solid currentColor;
+  border-right: 3rpx solid currentColor;
+  border-radius: 2rpx;
+  transform: rotate(45deg);
 }
 
 .empty-text {

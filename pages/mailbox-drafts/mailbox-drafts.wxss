@@ -2,7 +2,7 @@ page {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #fff8f6;
+  background: #fffaf8;
 }
 
 .drafts-scroll {
@@ -27,7 +27,7 @@ page {
 }
 
 .entry-action {
-  color: #e85d75;
+  color: #d86f83;
   font-size: 25rpx;
 }
 
@@ -42,16 +42,15 @@ page {
 }
 
 .draft-title {
+  display: -webkit-box;
+  overflow: hidden;
   color: #4f3c43;
-  font-size: 28rpx;
+  font-size: 26rpx;
   line-height: 1.5;
-}
-
-.draft-content {
-  margin-top: 6rpx;
-  color: #8e6f78;
-  font-size: 24rpx;
-  line-height: 1.5;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .draft-meta {
@@ -86,7 +85,7 @@ page {
 
 .edit-btn {
   color: #ffffff;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .delete-btn::after,

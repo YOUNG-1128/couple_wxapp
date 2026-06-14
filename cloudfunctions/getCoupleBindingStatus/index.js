@@ -78,6 +78,10 @@ exports.main = async () => {
         status: couple.status || 'bound',
         coupleId: couple.coupleId || '',
         inviteCode: couple.status === 'pending' ? (couple.inviteCode || '') : '',
+        boundAt: couple.boundAt || '',
+        relationshipStartDate: couple.relationshipStartDate || '',
+        relationshipStartDateUpdatedAt: couple.relationshipStartDateUpdatedAt || '',
+        relationshipStartDateUpdatedBy: couple.relationshipStartDateUpdatedBy || '',
         partnerProfile: buildPartnerProfile(
           currentUser.userId,
           ownerRes.data && ownerRes.data[0],
@@ -97,7 +101,11 @@ exports.main = async () => {
         success: true,
         status: 'pending',
         coupleId: pending.coupleId || '',
-        inviteCode: pending.inviteCode || ''
+        inviteCode: pending.inviteCode || '',
+        boundAt: '',
+        relationshipStartDate: '',
+        relationshipStartDateUpdatedAt: '',
+        relationshipStartDateUpdatedBy: ''
       }
     }
 
@@ -105,7 +113,11 @@ exports.main = async () => {
       success: true,
       status: 'unbound',
       coupleId: '',
-      inviteCode: ''
+      inviteCode: '',
+      boundAt: '',
+      relationshipStartDate: '',
+      relationshipStartDateUpdatedAt: '',
+      relationshipStartDateUpdatedBy: ''
     }
   } catch (error) {
     return {

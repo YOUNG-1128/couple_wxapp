@@ -1,4 +1,4 @@
-<navigation-bar title="想你按钮历史" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="想你按钮历史" back="{{true}}" color="black" background="#FFFAF8"></navigation-bar>
 <scroll-view class="companion-scroll" type="list" scroll-y scroll-into-view="{{scrollIntoView}}">
   <view class="companion-page">
     <common-card featured="{{true}}">

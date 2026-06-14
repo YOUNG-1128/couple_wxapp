@@ -18,6 +18,8 @@ function createEmptyLocationState() {
 Page({
   data: {
     draftId: '',
+    postId: '',
+    isEditing: false,
     currentUser: {},
     composeContent: '',
     composeImages: [],
@@ -27,8 +29,13 @@ Page({
 
   onLoad(options) {
     const draftId = options && options.draftId ? options.draftId : ''
+    const postId = options && options.postId ? decodeURIComponent(options.postId) : ''
 
-    this.setData({ draftId })
+    this.setData({
+      draftId,
+      postId,
+      isEditing: Boolean(postId)
+    })
     this.loadPageData()
   },
 
@@ -38,12 +45,24 @@ Page({
 
   loadPageData() {
     const currentUser = momentsService.getCurrentUser()
-    momentsService.getMomentDraftByIdAsync(this.data.draftId).then((draft) => {
+    const loadRecord = this.data.isEditing
+      ? momentsService.getPostByIdAsync(this.data.postId)
+      : momentsService.getMomentDraftByIdAsync(this.data.draftId)
+
+    loadRecord.then((record) => {
+      if (this.data.isEditing && !record) {
+        wx.showToast({
+          title: '动态不存在或无法编辑',
+          icon: 'none'
+        })
+        return
+      }
+
       this.setData({
         currentUser,
-        composeContent: draft ? draft.content : '',
-        composeImages: draft ? (draft.images || []) : [],
-        selectedLocation: this.buildLocationStateFromDraft(draft ? draft.location : null)
+        composeContent: record ? record.content : '',
+        composeImages: record ? (record.images || []) : [],
+        selectedLocation: this.buildLocationStateFromDraft(record ? record.location : null)
       })
     })
   },
@@ -280,7 +299,7 @@ Page({
   },
 
   onSaveDraft() {
-    if (this.data.submitting) {
+    if (this.data.submitting || this.data.isEditing) {
       return
     }
 
@@ -344,16 +363,26 @@ Page({
 
     this.setData({ submitting: true })
 
-    this.uploadComposeImages().then((uploadedImages) => momentsService.publishMomentAsync({
-      draftId: this.data.draftId,
-      content,
-      images: uploadedImages,
-      location,
-      shouldCreateFootprint: location.enabled === true
-    })).then(() => {
+    this.uploadComposeImages().then((uploadedImages) => {
+      const payload = {
+        content,
+        images: uploadedImages,
+        location,
+        shouldCreateFootprint: location.enabled === true
+      }
+
+      if (this.data.isEditing) {
+        return momentsService.updatePostAsync(this.data.postId, payload)
+      }
+
+      return momentsService.publishMomentAsync({
+        draftId: this.data.draftId,
+        ...payload
+      })
+    }).then(() => {
       this.setData({ submitting: false })
       wx.showToast({
-        title: '发布成功',
+        title: this.data.isEditing ? '修改成功' : '发布成功',
         icon: 'success'
       })
 
@@ -363,7 +392,7 @@ Page({
     }).catch(() => {
       this.setData({ submitting: false })
       wx.showToast({
-        title: '图片上传或发布失败',
+        title: this.data.isEditing ? '图片上传或修改失败' : '图片上传或发布失败',
         icon: 'none'
       })
     })

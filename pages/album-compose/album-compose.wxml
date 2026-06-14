@@ -1,4 +1,4 @@
-<navigation-bar title="书写动态" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="{{isEditing ? '编辑动态' : '书写动态'}}" back="{{true}}" color="black" background="#FFFAF8"></navigation-bar>
 <scroll-view class="compose-scroll" type="list" scroll-y>
   <view class="compose-page">
     <common-card featured="{{true}}">
@@ -58,8 +58,8 @@
 
       <view class="composer-actions">
         <button class="action-button ghost" bindtap="onChooseImages">选照片</button>
-        <button class="action-button ghost" bindtap="onSaveDraft">存草稿</button>
-        <button class="action-button" bindtap="onPublishPost">发布动态</button>
+        <button class="action-button ghost" wx:if="{{!isEditing}}" bindtap="onSaveDraft">存草稿</button>
+        <button class="action-button" bindtap="onPublishPost">{{isEditing ? '保存修改' : '发布动态'}}</button>
       </view>
     </common-card>
   </view>

@@ -1,4 +1,4 @@
-<navigation-bar title="输入邀请码" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="输入邀请码" back="{{true}}" color="black" background="#FFFAF8"></navigation-bar>
 <view class="bind-page">
   <common-card featured="{{true}}">
     <view class="bind-title">绑定另一半</view>

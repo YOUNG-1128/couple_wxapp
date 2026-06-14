@@ -3,8 +3,6 @@ const mailboxService = require('../../services/mailbox')
 Page({
   data: {
     letter: null,
-    paperDate: '',
-    senderSign: '—— 我',
     isVisible: true,
     paperReady: false
   },
@@ -30,12 +28,8 @@ Page({
       return
     }
 
-    const paperDate = this.formatPaperDate(detail.sentAt || detail.createdAt)
-
     this.setData({
       letter: detail,
-      paperDate,
-      senderSign: detail.fromUser && detail.fromUser.nickName ? `—— ${detail.fromUser.nickName}` : '—— 我',
       isVisible: !!detail.visible
     })
 
@@ -58,23 +52,5 @@ Page({
       current,
       urls: letter.images
     })
-  },
-
-  formatPaperDate(input) {
-    if (!input) {
-      return ''
-    }
-
-    const date = new Date(input)
-
-    if (Number.isNaN(date.getTime())) {
-      return ''
-    }
-
-    const y = date.getFullYear()
-    const m = String(date.getMonth() + 1).padStart(2, '0')
-    const d = String(date.getDate()).padStart(2, '0')
-
-    return `${y}.${m}.${d}`
   }
 })

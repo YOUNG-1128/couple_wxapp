@@ -10,7 +10,7 @@
 }
 
 .days {
-  color: #e85d75;
+  color: #d86f83;
   font-size: 88rpx;
   font-weight: 700;
   line-height: 1;

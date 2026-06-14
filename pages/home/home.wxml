@@ -1,20 +1,22 @@
-<navigation-bar title="首页" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar back="{{false}}" color="black" background="#FFFAF8"></navigation-bar>
 <scroll-view class="home-scroll" type="list" scroll-y>
   <view class="home-page">
     <view class="hero-card" bindlongpress="onReplayOpening">
       <view class="hero-main">
-        <view class="hero-badge">恋爱天数</view>
-        <view class="hero-days-row">
+        <view class="hero-badge">{{loveInfo.isConfigured ? '恋爱天数' : (loveInfo.isBound ? '我们的故事' : (loveInfo.hasInvite ? '邀请正在路上' : '属于两个人的小世界'))}}</view>
+        <view class="hero-days-row" wx:if="{{loveInfo.isConfigured}}">
           <text class="hero-days">{{loveInfo.days}}</text>
           <text class="hero-days-unit">天</text>
         </view>
-        <view class="hero-line">{{heroLine}}</view>
-        <view class="hero-note">始于 {{loveInfo.startDate}}</view>
+        <view class="hero-line">{{loveInfo.isConfigured ? heroLine : (loveInfo.isBound ? '补上故事开始的那一天' : (loveInfo.hasInvite ? '等 TA 沿着轨迹来到你身边' : '等那个特别的人，来到同一个方向'))}}</view>
+        <view class="hero-note relationship-entry" bindtap="onOpenRelationshipFlow">
+          {{loveInfo.isConfigured ? ('始于 ' + loveInfo.startDate + ' · 轻触可修改') : (loveInfo.isBound ? '轻触设置恋爱开始日' : (loveInfo.hasInvite ? '轻触查看相遇暗号' : '轻触邀请 TA 或加入 TA'))}}
+        </view>
       </view>
 
       <view class="heart-action-row">
         <button class="heart-btn" bindtap="onSendMissYou">
-          <text class="heart-icon">❤</text>
+          <view class="ui-icon ui-icon-heart heart-icon"></view>
           <text class="heart-text">想 TA</text>
         </button>
       </view>
@@ -48,15 +50,14 @@
       <view wx:else class="empty-text">今天要做的事已经完成了，去和 TA 说句话吧</view>
     </common-card>
 
-    <common-card bindtap="onAnniversaryTap">
+    <common-card wx:if="{{monthAnniversaries.length}}" bindtap="onAnniversaryTap">
       <view class="section-title">接下来值得期待的日子</view>
-      <view wx:if="{{monthAnniversaries.length}}" class="anniversary-list">
+      <view class="anniversary-list">
         <view class="anniversary-item" wx:for="{{monthAnniversaries}}" wx:key="title">
           <view class="item-title">{{item.title}}</view>
           <view class="item-meta">{{item.date}} · 还有 {{item.daysLeft}} 天</view>
         </view>
       </view>
-      <view wx:else class="empty-text">未来 30 天暂时没有纪念日</view>
     </common-card>
   </view>
 </scroll-view>
@@ -82,11 +83,10 @@
 
 <view
   wx:if="{{showOpening}}"
-  class="opening opening-{{openingMode}} {{openingReady ? 'opening-ready' : ''}}"
-  bindtap="onSkipOpening"
+  class="opening opening-{{openingMode}} {{openingReady && !openingInteractive ? 'opening-ready' : 'opening-stay'}}"
 >
   <block wx:if="{{openingReady}}">
-    <view class="opening-skip">轻触跳过</view>
+    <view class="opening-skip" bindtap="onSkipOpening">稍后再说</view>
 
     <view class="opening-date">{{openingEyebrow}}</view>
 
@@ -105,11 +105,13 @@
       </view>
 
       <view class="opening-point opening-point-rose">
-        <view class="opening-point-core"></view>
+        <image wx:if="{{myUser.avatarUrl && openingMode !== 'solo' && openingMode !== 'inviting'}}" class="opening-point-core opening-avatar" src="{{myUser.avatarUrl}}" mode="aspectFill"></image>
+        <view wx:else class="opening-point-core"></view>
         <view wx:if="{{showOpeningNames}}" class="opening-name">{{openingMyName}}</view>
       </view>
       <view class="opening-point opening-point-gold">
-        <view class="opening-point-core"></view>
+        <image wx:if="{{partnerUser.avatarUrl && openingMode !== 'solo' && openingMode !== 'inviting'}}" class="opening-point-core opening-avatar" src="{{partnerUser.avatarUrl}}" mode="aspectFill"></image>
+        <view wx:else class="opening-point-core"></view>
         <view wx:if="{{showOpeningNames}}" class="opening-name">{{openingPartnerName}}</view>
       </view>
 
@@ -120,6 +122,46 @@
     <view class="opening-copy">
       <view class="opening-title">{{openingTitle}}</view>
       <view class="opening-subtitle">{{openingSubtitle}}</view>
+    </view>
+
+    <view class="opening-actions" wx:if="{{openingMode === 'solo'}}" catchtap="noop">
+      <button class="opening-primary" bindtap="onOpeningInvite" loading="{{openingBusy}}">邀请 TA 来这里</button>
+      <button class="opening-secondary" bindtap="onOpeningJoin" disabled="{{openingBusy}}">我收到了邀请</button>
+    </view>
+
+    <view class="opening-actions opening-profile" wx:if="{{openingMode === 'profile'}}" catchtap="noop">
+      <button class="opening-avatar-picker" bindtap="onOpeningChooseAvatar" loading="{{openingBusy}}">
+        <image wx:if="{{openingProfileAvatar}}" class="opening-profile-avatar" src="{{openingProfileAvatar}}" mode="aspectFill"></image>
+        <view wx:else class="opening-profile-light"></view>
+        <text>{{openingProfileAvatar ? '换一张头像' : '选择头像（可跳过）'}}</text>
+      </button>
+      <input class="opening-input" placeholder="怎么称呼你？（可跳过）" maxlength="20" value="{{openingProfileNickName}}" bindinput="onOpeningProfileInput" />
+      <button class="opening-primary" bindtap="onContinueOpeningProfile" loading="{{openingBusy}}">继续</button>
+    </view>
+
+    <view class="opening-actions" wx:if="{{openingMode === 'inviting'}}" catchtap="noop">
+      <view class="opening-code-label">把这串相遇暗号告诉 TA</view>
+      <view class="opening-code">{{openingInviteCode}}</view>
+      <button class="opening-primary" bindtap="onCopyOpeningInvite">复制相遇暗号</button>
+      <button class="opening-secondary" open-type="share">分享给 TA</button>
+      <button class="opening-secondary" bindtap="onRefreshOpeningBinding" loading="{{openingBusy}}">TA 已加入？刷新看看</button>
+      <button class="opening-text-action" bindtap="onEnterHomeWhileWaiting">先进入我们的小世界</button>
+    </view>
+
+    <view class="opening-actions" wx:if="{{openingMode === 'joining'}}" catchtap="noop">
+      <input class="opening-input opening-code-input" placeholder="输入 6 位相遇暗号" maxlength="12" value="{{openingJoinCode}}" bindinput="onOpeningJoinCodeInput" />
+      <button class="opening-primary" bindtap="onSubmitOpeningJoin" loading="{{openingBusy}}">沿着轨迹去见 TA</button>
+    </view>
+
+    <view class="opening-actions" wx:if="{{openingMode === 'just-connected'}}" catchtap="noop">
+      <button class="opening-primary" bindtap="onContinueConnected">一起记住故事开始的日子</button>
+    </view>
+
+    <view class="opening-actions" wx:if="{{openingMode === 'choose-start-date'}}" catchtap="noop">
+      <picker mode="date" value="{{relationshipDateDraft}}" end="{{todayKey}}" bindchange="onRelationshipDateChange">
+        <view class="opening-date-picker">{{relationshipDateDraft || '选择日期'}}</view>
+      </picker>
+      <button class="opening-primary" bindtap="onSaveRelationshipDate" loading="{{openingBusy}}">一起记住这一天</button>
     </view>
   </block>
 </view>

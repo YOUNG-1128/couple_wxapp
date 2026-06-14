@@ -2,7 +2,7 @@ page {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #fff8f6;
+  background: #fffaf8;
 }
 
 .mood-scroll {
@@ -55,7 +55,7 @@ page {
 
 .mood-chip-active {
   color: #ffffff;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .note-input {
@@ -80,7 +80,7 @@ page {
   border-radius: 999rpx;
   color: #ffffff;
   font-size: 26rpx;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .save-btn::after {

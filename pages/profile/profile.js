@@ -15,27 +15,31 @@ Page({
     cloudAuth: authService.getCloudAuthState(),
     loggingIn: false,
     bindingState: coupleService.getBindingState(),
-    creatingInvite: false
+    creatingInvite: false,
+    aboutTaNotes: [],
+    aboutTaDraft: '',
+    aboutTaPlaceholder: '例如：\n喜欢热拿铁，少糖\n最近很想去海边\n难过时先抱抱，不要急着讲道理',
+    aboutTaEditorVisible: false
   },
 
   onShow() {
     const currentUser = momentsService.getCurrentUser()
+    const currentUserId = currentUser ? currentUser.userId : ''
 
     this.setData({
       recentStats: statsService.getRecentStatusStats(),
       users: momentsService.getUsers(),
       currentUser,
       nickNameDraft: currentUser ? currentUser.nickName : '',
-      account: authService.getAccountStatus(),
       cloudAuth: authService.getCloudAuthState(),
-      bindingState: coupleService.getBindingState()
+      bindingState: coupleService.getBindingState(),
+      aboutTaNotes: profileService.getAboutTaNotes(currentUserId)
     })
 
     if (this.data.cloudAuth.isCloudLoggedIn) {
       coupleService.getBindingStatus().then((bindingState) => {
         this.setData({
-          bindingState,
-          account: authService.getAccountStatus()
+          bindingState
         })
       })
     }
@@ -45,6 +49,43 @@ Page({
   onPrivacyTap() {
     wx.showToast({
       title: '隐私设置即将上线',
+      icon: 'none'
+    })
+  },
+
+  noop() {},
+
+  onOpenAboutTaEditor() {
+    this.setData({
+      aboutTaDraft: this.data.aboutTaNotes.join('\n'),
+      aboutTaEditorVisible: true
+    })
+  },
+
+  onCloseAboutTaEditor() {
+    this.setData({
+      aboutTaEditorVisible: false
+    })
+  },
+
+  onAboutTaInput(event) {
+    this.setData({
+      aboutTaDraft: event.detail.value
+    })
+  },
+
+  onSaveAboutTa() {
+    const currentUser = this.data.currentUser || {}
+    const aboutTaNotes = profileService.saveAboutTaNotes(currentUser.userId || '', this.data.aboutTaDraft)
+
+    this.setData({
+      aboutTaNotes,
+      aboutTaDraft: aboutTaNotes.join('\n'),
+      aboutTaEditorVisible: false
+    })
+
+    wx.showToast({
+      title: aboutTaNotes.length ? '已经记下来啦' : '已清空记录',
       icon: 'none'
     })
   },
@@ -67,7 +108,6 @@ Page({
           users: momentsService.getUsers(),
           currentUser,
           nickNameDraft: currentUser ? currentUser.nickName : '',
-          account: authService.getAccountStatus(),
           cloudAuth,
           bindingState: coupleService.getBindingState()
         })
@@ -75,8 +115,7 @@ Page({
         if (cloudAuth.isCloudLoggedIn) {
           coupleService.getBindingStatus().then((bindingState) => {
             this.setData({
-              bindingState,
-              account: authService.getAccountStatus()
+              bindingState
             })
           })
         }
@@ -125,8 +164,7 @@ Page({
     coupleService.createInviteCode()
       .then((bindingState) => {
         this.setData({
-          bindingState,
-          account: authService.getAccountStatus()
+          bindingState
         })
 
         wx.showToast({
@@ -162,8 +200,7 @@ Page({
 
     coupleService.getBindingStatus().then((bindingState) => {
       this.setData({
-        bindingState,
-        account: authService.getAccountStatus()
+        bindingState
       })
     })
   },
@@ -186,6 +223,17 @@ Page({
     })
   },
 
+  onShareAppMessage() {
+    const inviteCode = this.data.bindingState.inviteCode || ''
+
+    return {
+      title: inviteCode ? `来和我一起记录我们的故事，暗号是 ${inviteCode}` : '来和我一起记录我们的故事',
+      path: inviteCode
+        ? `/pages/home/home?inviteCode=${encodeURIComponent(inviteCode)}`
+        : '/pages/home/home'
+    }
+  },
+
 
   onSwitchUser(event) {
     if (this.data.cloudAuth.isCloudLoggedIn) {
@@ -203,46 +251,60 @@ Page({
     this.setData({
       users: momentsService.getUsers(),
       currentUser,
-      nickNameDraft: currentUser.nickName
+      nickNameDraft: currentUser.nickName,
+      aboutTaNotes: profileService.getAboutTaNotes(currentUser.userId)
     })
   },
 
-  onNickNameInput(event) {
-    this.setData({
-      nickNameDraft: event.detail.value
-    })
-  },
-
-  onSaveNickName() {
+  onEditNickName() {
     const currentUser = this.data.currentUser
-    const nickName = (this.data.nickNameDraft || '').trim()
 
     if (!currentUser || !currentUser.userId) {
       return
     }
 
-    if (!nickName) {
-      wx.showToast({
-        title: '昵称不能为空哦',
-        icon: 'none'
-      })
+    wx.showModal({
+      title: '给自己取个昵称',
+      editable: true,
+      placeholderText: '输入昵称',
+      content: currentUser.nickName || '',
+      success: (res) => {
+        if (!res.confirm) {
+          return
+        }
 
-      return
-    }
+        const nickName = String(res.content || '').trim().slice(0, 20)
 
-    momentsService.updateUserProfile(currentUser.userId, {
-      nickName
-    })
+        if (!nickName) {
+          wx.showToast({
+            title: '昵称不能为空哦',
+            icon: 'none'
+          })
+          return
+        }
 
-    this.setData({
-      users: momentsService.getUsers(),
-      currentUser: momentsService.getCurrentUser(),
-      nickNameDraft: nickName
-    })
+        momentsService.updateUserProfile(currentUser.userId, {
+          nickName
+        })
 
-    wx.showToast({
-      title: '昵称已更新',
-      icon: 'success'
+        const syncProfile = this.data.cloudAuth.isCloudLoggedIn
+          ? authService.syncCloudCurrentUserProfile()
+          : Promise.resolve()
+
+        syncProfile.finally(() => {
+          this.setData({
+            users: momentsService.getUsers(),
+            currentUser: momentsService.getCurrentUser(),
+            nickNameDraft: nickName,
+            cloudAuth: authService.getCloudAuthState()
+          })
+
+          wx.showToast({
+            title: '昵称已更新',
+            icon: 'success'
+          })
+        })
+      }
     })
   },
 

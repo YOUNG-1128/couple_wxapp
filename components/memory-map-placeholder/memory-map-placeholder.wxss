@@ -6,7 +6,7 @@
   min-height: 210rpx;
   border: 2rpx dashed #f1c9d1;
   border-radius: 22rpx;
-  background: #fff8f6;
+  background: #fffaf8;
   text-align: center;
 }
 
@@ -14,7 +14,7 @@
   width: 30rpx;
   height: 30rpx;
   border-radius: 50% 50% 50% 0;
-  background: #e85d75;
+  background: #d86f83;
   transform: rotate(-45deg);
 }
 

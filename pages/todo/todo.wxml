@@ -1,4 +1,4 @@
-<navigation-bar title="待办清单" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="待办清单" back="{{true}}" color="black" background="#FFFAF8"></navigation-bar>
 <scroll-view class="todo-scroll" type="list" scroll-y>
   <view class="todo-page">
     <common-card featured="{{true}}">

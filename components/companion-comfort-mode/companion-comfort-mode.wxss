@@ -22,14 +22,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 156rpx;
-  height: 66rpx;
+  min-width: 0;
+  height: 56rpx;
   margin: 0;
-  padding: 0 24rpx;
-  border-radius: 999rpx;
-  color: #e85d75;
-  font-size: 26rpx;
-  background: #ffecef;
+  padding: 0 18rpx;
+  border: 1rpx solid #eadde0;
+  border-radius: 10rpx;
+  color: #8d6d77;
+  font-size: 23rpx;
+  background: #fffdfb;
 }
 
 .mode-button::after {

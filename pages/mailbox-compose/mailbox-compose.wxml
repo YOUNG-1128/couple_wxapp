@@ -1,34 +1,35 @@
-<navigation-bar title="写信" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="写信" back="{{true}}" color="black" background="#FFFAF8"></navigation-bar>
 <scroll-view class="compose-scroll" type="list" scroll-y>
   <view class="compose-page">
-    <common-card featured="{{true}}">
-      <view class="composer-head">
-        <image class="author-avatar" src="{{currentUser.avatarUrl}}" mode="aspectFill"></image>
-        <view class="author-meta">
-          <view class="author-name">{{currentUser.nickName || '我'}}</view>
-          <view class="author-target">收信人：{{partnerUser.nickName || 'TA'}}</view>
-        </view>
-      </view>
-
-      <input class="form-input" placeholder="标题（可选）" value="{{title}}" bindinput="onTitleInput" />
+    <view class="letter-paper">
+      <input class="paper-title-input" placeholder="写一个标题，也可以留空" maxlength="60" value="{{title}}" bindinput="onTitleInput" />
+      <input class="paper-greeting-input" placeholder="怎么称呼收信的人？" maxlength="60" value="{{greeting}}" bindinput="onGreetingInput" />
       <textarea
-        class="form-textarea"
-        placeholder="写下想说的话..."
+        class="paper-content-input"
+        placeholder="在这里写下想说的话……"
         value="{{content}}"
         maxlength="2000"
         bindinput="onContentInput"
       ></textarea>
 
-      <view class="image-grid" wx:if="{{images.length}}">
+      <view class="paper-image-grid" wx:if="{{images.length}}">
         <view class="image-item" wx:for="{{images}}" wx:key="*this">
           <image class="picked-image" src="{{item}}" mode="aspectFill" data-src="{{item}}" bindtap="onPreviewImage"></image>
-          <view class="remove-image" data-index="{{index}}" bindtap="onRemoveImage">×</view>
+          <view class="remove-image" data-index="{{index}}" bindtap="onRemoveImage"><view class="ui-icon ui-icon-close"></view></view>
         </view>
       </view>
 
+      <view class="paper-footer">
+        <input class="paper-sign-input" placeholder="写下你的落款" maxlength="60" value="{{signature}}" bindinput="onSignatureInput" />
+        <input class="paper-date-input" placeholder="写下日期或特别的时刻" maxlength="80" value="{{letterDateText}}" bindinput="onLetterDateInput" />
+      </view>
+    </view>
+
+    <view class="delivery-panel">
+      <view class="delivery-label">选择送达方式，最后点击下方寄出按钮</view>
       <view class="send-mode-row">
-        <view class="mode-chip {{sendMode === 'now' ? 'mode-chip-active' : ''}}" data-mode="now" bindtap="onSelectSendMode">即时发送</view>
-        <view class="mode-chip {{sendMode === 'scheduled' ? 'mode-chip-active' : ''}}" data-mode="scheduled" bindtap="onSelectSendMode">定时发送</view>
+        <view class="delivery-mode {{sendMode === 'now' ? 'delivery-mode-active' : ''}}" data-mode="now" bindtap="onSelectSendMode">立即送达</view>
+        <view class="delivery-mode {{sendMode === 'scheduled' ? 'delivery-mode-active' : ''}}" data-mode="scheduled" bindtap="onSelectSendMode">约定时间</view>
       </view>
 
       <view class="schedule-row" wx:if="{{sendMode === 'scheduled'}}">
@@ -40,14 +41,11 @@
         </picker>
       </view>
 
-      <view class="notice-tip" wx:if="{{sendMode === 'now'}}">发送时会尝试通过微信订阅消息提醒 TA</view>
-      <view class="notice-tip" wx:if="{{sendMode === 'scheduled'}}">定时信件会先保存提醒意图，后续需配合云端定时任务发送站外提醒</view>
-
       <view class="compose-action-row">
-        <button class="ghost-btn" bindtap="onChooseImages">添加图片</button>
-        <button class="ghost-btn" bindtap="onSaveDraft">存草稿</button>
-        <button class="send-btn" bindtap="onSend" loading="{{sending}}">发送</button>
+        <button class="paper-tool-btn" bindtap="onChooseImages"><view class="paperclip-icon"></view>添加照片</button>
+        <button class="paper-tool-btn" bindtap="onSaveDraft"><view class="draft-paper-icon"></view>保存草稿</button>
+        <button class="letter-send-btn" bindtap="onSend" loading="{{sending}}"><view class="send-letter-icon"></view>{{sendMode === 'scheduled' ? '按约定寄出' : '寄出这封信'}}</button>
       </view>
-    </common-card>
+    </view>
   </view>
 </scroll-view>

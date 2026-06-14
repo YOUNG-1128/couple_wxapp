@@ -119,6 +119,10 @@ exports.main = async (event) => {
       success: true,
       coupleId: couple.coupleId,
       status: 'bound',
+      boundAt: now,
+      relationshipStartDate: couple.relationshipStartDate || '',
+      relationshipStartDateUpdatedAt: couple.relationshipStartDateUpdatedAt || '',
+      relationshipStartDateUpdatedBy: couple.relationshipStartDateUpdatedBy || '',
       partnerProfile: {
         userId: ownerUser.userId,
         nickName: ownerUser.nickName || 'TA',

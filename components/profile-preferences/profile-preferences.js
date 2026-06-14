@@ -1,8 +1,14 @@
 Component({
   properties: {
-    list: {
+    notes: {
       type: Array,
       value: []
+    }
+  },
+
+  methods: {
+    onEdit() {
+      this.triggerEvent('edit')
     }
   }
 })

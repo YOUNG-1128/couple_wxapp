@@ -20,7 +20,7 @@
 
 .privacy-arrow {
   flex: 0 0 auto;
-  color: #e85d75;
-  font-size: 48rpx;
+  color: #d86f83;
+  font-size: 38rpx;
   line-height: 1;
 }

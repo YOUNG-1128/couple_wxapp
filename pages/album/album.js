@@ -29,10 +29,24 @@ Page({
     currentUser: {},
     users: [],
     activeCommentPostId: '',
-    commentDraftMap: {}
+    commentDraftMap: {},
+    removingPostId: ''
   },
 
-  onLoad() {
+  onLoad(options) {
+    const date = options && /^\d{4}-\d{2}-\d{2}$/.test(options.date || '') ? options.date : ''
+
+    if (date) {
+      this.setData({
+        filterDateType: 'day',
+        filterDateValue: date,
+        draftDateType: 'day',
+        draftDateValue: date,
+        selectedYear: date.slice(0, 4),
+        selectedMonth: date.slice(5, 7)
+      })
+    }
+
     this.refreshPageData()
   },
 
@@ -323,6 +337,18 @@ Page({
     })
   },
 
+  onEditPost(event) {
+    const postId = event.currentTarget.dataset.postId
+
+    if (!postId) {
+      return
+    }
+
+    wx.navigateTo({
+      url: `/pages/album-compose/album-compose?postId=${encodeURIComponent(postId)}`
+    })
+  },
+
   applyDraftFilters(closePanel) {
     this.setData({
       keyword: (this.data.draftKeyword || '').trim(),
@@ -416,6 +442,49 @@ Page({
         title: '留言失败',
         icon: 'none'
       })
+    })
+  },
+
+  onRemovePost(event) {
+    const postId = event.currentTarget.dataset.postId
+
+    if (!postId || this.data.removingPostId) {
+      return
+    }
+
+    wx.showModal({
+      title: '删除动态',
+      content: '动态删除后无法恢复，由它生成的足迹也会一并删除。确定继续吗？',
+      confirmColor: '#e85d75',
+      success: (res) => {
+        if (!res.confirm) {
+          return
+        }
+
+        this.setData({ removingPostId: postId })
+        momentsService.removePostAsync(postId)
+          .then((removed) => {
+            if (!removed) {
+              throw new Error('post_not_found_or_forbidden')
+            }
+
+            this.refreshDateGroups()
+            this.refreshFeed()
+            wx.showToast({
+              title: '动态已删除',
+              icon: 'success'
+            })
+          })
+          .catch(() => {
+            wx.showToast({
+              title: '删除失败',
+              icon: 'none'
+            })
+          })
+          .finally(() => {
+            this.setData({ removingPostId: '' })
+          })
+      }
     })
   },
 

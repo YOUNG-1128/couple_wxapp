@@ -21,8 +21,21 @@
 .entry-action {
   flex: 0 0 auto;
   padding: 10rpx 20rpx;
-  border-radius: 999rpx;
-  color: #ffffff;
+  border: 1rpx solid #e6cbd0;
+  border-radius: 10rpx;
+  color: #9f5d6c;
   font-size: 25rpx;
-  background: #e85d75;
+  background: #fff9f8;
+}
+
+.entry-action::before {
+  content: '';
+  display: inline-block;
+  width: 11rpx;
+  height: 11rpx;
+  margin-right: 9rpx;
+  border-top: 3rpx solid currentColor;
+  border-right: 3rpx solid currentColor;
+  border-radius: 2rpx;
+  transform: rotate(45deg);
 }

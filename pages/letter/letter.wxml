@@ -1,9 +1,10 @@
-<navigation-bar title="信件" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="信件" back="{{true}}" color="black" background="#FFFAF8"></navigation-bar>
 <scroll-view class="letter-scroll" type="list" scroll-y>
   <view class="letter-page" wx:if="{{letter}}">
     <view class="paper-card {{paperReady ? 'paper-card-ready' : ''}}">
       <view class="paper-lines"></view>
       <view class="paper-title" wx:if="{{letter.title}}">{{letter.title}}</view>
+      <view class="paper-greeting" wx:if="{{isVisible && letter.greeting}}">{{letter.greeting}}</view>
 
       <view class="paper-content" wx:if="{{isVisible}}">{{letter.content}}</view>
       <view class="paper-content" wx:else>这封信还没有到可阅读时间，等约定时间到了再来看吧。</view>
@@ -20,8 +21,8 @@
         ></image>
       </view>
 
-      <view class="paper-sign" wx:if="{{isVisible}}">{{senderSign}}</view>
-      <view class="paper-date">{{paperDate}}</view>
+      <view class="paper-sign" wx:if="{{isVisible && letter.signature}}">{{letter.signature}}</view>
+      <view class="paper-date" wx:if="{{isVisible && letter.letterDateText}}">{{letter.letterDateText}}</view>
     </view>
   </view>
 </scroll-view>

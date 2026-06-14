@@ -1,18 +1,5 @@
 module.exports = {
-  preferences: [
-    {
-      label: '喜欢的饮品',
-      value: '热拿铁，少糖'
-    },
-    {
-      label: '偏爱的约会',
-      value: '散步、看电影、吃甜点'
-    },
-    {
-      label: '需要被照顾时',
-      value: '先抱抱，再慢慢说'
-    }
-  ],
+  aboutTaNotes: [],
   checklist: {
     completed: 18,
     total: 100,

@@ -2,7 +2,7 @@ page {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #fff8f6;
+  background: #fffaf8;
 }
 
 .footprint-scroll {
@@ -11,7 +11,7 @@ page {
 }
 
 .footprint-page {
-  padding: 32rpx 32rpx 56rpx;
+  padding: 36rpx 28rpx 64rpx;
 }
 
 .hero-row {
@@ -48,7 +48,7 @@ page {
   color: #ffffff;
   font-size: 24rpx;
   line-height: 64rpx;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .new-btn::after {
@@ -71,7 +71,7 @@ page {
 }
 
 .stats-value {
-  color: #e85d75;
+  color: #d86f83;
   font-size: 32rpx;
   font-weight: 700;
 }
@@ -111,7 +111,7 @@ page {
 }
 
 .view-all {
-  color: #e85d75;
+  color: #d86f83;
   font-size: 24rpx;
 }
 
@@ -160,7 +160,7 @@ page {
 
 .item-place {
   margin-top: 10rpx;
-  color: #e85d75;
+  color: #d86f83;
   font-size: 25rpx;
 }
 
@@ -190,7 +190,7 @@ page {
 
 .post-meta {
   margin-top: 10rpx;
-  color: #e85d75;
+  color: #d86f83;
   font-size: 25rpx;
 }
 
@@ -229,7 +229,7 @@ page {
   margin-left: 0;
   margin-right: 0;
   border-radius: 24rpx;
-  color: #e85d75;
+  color: #d86f83;
   font-size: 25rpx;
   line-height: 72rpx;
   background: #fff1f4;
@@ -262,7 +262,7 @@ page {
 
 .selected-place {
   margin-top: 14rpx;
-  color: #e85d75;
+  color: #d86f83;
   font-size: 24rpx;
 }
 
@@ -271,7 +271,7 @@ page {
   margin-top: 14rpx;
   overflow-y: auto;
   border-radius: 24rpx;
-  background: #fff8f6;
+  background: #fffaf8;
 }
 
 .search-item {
@@ -310,7 +310,7 @@ page {
   color: #ffffff;
   font-size: 26rpx;
   line-height: 72rpx;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .panel-btn::after {

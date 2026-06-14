@@ -2,7 +2,27 @@ page {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #fff8f6;
+  background: #fffaf8;
+}
+
+.mini-draft-icon {
+  position: relative;
+  width: 30rpx;
+  height: 24rpx;
+  border: 3rpx solid #6f5c62;
+  border-radius: 5rpx;
+}
+
+.mini-draft-icon::before {
+  content: '';
+  position: absolute;
+  top: -9rpx;
+  left: 3rpx;
+  width: 14rpx;
+  height: 8rpx;
+  border: 3rpx solid #6f5c62;
+  border-bottom: 0;
+  border-radius: 5rpx 5rpx 0 0;
 }
 
 .mailbox-scroll {
@@ -11,7 +31,7 @@ page {
 }
 
 .mailbox-page {
-  padding: 24rpx 32rpx 56rpx;
+  padding: 28rpx 28rpx 64rpx;
 }
 
 .mailbox-entry-row {
@@ -51,7 +71,7 @@ page {
   color: #ffffff;
   font-size: 38rpx;
   font-weight: 700;
-  background: #e85d75;
+  background: #d86f83;
   box-shadow: 0 8rpx 18rpx rgba(232, 93, 117, 0.26);
 }
 
@@ -163,33 +183,25 @@ page {
   background: #fff0f3;
 }
 
-.letter-main-outgoing .letter-title,
-.letter-main-outgoing .letter-subtitle {
+.letter-main-outgoing .letter-summary {
   text-align: right;
 }
 
-.letter-title {
-  color: #4f3c43;
-  font-size: 26rpx;
-  font-weight: 600;
-  word-break: break-all;
-}
-
-.letter-title-unread {
-  font-weight: 700;
-  color: #2f2126;
-}
-
-.letter-subtitle {
-  color: #9a7b84;
-  font-size: 23rpx;
-  line-height: 1.4;
-  word-break: break-all;
+.letter-summary {
   display: -webkit-box;
   overflow: hidden;
+  color: #4f3c43;
+  font-size: 25rpx;
+  line-height: 1.5;
   text-overflow: ellipsis;
-  -webkit-line-clamp: 2;
+  word-break: break-all;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.letter-summary-unread {
+  font-weight: 700;
+  color: #2f2126;
 }
 
 .letter-foot {
@@ -354,6 +366,7 @@ page {
 }
 
 .reader-title,
+.reader-greeting,
 .reader-content,
 .reader-sign,
 .reader-date,
@@ -372,6 +385,19 @@ page {
   line-height: 1.4;
   letter-spacing: 0.5rpx;
   word-break: break-all;
+}
+
+.reader-greeting {
+  margin-top: 24rpx;
+  color: #5c4630;
+  font-size: 29rpx;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.reader-greeting + .reader-content {
+  margin-top: 12rpx;
 }
 
 .reader-content {

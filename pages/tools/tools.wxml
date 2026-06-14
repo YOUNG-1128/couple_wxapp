@@ -4,7 +4,7 @@
 
   <view class="feature-grid">
     <view class="feature-item" wx:for="{{features}}" wx:key="key" data-target="{{item.target}}" bindtap="onFeatureTap">
-      <view class="feature-icon">{{item.icon}}</view>
+      <view class="feature-icon feature-icon-{{item.key}}"></view>
       <view class="feature-name">{{item.name}}</view>
       <view class="feature-desc">{{item.desc}}</view>
     </view>

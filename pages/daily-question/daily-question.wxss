@@ -2,7 +2,7 @@ page {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #fff8f6;
+  background: #fffaf8;
 }
 
 .question-scroll {
@@ -80,7 +80,7 @@ page {
   border-radius: 999rpx;
   color: #ffffff;
   font-size: 26rpx;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .submit-btn::after,
@@ -126,7 +126,7 @@ page {
 }
 
 .analysis-score {
-  color: #e85d75;
+  color: #d86f83;
   font-size: 44rpx;
   font-weight: 700;
 }
@@ -167,6 +167,6 @@ page {
 }
 
 .history-action {
-  color: #e85d75;
+  color: #d86f83;
   font-size: 24rpx;
 }

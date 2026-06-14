@@ -2,7 +2,7 @@ page {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #fff8f6;
+  background: #fffaf8;
 }
 
 .ann-scroll {
@@ -43,7 +43,7 @@ page {
   margin-top: 16rpx;
   padding: 22rpx;
   border-radius: 22rpx;
-  background: linear-gradient(145deg, #fff2f6 0%, #ffeaf1 100%);
+  background-color: #f8dde5;
 }
 
 .hero-label {
@@ -99,10 +99,25 @@ page {
 }
 
 .ann-item {
-  margin-top: 14rpx;
+  margin-top: 12rpx;
   padding: 22rpx;
   border-radius: 20rpx;
   background: #fff;
+}
+
+.ann-section {
+  margin-top: 28rpx;
+}
+
+.ann-section-title {
+  margin-bottom: 4rpx;
+  color: #755a63;
+  font-size: 25rpx;
+  font-weight: 700;
+}
+
+.ann-item-past {
+  opacity: 0.82;
 }
 
 .ann-head {
@@ -127,26 +142,27 @@ page {
   background: #dd8ea1;
 }
 
+.ann-countdown-past {
+  color: #8e737c;
+  background: rgba(255, 255, 255, 0.72);
+}
+
 .ann-meta {
   margin-top: 8rpx;
   color: #927680;
   font-size: 23rpx;
 }
 
-.ann-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 24rpx;
-  margin-top: 14rpx;
-}
-
-.ann-action {
-  color: #a36e7b;
+.ann-elapsed {
+  margin-top: 8rpx;
+  color: #745963;
   font-size: 23rpx;
 }
 
-.ann-action-danger {
-  color: #c65f69;
+.ann-occurrence {
+  margin-top: 8rpx;
+  color: #a36e7b;
+  font-size: 22rpx;
 }
 
 .creator-mask {
@@ -172,11 +188,8 @@ page {
   font-weight: 700;
 }
 
-.form-input,
-.form-textarea {
+.form-input {
   width: 100%;
-  margin-top: 16rpx;
-  padding: 16rpx 18rpx;
   border-radius: 16rpx;
   color: #2b2024;
   font-size: 26rpx;
@@ -184,12 +197,39 @@ page {
   box-sizing: border-box;
 }
 
-.form-textarea {
-  min-height: 130rpx;
+.form-input {
+  height: 76rpx;
+  margin-top: 8rpx;
+  padding: 0 18rpx;
+  line-height: normal;
 }
 
 .form-row {
   margin-top: 14rpx;
+}
+
+.form-row-first {
+  margin-top: 18rpx;
+}
+
+.occasion-templates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-top: 12rpx;
+}
+
+.occasion-template {
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  color: #9a7a84;
+  font-size: 21rpx;
+  background: #fff0f3;
+}
+
+.occasion-template-active {
+  color: #fff;
+  background: #c98294;
 }
 
 .form-label {
@@ -206,31 +246,74 @@ page {
   background: #fff5f8;
 }
 
-.repeat-row {
-  display: flex;
-  gap: 10rpx;
+.calendar-switch {
+  display: inline-flex;
   margin-top: 8rpx;
+  padding: 4rpx;
+  border-radius: 999rpx;
+  background: #f7ecef;
 }
 
-.repeat-chip {
-  height: 52rpx;
-  padding: 0 16rpx;
+.calendar-option {
+  padding: 7rpx 20rpx;
   border-radius: 999rpx;
-  line-height: 52rpx;
-  color: #8d6d77;
-  font-size: 24rpx;
+  color: #9a7a84;
+  font-size: 23rpx;
+}
+
+.calendar-option-active {
+  color: #fff;
+  background: #d86f83;
+}
+
+.lunar-leap-option {
+  display: inline-flex;
+  margin-top: 8rpx;
+  padding: 7rpx 16rpx;
+  border-radius: 999rpx;
+  color: #a17e88;
+  font-size: 21rpx;
   background: #fff0f3;
 }
 
-.repeat-chip-active {
+.lunar-leap-option-active {
   color: #fff;
-  background: #e85d75;
+  background: #c98294;
 }
 
 .cover-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 10rpx;
-  margin-top: 8rpx;
+  margin-top: 14rpx;
+}
+
+.background-options {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 12rpx;
+}
+
+.background-swatch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56rpx;
+  height: 56rpx;
+  border: 4rpx solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2rpx rgba(141, 109, 119, 0.12);
+  box-sizing: border-box;
+}
+
+.background-swatch-active {
+  box-shadow: 0 0 0 3rpx #c98294;
+}
+
+.background-check {
+  color: rgba(80, 57, 65, 0.68);
+  font-size: 24rpx;
+  font-weight: 700;
 }
 
 .cover-btn {
@@ -242,7 +325,7 @@ page {
   color: #fff;
   font-size: 24rpx;
   line-height: 54rpx;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .cover-btn-ghost {
@@ -252,14 +335,6 @@ page {
 
 .cover-btn::after {
   border: 0;
-}
-
-.cover-preview {
-  width: 100%;
-  height: 220rpx;
-  margin-top: 10rpx;
-  border-radius: 14rpx;
-  background: #ffecef;
 }
 
 .panel-actions {
@@ -275,7 +350,7 @@ page {
   border-radius: 999rpx;
   color: #fff;
   font-size: 24rpx;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .panel-btn.ghost {

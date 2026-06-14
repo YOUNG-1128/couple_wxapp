@@ -34,22 +34,28 @@
     }
   },
   "tabBar": {
-    "color": "#8A8A8A",
-    "selectedColor": "#E85D75",
-    "backgroundColor": "#FFFFFF",
+    "color": "#514448",
+    "selectedColor": "#D86F83",
+    "backgroundColor": "#FFFAF8",
     "borderStyle": "white",
     "list": [
       {
         "pagePath": "pages/home/home",
-        "text": "首页"
+        "text": "",
+        "iconPath": "assets/tabbar/home.png",
+        "selectedIconPath": "assets/tabbar/home-active.png"
       },
       {
         "pagePath": "pages/hub/hub",
-        "text": "功能"
+        "text": "",
+        "iconPath": "assets/tabbar/hub.png",
+        "selectedIconPath": "assets/tabbar/hub-active.png"
       },
       {
         "pagePath": "pages/profile/profile",
-        "text": "我们"
+        "text": "",
+        "iconPath": "assets/tabbar/profile.png",
+        "selectedIconPath": "assets/tabbar/profile-active.png"
       }
     ]
   },

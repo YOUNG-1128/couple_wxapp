@@ -1,4 +1,4 @@
-<navigation-bar title="历史问答" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="历史问答" back="{{true}}" color="black" background="#FFFAF8"></navigation-bar>
 <scroll-view class="history-scroll" type="list" scroll-y>
   <view class="history-page">
     <view class="empty-box" wx:if="{{!records.length}}">还没有历史问答，先完成今天的问题吧</view>

@@ -2,31 +2,47 @@
 <scroll-view class="ann-scroll" type="list" scroll-y>
   <view class="ann-page">
     <view class="top-row">
-      <view class="page-title">{{pageTitle}}</view>
+      <view>
+        <view class="page-title">{{pageTitle}}</view>
+        <view class="page-subtitle">{{pageSubtitle}}</view>
+      </view>
       <view class="new-icon-btn" bindtap="onOpenCreator">＋</view>
     </view>
 
-    <view class="hero-card" wx:if="{{highlighted}}">
+    <view class="hero-card" wx:if="{{highlighted}}" data-id="{{highlighted.id}}" bindtap="onOpenDetail">
       <view class="hero-label">下一个重要日子</view>
       <view class="hero-main-row">
         <view class="hero-title">{{highlighted.title}}</view>
         <view class="hero-countdown">{{highlighted.countdownText}}</view>
       </view>
-      <view class="hero-date">{{highlighted.nextDateShort || highlighted.nextDate}}</view>
-      <view class="hero-note">把重要的日子好好记住</view>
+      <view class="hero-date">{{highlighted.displayDate}}</view>
+      <view class="hero-note">{{highlighted.elapsedText || '把重要的日子好好记住'}}</view>
     </view>
 
     <view class="empty-box" wx:if="{{!list.length}}">还没有纪念日，先记录一个属于你们的重要日子吧</view>
 
-    <view class="ann-item" wx:for="{{list}}" wx:key="id" data-id="{{item.id}}" bindtap="onOpenDetail">
-      <view class="ann-head">
-        <view class="ann-title">{{item.title}}</view>
-        <view class="ann-countdown">{{item.countdownText}}</view>
+    <view class="ann-section" wx:if="{{upcomingList.length}}">
+      <view class="ann-section-title">即将到来</view>
+      <view class="ann-item" wx:for="{{upcomingList}}" wx:key="id" data-id="{{item.id}}" bindtap="onOpenDetail">
+        <view class="ann-head">
+          <view class="ann-title">{{item.title}}</view>
+          <view class="ann-countdown">{{item.countdownText}}</view>
+        </view>
+        <view class="ann-meta">{{item.displayDate}}{{item.repeatType === 'none' ? ' · 一次性' : ''}}</view>
+        <view class="ann-elapsed" wx:if="{{item.elapsedText}}">{{item.elapsedText}}</view>
+        <view class="ann-occurrence" wx:if="{{item.occurrenceText}}">{{item.occurrenceText}}</view>
       </view>
-      <view class="ann-meta">{{item.nextDate}} · {{item.repeatType === 'yearly' ? '每年重复' : '一次性'}}</view>
-      <view class="ann-actions">
-        <view class="ann-action" data-id="{{item.id}}" catchtap="onEditAnniversary">编辑</view>
-        <view class="ann-action ann-action-danger" data-id="{{item.id}}" catchtap="onRemoveAnniversary">删除</view>
+    </view>
+
+    <view class="ann-section" wx:if="{{pastList.length}}">
+      <view class="ann-section-title">已经过去</view>
+      <view class="ann-item ann-item-past" wx:for="{{pastList}}" wx:key="id" data-id="{{item.id}}" bindtap="onOpenDetail">
+        <view class="ann-head">
+          <view class="ann-title">{{item.title}}</view>
+          <view class="ann-countdown ann-countdown-past">{{item.countdownText}}</view>
+        </view>
+        <view class="ann-meta">{{item.displayDate}} · 一次性</view>
+        <view class="ann-elapsed" wx:if="{{item.elapsedText}}">{{item.elapsedText}}</view>
       </view>
     </view>
   </view>
@@ -35,44 +51,63 @@
 <view class="creator-mask" wx:if="{{showCreator}}" bindtap="onCloseCreator">
   <view class="creator-panel" catchtap="noop">
     <view class="panel-title">{{editingId ? '编辑纪念日' : '新增纪念日'}}</view>
-    <input class="form-input" value="{{formTitle}}" placeholder="标题（必填）" maxlength="40" bindinput="onTitleInput" />
+
+    <view class="form-row form-row-first">
+      <view class="form-label">纪念日名称</view>
+      <input class="form-input" value="{{formTitle}}" placeholder="例如：第一次约会、领证日" maxlength="40" bindinput="onTitleInput" />
+      <view class="occasion-templates">
+        <view
+          class="occasion-template {{formType === item.type ? 'occasion-template-active' : ''}}"
+          wx:for="{{occasionTemplates}}"
+          wx:key="type"
+          data-type="{{item.type}}"
+          bindtap="onOccasionTemplateChange"
+        >{{item.label}}</view>
+      </view>
+    </view>
 
     <view class="form-row">
-      <view class="form-label">日期（必填）</view>
-      <picker mode="date" value="{{formDate}}" bindchange="onDateChange">
+      <view class="form-label">日期</view>
+      <view class="calendar-switch">
+        <view class="calendar-option {{formCalendarType === 'solar' ? 'calendar-option-active' : ''}}" data-calendar-type="solar" bindtap="onCalendarTypeChange">公历</view>
+        <view class="calendar-option {{formCalendarType === 'lunar' ? 'calendar-option-active' : ''}}" data-calendar-type="lunar" bindtap="onCalendarTypeChange">农历</view>
+      </view>
+      <picker wx:if="{{formCalendarType === 'solar'}}" mode="date" value="{{formDate}}" bindchange="onDateChange">
         <view class="picker-view">{{formDate || '选择日期'}}</view>
       </picker>
-    </view>
-
-    <view class="form-row">
-      <view class="form-label">类型</view>
-      <picker mode="selector" range="{{typeOptions}}" bindchange="onTypeChange">
-        <view class="picker-view">{{formType}}</view>
+      <picker wx:else mode="multiSelector" range="{{lunarPickerRange}}" value="{{formLunarIndexes}}" bindchange="onLunarDateChange">
+        <view class="picker-view">{{formLunarLabel || '选择农历日期'}}</view>
       </picker>
+      <view
+        class="lunar-leap-option {{formLunarIsLeapMonth ? 'lunar-leap-option-active' : ''}}"
+        wx:if="{{formCalendarType === 'lunar' && formLunarLeapAvailable}}"
+        bindtap="onLunarLeapChange"
+      >{{formLunarIsLeapMonth ? '已选择闰月' : '设为闰月'}}</view>
     </view>
 
     <view class="form-row">
-      <view class="form-label">重复</view>
-      <view class="repeat-row">
-        <view class="repeat-chip {{formRepeatType === 'yearly' ? 'repeat-chip-active' : ''}}" data-repeat-type="yearly" bindtap="onRepeatChange">每年重复</view>
-        <view class="repeat-chip {{formRepeatType === 'none' ? 'repeat-chip-active' : ''}}" data-repeat-type="none" bindtap="onRepeatChange">不重复</view>
+      <view class="form-label">设置背景</view>
+      <view class="background-options">
+        <view
+          class="background-swatch {{formBackgroundColor === item.color && !formCoverImage ? 'background-swatch-active' : ''}}"
+          wx:for="{{backgroundOptions}}"
+          wx:key="color"
+          data-color="{{item.color}}"
+          style="background-color: {{item.color}};"
+          bindtap="onBackgroundChange"
+        >
+          <view class="background-check" wx:if="{{formBackgroundColor === item.color && !formCoverImage}}">✓</view>
+        </view>
       </view>
-    </view>
-
-    <view class="form-row">
-      <view class="form-label">封面图（可选）</view>
       <view class="cover-row">
-        <button class="cover-btn" bindtap="onChooseCoverImage">选择图片</button>
-        <button class="cover-btn cover-btn-ghost" wx:if="{{formCoverImage}}" bindtap="onRemoveCoverImage">移除</button>
+        <button class="cover-btn" bindtap="onChooseCoverImage">{{formCoverImage ? '更换照片' : '上传照片'}}</button>
+        <button class="cover-btn cover-btn-ghost" wx:if="{{formCoverImage}}" bindtap="onRemoveCoverImage">移除照片</button>
       </view>
-      <image class="cover-preview" wx:if="{{formCoverImage}}" src="{{formCoverImage}}" mode="aspectFill" bindtap="onPreviewCoverImage"></image>
     </view>
-
-    <textarea class="form-textarea" value="{{formNote}}" placeholder="备注（可选）" maxlength="200" bindinput="onNoteInput"></textarea>
 
     <view class="panel-actions">
       <button class="panel-btn ghost" bindtap="onCloseCreator">取消</button>
-      <button class="panel-btn" bindtap="onSaveAnniversary">保存</button>
+      <button class="panel-btn" loading="{{saving}}" disabled="{{saving}}" bindtap="onSaveAnniversary">保存</button>
     </view>
   </view>
 </view>

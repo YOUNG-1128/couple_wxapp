@@ -45,7 +45,6 @@ function decorateItem(item) {
   return {
     ...item,
     sequenceLabel: toSequenceLabel(item.id),
-    icon: item.completed ? '❤️' : '🤍',
     completedAtLabel: item.completed ? formatCompletedTime(item.completedAt) : ''
   }
 }

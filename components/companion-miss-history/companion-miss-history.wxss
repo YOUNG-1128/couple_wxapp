@@ -42,5 +42,5 @@
 
 .history-status-received {
   color: #ffffff;
-  background: #e85d75;
+  background: #d86f83;
 }

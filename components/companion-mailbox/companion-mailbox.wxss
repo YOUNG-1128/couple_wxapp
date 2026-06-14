@@ -14,7 +14,7 @@
   color: #4f3c43;
   font-size: 28rpx;
   line-height: 1.5;
-  background: #fff8f6;
+  background: #fffaf8;
 }
 
 .tag-list {
@@ -34,22 +34,37 @@
 
 .mood-tag-active {
   color: #ffffff;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .submit-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 76rpx;
-  margin-top: 26rpx;
-  border-radius: 999rpx;
-  color: #ffffff;
-  font-size: 28rpx;
+  width: auto;
+  min-width: 176rpx;
+  height: 56rpx;
+  margin: 26rpx 0 0 auto;
+  padding: 0 20rpx;
+  border: 1rpx solid #e6cbd0;
+  border-radius: 10rpx;
+  color: #9f5d6c;
+  font-size: 23rpx;
   font-weight: 600;
-  background: #e85d75;
+  background: #fff9f8;
 }
 
 .submit-button::after {
   border: 0;
+}
+
+.submit-button::before {
+  content: '';
+  width: 16rpx;
+  height: 9rpx;
+  margin-right: 10rpx;
+  border-left: 3rpx solid currentColor;
+  border-bottom: 3rpx solid currentColor;
+  border-radius: 2rpx;
+  transform: rotate(-45deg);
 }

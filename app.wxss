@@ -1,0 +1,395 @@
+page {
+  color: #493b40;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  background: #fffaf8;
+}
+
+button {
+  letter-spacing: 0;
+}
+
+button::after {
+  border: 0;
+}
+
+.page-title,
+.card-title,
+.section-title,
+.panel-title {
+  color: #493b40 !important;
+  letter-spacing: 0;
+}
+
+.page-subtitle,
+.page-desc,
+.card-desc,
+.empty-text,
+.empty-box {
+  color: #a18189 !important;
+  letter-spacing: 0;
+}
+
+.empty-box {
+  border: 1rpx dashed #ead6da !important;
+  border-radius: 14rpx !important;
+  background: rgba(255, 255, 255, 0.64) !important;
+}
+
+.creator-mask,
+.detail-mask {
+  background: rgba(73, 59, 64, 0.28) !important;
+}
+
+.creator-panel,
+.detail-panel {
+  border-radius: 20rpx 20rpx 0 0 !important;
+  background: #fffdfb !important;
+}
+
+.form-input,
+.form-textarea,
+.field-input,
+.field-textarea,
+.note-input,
+.answer-input,
+.nickname-input,
+.search-input {
+  border: 1rpx solid #eadde0 !important;
+  border-radius: 12rpx !important;
+  background: #fffdfb !important;
+}
+
+.filter-chip,
+.target-chip,
+.repeat-chip,
+.mode-chip,
+.type-item,
+.identity-chip,
+.status-chip {
+  border: 1rpx solid #eadde0 !important;
+  border-radius: 10rpx !important;
+  background: #fffdfb !important;
+}
+
+.filter-chip-active,
+.target-chip-active,
+.repeat-chip-active,
+.mode-chip-active,
+.type-item-active,
+.identity-chip-active,
+.status-chip-active {
+  border-color: #d86f83 !important;
+  color: #fff !important;
+  background: #d86f83 !important;
+}
+
+.stats-item,
+.status-box {
+  border: 1rpx solid #eee1e3 !important;
+  border-radius: 12rpx !important;
+  background: #fffdfb !important;
+}
+
+.todo-card,
+.ann-item,
+.footprint-item,
+.post-item,
+.capsule-item,
+.search-box,
+.location-card {
+  border: 1rpx solid #efe3e5 !important;
+  border-radius: 14rpx !important;
+  background: rgba(255, 255, 255, 0.82) !important;
+  box-shadow: none !important;
+}
+
+.small-btn,
+.new-btn,
+.new-todo-btn,
+.submit-btn,
+.save-btn,
+.seal-button,
+.send-btn,
+.analysis-btn,
+.miss-send-btn,
+.action-button,
+.panel-btn,
+.bind-btn,
+.close-button,
+.edit-btn,
+.delete-btn,
+.toggle-btn,
+.ghost-btn,
+.cover-btn,
+.location-btn,
+.locate-btn {
+  border-radius: 12rpx !important;
+  box-shadow: none !important;
+}
+
+.panel-actions,
+.compose-action-row,
+.composer-actions,
+.todo-action-row,
+.draft-actions,
+.draft-action-row {
+  gap: 10rpx !important;
+}
+
+.section-title {
+  font-size: 29rpx !important;
+}
+
+.ui-icon {
+  position: relative;
+  display: inline-block;
+  width: 34rpx;
+  height: 34rpx;
+  flex: 0 0 auto;
+  color: currentColor;
+}
+
+.ui-icon-plus::before,
+.ui-icon-plus::after,
+.ui-icon-close::before,
+.ui-icon-close::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24rpx;
+  height: 3rpx;
+  border-radius: 999rpx;
+  background: currentColor;
+}
+
+.ui-icon-plus::before {
+  transform: translate(-50%, -50%);
+}
+
+.ui-icon-plus::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.ui-icon-close::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.ui-icon-close::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.ui-icon-heart::before {
+  content: '';
+  position: absolute;
+  top: 7rpx;
+  left: 8rpx;
+  width: 18rpx;
+  height: 18rpx;
+  border: 3rpx solid currentColor;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-radius: 5rpx 10rpx 5rpx 10rpx;
+  transform: rotate(45deg);
+}
+
+.ui-icon-check::before {
+  content: '';
+  position: absolute;
+  top: 8rpx;
+  left: 7rpx;
+  width: 19rpx;
+  height: 11rpx;
+  border-left: 3rpx solid currentColor;
+  border-bottom: 3rpx solid currentColor;
+  border-radius: 2rpx;
+  transform: rotate(-45deg);
+}
+
+.feature-icon {
+  position: relative;
+  display: inline-block;
+  width: 44rpx;
+  height: 44rpx;
+  border: 3rpx solid #6f5c62;
+  border-radius: 14rpx;
+  background: #fffdfb;
+  box-sizing: border-box;
+}
+
+.feature-icon::before,
+.feature-icon::after {
+  content: '';
+  position: absolute;
+  border-radius: 999rpx;
+  background: #d86f83;
+}
+
+.feature-icon::before {
+  top: 11rpx;
+  left: 10rpx;
+  width: 18rpx;
+  height: 4rpx;
+}
+
+.feature-icon::after {
+  left: 10rpx;
+  bottom: 11rpx;
+  width: 12rpx;
+  height: 4rpx;
+}
+
+.feature-icon-moments,
+.feature-icon-footprint {
+  border-radius: 50%;
+}
+
+.feature-icon-anniversary,
+.feature-icon-dailyQuestion {
+  transform: rotate(-4deg);
+}
+
+.feature-icon-checklist,
+.feature-icon-missyou {
+  transform: rotate(4deg);
+}
+
+.bind-btn,
+.submit-btn,
+.save-btn,
+.seal-button,
+.send-btn,
+.analysis-btn {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  min-width: 196rpx;
+  max-width: 320rpx;
+  margin-right: 0 !important;
+  margin-left: auto !important;
+  padding: 0 28rpx !important;
+  border: 1rpx solid #e5bdc5 !important;
+  color: #a95669 !important;
+  background: #fff4f5 !important;
+}
+
+.bind-btn:active,
+.submit-btn:active,
+.save-btn:active,
+.seal-button:active,
+.send-btn:active,
+.analysis-btn:active {
+  color: #fff !important;
+  background: #d86f83 !important;
+}
+
+/* Compact hand-drawn action tags replace the old solid pill buttons. */
+.task-btn,
+.pending-action,
+.entry-button,
+.answer-button,
+.album-button,
+.miss-send-btn,
+.miss-button,
+.entry-action,
+.history-action,
+.new-btn,
+.new-todo-btn,
+.action-button,
+.edit-btn,
+.toggle-btn,
+.small-btn,
+.cover-btn,
+.location-btn,
+.locate-btn,
+.ghost-btn,
+.panel-btn,
+.close-button,
+.comment-submit {
+  position: relative;
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 280rpx;
+  height: 56rpx !important;
+  margin: 0 !important;
+  padding: 0 18rpx !important;
+  border: 1rpx solid #e6cbd0 !important;
+  border-radius: 10rpx !important;
+  color: #9f5d6c !important;
+  font-size: 23rpx !important;
+  font-weight: 600;
+  line-height: 1 !important;
+  background: #fff9f8 !important;
+  box-shadow: none !important;
+  box-sizing: border-box;
+}
+
+.task-btn::before,
+.pending-action::before,
+.entry-button::before,
+.answer-button::before,
+.album-button::before,
+.entry-action::before,
+.history-action::before,
+.new-btn::before,
+.new-todo-btn::before,
+.edit-btn::before,
+.toggle-btn::before {
+  content: '';
+  width: 12rpx;
+  height: 12rpx;
+  margin-right: 10rpx;
+  border-top: 3rpx solid currentColor;
+  border-right: 3rpx solid currentColor;
+  border-radius: 2rpx;
+  transform: rotate(45deg);
+}
+
+.delete-btn,
+.ann-action-danger,
+.clear-date,
+.clear-due {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  min-width: 0 !important;
+  height: 52rpx !important;
+  margin: 0 !important;
+  padding: 0 16rpx !important;
+  border: 1rpx dashed #e4c2c9 !important;
+  border-radius: 10rpx !important;
+  color: #b47582 !important;
+  font-size: 22rpx !important;
+  background: transparent !important;
+}
+
+.pending-action,
+.entry-action,
+.history-action {
+  white-space: nowrap;
+}
+
+.bind-btn::before,
+.submit-btn::before,
+.save-btn::before,
+.seal-button::before,
+.send-btn::before,
+.analysis-btn::before,
+.panel-btn::before {
+  content: '';
+  width: 16rpx;
+  height: 9rpx;
+  margin-right: 10rpx;
+  border-left: 3rpx solid currentColor;
+  border-bottom: 3rpx solid currentColor;
+  border-radius: 2rpx;
+  transform: rotate(-45deg);
+}
+
+.panel-btn.ghost::before {
+  display: none;
+}

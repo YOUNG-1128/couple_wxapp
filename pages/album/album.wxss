@@ -2,7 +2,47 @@ page {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #fff8f6;
+  background: #fffaf8;
+}
+
+.mini-draft-icon {
+  position: relative;
+  width: 30rpx;
+  height: 24rpx;
+  border: 3rpx solid #6f5c62;
+  border-radius: 5rpx;
+}
+
+.mini-draft-icon::before {
+  content: '';
+  position: absolute;
+  top: -9rpx;
+  left: 3rpx;
+  width: 14rpx;
+  height: 8rpx;
+  border: 3rpx solid #6f5c62;
+  border-bottom: 0;
+  border-radius: 5rpx 5rpx 0 0;
+}
+
+.mini-search-icon {
+  position: relative;
+  width: 24rpx;
+  height: 24rpx;
+  border: 3rpx solid #6f5c62;
+  border-radius: 50%;
+}
+
+.mini-search-icon::after {
+  content: '';
+  position: absolute;
+  right: -10rpx;
+  bottom: -7rpx;
+  width: 13rpx;
+  height: 3rpx;
+  border-radius: 999rpx;
+  background: #6f5c62;
+  transform: rotate(45deg);
 }
 
 .moments-scroll {
@@ -11,7 +51,7 @@ page {
 }
 
 .moments-page {
-  padding: 32rpx 32rpx 56rpx;
+  padding: 36rpx 28rpx 64rpx;
 }
 
 .page-title {
@@ -68,7 +108,7 @@ page {
   color: #ffffff;
   font-size: 38rpx;
   font-weight: 700;
-  background: #e85d75;
+  background: #d86f83;
   box-shadow: 0 8rpx 18rpx rgba(232, 93, 117, 0.26);
 }
 
@@ -79,7 +119,7 @@ page {
   width: 12rpx;
   height: 12rpx;
   border-radius: 50%;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .entry-red-dot {
@@ -128,7 +168,7 @@ page {
 
 .author-chip-active {
   color: #ffffff;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .search-input {
@@ -176,7 +216,7 @@ page {
 
 .date-option-active {
   color: #ffffff;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .clear-date {
@@ -188,7 +228,7 @@ page {
   margin: 0;
   padding: 0 16rpx;
   border-radius: 999rpx;
-  color: #e85d75;
+  color: #d86f83;
   font-size: 24rpx;
   background: #ffe9ee;
 }
@@ -296,7 +336,7 @@ page {
   border-radius: 999rpx;
   color: #ffffff;
   font-size: 26rpx;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .action-button::after,
@@ -498,7 +538,7 @@ page {
   border-radius: 999rpx;
   color: #ffffff;
   font-size: 24rpx;
-  background: #e85d75;
+  background: #d86f83;
 }
 
 .date-inline-panel {

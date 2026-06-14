@@ -1,4 +1,4 @@
-<navigation-bar title="回忆" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="回忆" back="{{true}}" color="black" background="#FFFAF8"></navigation-bar>
 <scroll-view class="memory-scroll" type="list" scroll-y>
   <view class="memory-page">
     <memory-timeline entry="{{footprintEntry}}" bind:footprinttap="onFootprintTap"></memory-timeline>

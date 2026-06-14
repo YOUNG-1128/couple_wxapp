@@ -1,4 +1,4 @@
-<navigation-bar title="时光胶囊" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="时光胶囊" back="{{true}}" color="black" background="#FFFAF8"></navigation-bar>
 <scroll-view class="capsule-scroll" type="list" scroll-y>
   <view class="capsule-page">
     <common-card featured="{{true}}">

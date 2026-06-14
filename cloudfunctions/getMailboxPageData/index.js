@@ -43,7 +43,10 @@ function sanitizeLetterForUser(letter, currentUserId) {
   return {
     ...letter,
     title: '',
+    greeting: '',
     content: '',
+    signature: '',
+    letterDateText: '',
     images: [],
     lockedForUser: true
   }

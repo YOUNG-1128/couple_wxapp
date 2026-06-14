@@ -2,7 +2,7 @@ page {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #fff8f6;
+  background: #fffaf8;
 }
 
 .history-scroll {
@@ -69,7 +69,7 @@ page {
 }
 
 .record-toggle {
-  color: #e85d75;
+  color: #d86f83;
   font-size: 24rpx;
 }
 

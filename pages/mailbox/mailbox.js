@@ -9,9 +9,7 @@ Page({
     unreadIncomingCount: 0,
     showReader: false,
     readerReady: false,
-    readerLetter: null,
-    readerDate: '',
-    readerSign: '—— 我'
+    readerLetter: null
   },
 
   onShow() {
@@ -58,9 +56,7 @@ Page({
       this.setData({
         showReader: true,
         readerReady: false,
-        readerLetter: detail,
-        readerDate: this.formatPaperDate(detail.sentAt || detail.createdAt),
-        readerSign: detail.fromUser && detail.fromUser.nickName ? `—— ${detail.fromUser.nickName}` : '—— 我'
+        readerLetter: detail
       })
 
       this.refreshPageData()
@@ -91,24 +87,6 @@ Page({
       current,
       urls: letter.images
     })
-  },
-
-  formatPaperDate(input) {
-    if (!input) {
-      return ''
-    }
-
-    const date = new Date(input)
-
-    if (Number.isNaN(date.getTime())) {
-      return ''
-    }
-
-    const y = date.getFullYear()
-    const m = String(date.getMonth() + 1).padStart(2, '0')
-    const d = String(date.getDate()).padStart(2, '0')
-
-    return `${y}.${m}.${d}`
   },
 
   noop() {

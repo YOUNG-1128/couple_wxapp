@@ -1,20 +1,26 @@
 .miss-section {
   margin-top: 28rpx;
   padding: 32rpx;
-  border-radius: 24rpx;
-  background: #ffecef;
+  border: 1rpx solid #efe0e3;
+  border-radius: 14rpx;
+  background: #fff9f8;
 }
 
 .miss-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 88rpx;
-  border-radius: 999rpx;
-  color: #ffffff;
-  font-size: 30rpx;
+  width: auto;
+  min-width: 176rpx;
+  height: 58rpx;
+  margin: 0 auto;
+  padding: 0 22rpx;
+  border: 1rpx solid #e6cbd0;
+  border-radius: 10rpx;
+  color: #9f5d6c;
+  font-size: 24rpx;
   font-weight: 600;
-  background: #e85d75;
+  background: #fff4f5;
 }
 
 .miss-button::after {
@@ -27,4 +33,16 @@
   font-size: 26rpx;
   line-height: 1.5;
   text-align: center;
+}
+
+.miss-button::before {
+  content: '';
+  width: 15rpx;
+  height: 15rpx;
+  margin-right: 12rpx;
+  border: 3rpx solid currentColor;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-radius: 4rpx 8rpx 4rpx 8rpx;
+  transform: rotate(45deg);
 }

@@ -1,16 +1,77 @@
-<navigation-bar title="功能" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar back="{{false}}" color="black" background="#FFFAF8"></navigation-bar>
 <scroll-view class="hub-scroll" type="list" scroll-y>
   <view class="hub-page">
-    <common-card featured="{{true}}">
-      <view class="hub-title">功能中心</view>
-      <view class="hub-subtitle">把常用功能都放在一个地方，找起来更轻松。</view>
-    </common-card>
+    <view class="hub-header">
+      <view class="hub-title">我们的日常</view>
+      <view class="hub-subtitle">想和你做点什么？</view>
+    </view>
 
     <view class="hub-grid">
       <view class="hub-item" wx:for="{{features}}" wx:key="key" data-target="{{item.target}}" bindtap="onFeatureTap">
-        <view class="hub-icon">{{item.icon}}</view>
-        <view class="hub-name">{{item.name}}</view>
-        <view class="hub-desc">{{item.desc}}</view>
+        <view class="doodle doodle-{{item.key}}">
+          <block wx:if="{{item.key === 'mailbox'}}">
+            <view class="mail-body"></view>
+            <view class="mail-flap"></view>
+            <view class="doodle-heart"></view>
+            <view class="doodle-face"><view></view><view></view></view>
+          </block>
+
+          <block wx:elif="{{item.key === 'moments'}}">
+            <view class="camera-body"></view>
+            <view class="camera-lens"></view>
+            <view class="camera-top"></view>
+            <view class="doodle-heart"></view>
+          </block>
+
+          <block wx:elif="{{item.key === 'todo'}}">
+            <view class="todo-paper"></view>
+            <view class="todo-line todo-line-one"></view>
+            <view class="todo-line todo-line-two"></view>
+            <view class="todo-line todo-line-three"></view>
+            <view class="todo-check"><view class="ui-icon ui-icon-check"></view></view>
+          </block>
+
+          <block wx:elif="{{item.key === 'anniversary'}}">
+            <view class="calendar-body"></view>
+            <view class="calendar-bar"></view>
+            <view class="calendar-ring calendar-ring-one"></view>
+            <view class="calendar-ring calendar-ring-two"></view>
+            <view class="doodle-heart"></view>
+          </block>
+
+          <block wx:elif="{{item.key === 'footprint'}}">
+            <view class="footprint-path"></view>
+            <view class="footprint-dot footprint-dot-one"></view>
+            <view class="footprint-dot footprint-dot-two"></view>
+            <view class="footprint-pin"></view>
+          </block>
+
+          <block wx:elif="{{item.key === 'checklist'}}">
+            <view class="list-paper"></view>
+            <view class="list-row list-row-one"></view>
+            <view class="list-row list-row-two"></view>
+            <view class="list-row list-row-three"></view>
+            <view class="doodle-star"></view>
+          </block>
+
+          <block wx:elif="{{item.key === 'dailyQuestion'}}">
+            <view class="bubble bubble-one"></view>
+            <view class="bubble bubble-two"></view>
+            <view class="bubble-heart ui-icon ui-icon-heart"></view>
+          </block>
+
+          <block wx:else>
+            <view class="miss-heart ui-icon ui-icon-heart"></view>
+            <view class="miss-wave miss-wave-one"></view>
+            <view class="miss-wave miss-wave-two"></view>
+            <view class="miss-wave miss-wave-three"></view>
+          </block>
+        </view>
+
+        <view class="hub-copy">
+          <view class="hub-name">{{item.name}}</view>
+          <view class="hub-desc">{{item.desc}}</view>
+        </view>
       </view>
     </view>
   </view>

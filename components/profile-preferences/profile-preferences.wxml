@@ -1,9 +1,25 @@
-<common-card featured="{{true}}">
-  <view class="card-title">偏好记录</view>
-  <view class="preference-list">
-    <view class="preference-item" wx:for="{{list}}" wx:key="label">
-      <view class="preference-label">{{item.label}}</view>
-      <view class="preference-value">{{item.value}}</view>
+<common-card>
+  <view class="about-head">
+    <view>
+      <view class="card-title">关于 TA</view>
+      <view class="card-desc">把她随口提起的小事，慢慢记下来</view>
     </view>
+    <view class="edit-button" bindtap="onEdit">
+      <view class="edit-pencil"></view>
+    </view>
+  </view>
+
+  <view class="note-list" wx:if="{{notes.length}}">
+    <view class="note-item" wx:for="{{notes}}" wx:key="index">
+      <view class="note-index">{{index < 9 ? '0' + (index + 1) : index + 1}}</view>
+      <view class="note-text">{{item}}</view>
+    </view>
+  </view>
+
+  <view class="empty-guide" wx:else bindtap="onEdit">
+    <view class="empty-title">关于她的故事，慢慢记在这里。</view>
+    <view class="guide-line">她随口说过的喜欢</view>
+    <view class="guide-line">最近很想一起做的事</view>
+    <view class="guide-line">难过时希望怎样被陪伴</view>
   </view>
 </common-card>

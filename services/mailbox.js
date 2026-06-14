@@ -169,6 +169,30 @@ function getReadReceiptText(letter, currentUserId) {
     : '你还没有阅读'
 }
 
+function getLetterListText(letter, lockedForMe) {
+  if (lockedForMe) {
+    return '一封等待送达的信'
+  }
+
+  const title = String(letter.title || '').trim()
+  const content = String(letter.content || '').trim()
+  const images = Array.isArray(letter.images) ? letter.images : []
+
+  if (title) {
+    return title
+  }
+
+  if (content) {
+    return content
+  }
+
+  if (images.length) {
+    return '一封附有照片的信'
+  }
+
+  return '一封还没有写完的信'
+}
+
 function decorateLetter(letter, currentUserId) {
   const fromUser = getUserById(letter.fromUserId) || { nickName: '我', avatarUrl: '' }
   const toUser = getUserById(letter.toUserId) || { nickName: 'TA', avatarUrl: '' }
@@ -184,10 +208,14 @@ function decorateLetter(letter, currentUserId) {
   return {
     ...letter,
     title: lockedForMe ? '一封等待送达的信' : (letter.title || ''),
+    greeting: lockedForMe ? '' : (letter.greeting || ''),
     content: lockedForMe ? '这封信还没有到约定的送达时间' : (letter.content || ''),
+    signature: lockedForMe ? '' : (letter.signature || ''),
+    letterDateText: lockedForMe ? '' : (letter.letterDateText || ''),
     images: lockedForMe ? [] : (Array.isArray(letter.images) ? letter.images : []),
     previewTime: formatPostTime(displayTime),
     listTime: formatListTime(displayTime),
+    listText: getLetterListText(letter, lockedForMe),
     statusText: getStatusText(letter),
     readStatusText: getReadStatusText(letter, currentUserId),
     fromUser,
@@ -387,7 +415,10 @@ function sendLetterNow(payload) {
       if (target) {
         target.toUserId = toUserId
         target.title = payload.title || ''
+        target.greeting = payload.greeting || ''
         target.content = payload.content || ''
+        target.signature = payload.signature || ''
+        target.letterDateText = payload.letterDateText || ''
         target.images = Array.isArray(payload.images) ? payload.images : []
         target.status = 'sent'
         target.sendMode = 'now'
@@ -408,7 +439,10 @@ function sendLetterNow(payload) {
       fromUserId: currentUser.userId,
       toUserId,
       title: payload.title || '',
+      greeting: payload.greeting || '',
       content: payload.content || '',
+      signature: payload.signature || '',
+      letterDateText: payload.letterDateText || '',
       images: Array.isArray(payload.images) ? payload.images : [],
       status: 'sent',
       sendMode: 'now',
@@ -459,7 +493,10 @@ function sendLetterScheduled(payload) {
       if (target) {
         target.toUserId = toUserId
         target.title = payload.title || ''
+        target.greeting = payload.greeting || ''
         target.content = payload.content || ''
+        target.signature = payload.signature || ''
+        target.letterDateText = payload.letterDateText || ''
         target.images = Array.isArray(payload.images) ? payload.images : []
         target.status = 'scheduled'
         target.sendMode = 'scheduled'
@@ -480,7 +517,10 @@ function sendLetterScheduled(payload) {
       fromUserId: currentUser.userId,
       toUserId,
       title: payload.title || '',
+      greeting: payload.greeting || '',
       content: payload.content || '',
+      signature: payload.signature || '',
+      letterDateText: payload.letterDateText || '',
       images: Array.isArray(payload.images) ? payload.images : [],
       status: 'scheduled',
       sendMode: 'scheduled',
@@ -531,7 +571,10 @@ function saveDraft(payload) {
       if (target) {
         target.toUserId = toUserId
         target.title = payload.title || ''
+        target.greeting = payload.greeting || ''
         target.content = payload.content || ''
+        target.signature = payload.signature || ''
+        target.letterDateText = payload.letterDateText || ''
         target.images = Array.isArray(payload.images) ? payload.images : []
         target.status = 'draft'
         target.sendMode = payload.sendMode || 'now'
@@ -552,7 +595,10 @@ function saveDraft(payload) {
       fromUserId: currentUser.userId,
       toUserId,
       title: payload.title || '',
+      greeting: payload.greeting || '',
       content: payload.content || '',
+      signature: payload.signature || '',
+      letterDateText: payload.letterDateText || '',
       images: Array.isArray(payload.images) ? payload.images : [],
       status: 'draft',
       sendMode: payload.sendMode || 'now',
@@ -666,7 +712,10 @@ function getLetterDetailOnOpen(letterId) {
   return {
     ...decorateLetter(targetLetter, currentUser.userId),
     title: lockedForMe ? '' : (targetLetter.title || ''),
+    greeting: lockedForMe ? '' : (targetLetter.greeting || ''),
     content: lockedForMe ? '' : (targetLetter.content || ''),
+    signature: lockedForMe ? '' : (targetLetter.signature || ''),
+    letterDateText: lockedForMe ? '' : (targetLetter.letterDateText || ''),
     images: lockedForMe ? [] : (Array.isArray(targetLetter.images) ? targetLetter.images : []),
     fromUser,
     toUser,

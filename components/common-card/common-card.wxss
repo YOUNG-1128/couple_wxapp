@@ -1,13 +1,16 @@
 .common-card {
-  margin-top: 28rpx;
-  padding: 32rpx;
-  border-radius: 24rpx;
-  background: #ffffff;
+  margin-top: 20rpx;
+  padding: 28rpx;
+  border: 1rpx solid #efe3e5;
+  border-radius: 16rpx;
+  background: rgba(255, 255, 255, 0.82);
 }
 
 .common-card-featured {
   margin-top: 0;
-  padding: 44rpx 36rpx;
-  border-radius: 28rpx;
-  box-shadow: 0 16rpx 40rpx rgba(221, 119, 136, 0.12);
+  padding: 32rpx;
+  border-color: #eedcdf;
+  border-radius: 18rpx;
+  background: linear-gradient(145deg, #fffdfb 0%, #fff7f6 100%);
+  box-shadow: none;
 }

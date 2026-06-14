@@ -34,7 +34,9 @@ function formatBindingError(errorCode = '') {
     invite_owner_not_found: '邀请码对应用户不存在',
     invite_code_required: '请输入邀请码',
     user_not_found: '当前用户还没同步到云端',
-    openid_missing: '当前登录态无效，请重新登录'
+    openid_missing: '当前登录态无效，请重新登录',
+    relationship_start_date_invalid: '请选择今天或更早的日期',
+    relationship_start_date_update_failed: '开始日期保存失败'
   }
 
   return map[errorCode] || errorCode || ''
@@ -49,6 +51,10 @@ function saveBindingState(result = {}) {
   const previousInviteCode = session.inviteCode || ''
   const previousStatus = session.bindingStatus || 'unbound'
   const previousPartnerProfile = session.partnerProfile || null
+  const previousRelationshipStartDate = session.relationshipStartDate || ''
+  const previousRelationshipStartDateUpdatedAt = session.relationshipStartDateUpdatedAt || ''
+  const previousRelationshipStartDateUpdatedBy = session.relationshipStartDateUpdatedBy || ''
+  const previousBoundAt = session.boundAt || ''
   const nextStatus = result.success === true
     ? (result.status || 'unbound')
     : previousStatus
@@ -60,6 +66,16 @@ function saveBindingState(result = {}) {
     state.cloudBindingSynced = result.success === true
     state.cloudBindingSyncError = result.success === true ? '' : formatBindingError(result.errorMessage || 'binding_sync_failed')
     state.partnerProfile = result.success === true ? (result.partnerProfile || null) : previousPartnerProfile
+    state.relationshipStartDate = result.success === true
+      ? (result.relationshipStartDate || '')
+      : previousRelationshipStartDate
+    state.relationshipStartDateUpdatedAt = result.success === true
+      ? (result.relationshipStartDateUpdatedAt || '')
+      : previousRelationshipStartDateUpdatedAt
+    state.relationshipStartDateUpdatedBy = result.success === true
+      ? (result.relationshipStartDateUpdatedBy || '')
+      : previousRelationshipStartDateUpdatedBy
+    state.boundAt = result.success === true ? (result.boundAt || '') : previousBoundAt
   })
 
   if (currentUser) {
@@ -124,6 +140,10 @@ function getBindingState() {
         ? '邀请码已生成，等待对方输入'
         : '还没有建立情侣关系'),
     partnerProfile,
+    relationshipStartDate: session.relationshipStartDate || '',
+    relationshipStartDateUpdatedAt: session.relationshipStartDateUpdatedAt || '',
+    relationshipStartDateUpdatedBy: session.relationshipStartDateUpdatedBy || '',
+    boundAt: session.boundAt || '',
     syncError: session.cloudBindingSyncError || ''
   }
 }
@@ -144,6 +164,10 @@ function getBindingStatus() {
       inviteCode: result.inviteCode || '',
       status: result.status || 'unbound',
       partnerProfile: result.partnerProfile || null,
+      relationshipStartDate: result.relationshipStartDate || '',
+      relationshipStartDateUpdatedAt: result.relationshipStartDateUpdatedAt || '',
+      relationshipStartDateUpdatedBy: result.relationshipStartDateUpdatedBy || '',
+      boundAt: result.boundAt || '',
       errorMessage: result.errorMessage || ''
     })
   }).catch((error) => saveBindingState({
@@ -164,6 +188,10 @@ function createInviteCode() {
       inviteCode: result.inviteCode || '',
       status: result.status || 'pending',
       partnerProfile: result.partnerProfile || null,
+      relationshipStartDate: result.relationshipStartDate || '',
+      relationshipStartDateUpdatedAt: result.relationshipStartDateUpdatedAt || '',
+      relationshipStartDateUpdatedBy: result.relationshipStartDateUpdatedBy || '',
+      boundAt: result.boundAt || '',
       errorMessage: result.errorMessage || ''
     })
   }).catch((error) => saveBindingState({
@@ -187,6 +215,10 @@ function bindByInviteCode(inviteCode) {
       inviteCode: '',
       status: result.status || 'bound',
       partnerProfile: result.partnerProfile || null,
+      relationshipStartDate: result.relationshipStartDate || '',
+      relationshipStartDateUpdatedAt: result.relationshipStartDateUpdatedAt || '',
+      relationshipStartDateUpdatedBy: result.relationshipStartDateUpdatedBy || '',
+      boundAt: result.boundAt || '',
       errorMessage: result.errorMessage || ''
     })
   }).catch((error) => saveBindingState({
@@ -195,10 +227,38 @@ function bindByInviteCode(inviteCode) {
   }))
 }
 
+function updateRelationshipStartDate(relationshipStartDate) {
+  return wx.cloud.callFunction({
+    name: 'updateRelationshipStartDate',
+    data: {
+      relationshipStartDate
+    }
+  }).then((res) => {
+    const result = (res && res.result) || {}
+
+    return saveBindingState({
+      success: result.success === true,
+      coupleId: result.coupleId || getSession().coupleId || '',
+      inviteCode: '',
+      status: 'bound',
+      partnerProfile: getSession().partnerProfile || null,
+      relationshipStartDate: result.relationshipStartDate || '',
+      relationshipStartDateUpdatedAt: result.relationshipStartDateUpdatedAt || '',
+      relationshipStartDateUpdatedBy: result.relationshipStartDateUpdatedBy || '',
+      boundAt: getSession().boundAt || '',
+      errorMessage: result.errorMessage || ''
+    })
+  }).catch((error) => saveBindingState({
+    success: false,
+    errorMessage: (error && (error.message || error.errMsg)) || 'relationship_start_date_update_failed'
+  }))
+}
+
 module.exports = {
   getBindingState,
   getBindingStatus,
   createInviteCode,
   bindByInviteCode,
+  updateRelationshipStartDate,
   formatBindingError
 }

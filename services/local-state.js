@@ -50,7 +50,11 @@ const state = {
     cloudBindingSyncError: '',
     inviteCode: '',
     bindingStatus: 'unbound',
-    partnerProfile: null
+    partnerProfile: null,
+    relationshipStartDate: '',
+    relationshipStartDateUpdatedAt: '',
+    relationshipStartDateUpdatedBy: '',
+    boundAt: ''
   }
 }
 

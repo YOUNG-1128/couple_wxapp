@@ -1,4 +1,4 @@
-<navigation-bar title="功能" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar back="{{false}}" color="black" background="#FFFAF8"></navigation-bar>
 <scroll-view class="function-scroll" type="list" scroll-y>
   <view class="function-page">
     <common-card featured="{{true}}">
@@ -8,7 +8,7 @@
 
     <view class="feature-grid">
       <view class="feature-item" wx:for="{{features}}" wx:key="key" data-target="{{item.target}}" bindtap="onFeatureTap">
-        <view class="feature-icon">{{item.icon}}</view>
+        <view class="feature-icon feature-icon-{{item.key}}"></view>
         <view class="feature-name">{{item.name}}</view>
         <view class="feature-desc">{{item.desc}}</view>
       </view>

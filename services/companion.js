@@ -93,7 +93,7 @@ function decorateMissRecord(record, currentUserId = getCurrentUserId()) {
     timeLabel,
     message: isSent
       ? '你发送了一次想你信号'
-      : `TA 在 ${timeLabel} 想了你一下 ❤️`
+      : `TA 在 ${timeLabel} 想了你一下`
   }
 }
 
