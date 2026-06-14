@@ -1,19 +1,18 @@
 const momentsService = require('../../services/moments')
 const dailyMoodService = require('../../services/dailyMood')
+const { toDateKey } = require('../../utils/time')
+const { MOOD_OPTIONS, buildMoodTrend } = require('../../utils/mood-trend')
 
 Page({
   data: {
-    options: [
-      { value: 'happy', label: '开心' },
-      { value: 'normal', label: '一般' },
-      { value: 'tired', label: '有点累' },
-      { value: 'miss', label: '想你' },
-      { value: 'busy', label: '忙碌' },
-      { value: 'hug', label: '需要抱抱' }
-    ],
+    options: MOOD_OPTIONS,
     selectedMood: '',
     note: '',
-    currentUser: {}
+    currentUser: {},
+    trend: {
+      recordedDays: 0,
+      items: []
+    }
   },
 
   onShow() {
@@ -29,7 +28,12 @@ Page({
       this.setData({
         currentUser,
         selectedMood: todayMood ? todayMood.status : '',
-        note: todayMood ? todayMood.note : ''
+        note: todayMood ? todayMood.note : '',
+        trend: buildMoodTrend(
+          dailyMoodService.getStatusRecords(),
+          currentUser.userId,
+          toDateKey(new Date())
+        )
       })
     })
   },

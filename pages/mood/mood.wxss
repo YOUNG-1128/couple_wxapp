@@ -86,3 +86,71 @@ page {
 .save-btn::after {
   border: 0;
 }
+
+.trend-head,
+.trend-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.trend-title {
+  margin-top: 0;
+}
+
+.trend-count,
+.trend-value {
+  color: #977a84;
+  font-size: 22rpx;
+}
+
+.trend-empty {
+  margin-top: 18rpx;
+  color: #8d6d77;
+  font-size: 24rpx;
+  line-height: 1.6;
+}
+
+.trend-list {
+  margin-top: 18rpx;
+}
+
+.trend-item + .trend-item {
+  margin-top: 18rpx;
+}
+
+.trend-label {
+  color: #5d444d;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.trend-track {
+  height: 14rpx;
+  margin-top: 9rpx;
+  overflow: hidden;
+  border-radius: 7rpx;
+  background: #f5e6e9;
+}
+
+.trend-bar {
+  min-width: 14rpx;
+  height: 100%;
+  border-radius: 7rpx;
+  background: #d78697;
+}
+
+.trend-bar-happy,
+.trend-bar-miss {
+  background: #e85d75;
+}
+
+.trend-bar-tired,
+.trend-bar-busy {
+  background: #9b8bb5;
+}
+
+.trend-bar-hug {
+  background: #d79b6b;
+}
