@@ -1,8 +1,9 @@
 <common-card featured="{{true}}">
-  <view class="card-title">我们的最近状态</view>
+  <view class="card-title">我们的今日小报告</view>
+  <view class="card-desc">每天发现一点不一样</view>
   <view class="stats-grid">
-    <view class="stat-item" wx:for="{{list}}" wx:key="title">
-      <view class="stat-value">{{item.value}}</view>
+    <view class="stat-item stat-item-{{item.category}}" wx:for="{{list}}" wx:key="id">
+      <view class="stat-value">{{item.value}}<text class="stat-suffix">{{item.suffix}}</text></view>
       <view class="stat-title">{{item.title}}</view>
       <view class="stat-desc">{{item.desc}}</view>
     </view>

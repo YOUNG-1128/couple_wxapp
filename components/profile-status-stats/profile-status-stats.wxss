@@ -4,6 +4,12 @@
   font-weight: 700;
 }
 
+.card-desc {
+  margin-top: 7rpx;
+  color: #9a7b84;
+  font-size: 22rpx;
+}
+
 .stats-grid {
   display: flex;
   gap: 16rpx;
@@ -24,6 +30,12 @@
   font-size: 42rpx;
   font-weight: 700;
   line-height: 1;
+}
+
+.stat-suffix {
+  margin-left: 4rpx;
+  font-size: 20rpx;
+  font-weight: 600;
 }
 
 .stat-title {
