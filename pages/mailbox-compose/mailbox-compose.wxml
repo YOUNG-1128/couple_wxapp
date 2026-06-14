@@ -41,6 +41,10 @@
         </picker>
       </view>
 
+      <view class="auto-save-status auto-save-status-{{autoSaveStatusView.tone}}" wx:if="{{autoSaveStatusView.text}}">
+        {{autoSaveStatusView.text}}
+      </view>
+
       <view class="compose-action-row">
         <button class="paper-tool-btn" bindtap="onChooseImages"><view class="paperclip-icon"></view>添加照片</button>
         <button class="paper-tool-btn" bindtap="onSaveDraft"><view class="draft-paper-icon"></view>保存草稿</button>

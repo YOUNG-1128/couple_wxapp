@@ -1,6 +1,7 @@
 const mailboxService = require('../../services/mailbox')
 const cloudStorageService = require('../../services/cloud-storage')
 const { buildLetterSendConfirmation } = require('../../utils/letter-send-confirmation')
+const { getDraftSaveStatusView } = require('../../utils/draft-save-status')
 
 const MAX_IMAGE_COUNT = 9
 const MAX_CONTENT_LENGTH = 2000
@@ -20,12 +21,16 @@ Page({
     sendMode: 'now',
     scheduleDate: '',
     scheduleTime: '',
-    sending: false
+    sending: false,
+    autoSaveStatus: '',
+    autoSaveStatusView: getDraftSaveStatusView('')
   },
 
   onLoad(options) {
     this.skipAutoSave = false
     this.lastSavedSnapshot = ''
+    this.autoSaveInFlight = null
+    this.pageUnloaded = false
     const draftId = options && options.draftId ? options.draftId : ''
 
     this.setData({ draftId })
@@ -41,6 +46,7 @@ Page({
   },
 
   onUnload() {
+    this.pageUnloaded = true
     this.tryAutoSaveDraft()
   },
 
@@ -231,7 +237,7 @@ Page({
   },
 
   tryAutoSaveDraft() {
-    if (this.skipAutoSave || this.data.sending || !this.hasDraftContent()) {
+    if (this.skipAutoSave || this.data.sending || this.autoSaveInFlight || !this.hasDraftContent()) {
       return
     }
 
@@ -241,7 +247,28 @@ Page({
       return
     }
 
-    this.saveDraftRecord().catch(() => {})
+    this.setAutoSaveStatus('saving')
+    this.autoSaveInFlight = this.saveDraftRecord()
+      .then(() => {
+        this.setAutoSaveStatus('saved')
+      })
+      .catch(() => {
+        this.setAutoSaveStatus('failed')
+      })
+      .finally(() => {
+        this.autoSaveInFlight = null
+      })
+  },
+
+  setAutoSaveStatus(status) {
+    if (this.pageUnloaded) {
+      return
+    }
+
+    this.setData({
+      autoSaveStatus: status,
+      autoSaveStatusView: getDraftSaveStatusView(status)
+    })
   },
 
   onSaveDraft() {

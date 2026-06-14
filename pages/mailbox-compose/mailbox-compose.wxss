@@ -192,6 +192,20 @@ page {
   margin-top: 14rpx;
 }
 
+.auto-save-status {
+  margin-top: 10rpx;
+  color: #8d6d77;
+  font-size: 22rpx;
+}
+
+.auto-save-status-saved {
+  color: #63836b;
+}
+
+.auto-save-status-failed {
+  color: #b14f62;
+}
+
 .picker-cell {
   min-width: 180rpx;
   height: 52rpx;
