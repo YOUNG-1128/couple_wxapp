@@ -22,6 +22,10 @@ function getSession() {
   return getState('session') || {}
 }
 
+function getCurrentUserId() {
+  return getSession().currentUserId || 'anonymous'
+}
+
 function canUseCloudFootprints() {
   const session = getSession()
   const relationship = relationshipService.getRelationshipContext()
@@ -250,6 +254,7 @@ function createFootprintAsync(payload) {
 
 module.exports = {
   canUseCloudFootprints,
+  getCurrentUserId,
   getFootprintPageData,
   getFootprintPageDataAsync,
   searchCitiesByKeyword,
