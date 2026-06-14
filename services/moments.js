@@ -161,12 +161,18 @@ function getMomentsFeed(filters = {}) {
   const dateType = filters.dateType || (date ? 'day' : 'all')
   const dateValue = filters.dateValue || date
   const authorId = filters.authorId || 'all'
+  const postId = filters.postId || ''
 
-  if (!keyword && !dateValue && (authorId === 'all' || !authorId)) {
+  if (!keyword && !dateValue && !postId && (authorId === 'all' || !authorId)) {
     return posts
   }
 
-  return posts.filter((post) => matchKeyword(post, keyword) && matchDate(post, dateType, dateValue) && matchAuthor(post, authorId))
+  return posts.filter((post) => {
+    return (!postId || post.postId === postId)
+      && matchKeyword(post, keyword)
+      && matchDate(post, dateType, dateValue)
+      && matchAuthor(post, authorId)
+  })
 }
 
 function syncCloudPostsToLocal(posts = []) {
