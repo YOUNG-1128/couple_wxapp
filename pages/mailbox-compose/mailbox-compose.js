@@ -1,5 +1,6 @@
 const mailboxService = require('../../services/mailbox')
 const cloudStorageService = require('../../services/cloud-storage')
+const { buildLetterSendConfirmation } = require('../../utils/letter-send-confirmation')
 
 const MAX_IMAGE_COUNT = 9
 const MAX_CONTENT_LENGTH = 2000
@@ -292,9 +293,58 @@ Page({
       return
     }
 
-    this.setData({
-      sending: true
+    if (!this.validateScheduledSend()) {
+      return
+    }
+
+    const confirmation = buildLetterSendConfirmation({
+      sendMode: this.data.sendMode,
+      receiverName: this.data.partnerUser ? this.data.partnerUser.nickName : 'TA',
+      scheduleDate: this.data.scheduleDate,
+      scheduleTime: this.data.scheduleTime
     })
+
+    wx.showModal({
+      ...confirmation,
+      confirmColor: '#e85d75',
+      success: (res) => {
+        if (!res.confirm) {
+          return
+        }
+
+        this.prepareAndSendLetter(content)
+      }
+    })
+  },
+
+  validateScheduledSend() {
+    if (this.data.sendMode !== 'scheduled') {
+      return true
+    }
+
+    const visibleAt = this.combineScheduleAt()
+
+    if (!visibleAt) {
+      wx.showToast({
+        title: '请选择定时时间',
+        icon: 'none'
+      })
+      return false
+    }
+
+    if (new Date(visibleAt).getTime() <= Date.now()) {
+      wx.showToast({
+        title: '请选择未来时间',
+        icon: 'none'
+      })
+      return false
+    }
+
+    return true
+  },
+
+  prepareAndSendLetter(content) {
+    this.setData({ sending: true })
 
     this.uploadLetterImages().then(() => {
       this.sendPreparedLetter(content)
@@ -310,24 +360,6 @@ Page({
   sendPreparedLetter(content) {
     if (this.data.sendMode === 'scheduled') {
       const visibleAt = this.combineScheduleAt()
-
-      if (!visibleAt) {
-        this.setData({ sending: false })
-        wx.showToast({
-          title: '请选择定时时间',
-          icon: 'none'
-        })
-        return
-      }
-
-      if (new Date(visibleAt).getTime() <= Date.now()) {
-        this.setData({ sending: false })
-        wx.showToast({
-          title: '请选择未来时间',
-          icon: 'none'
-        })
-        return
-      }
 
       mailboxService.sendLetterScheduledAsync({
         editingLetterId: this.data.draftId,
