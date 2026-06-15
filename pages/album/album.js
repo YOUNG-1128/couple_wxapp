@@ -37,7 +37,9 @@ Page({
     nextOffset: 0,
     hasMore: true,
     loadingMore: false,
-    feedLoaded: false
+    loadMoreFailed: false,
+    feedLoaded: false,
+    pageState: ''
   },
 
   onLoad(options) {
@@ -61,6 +63,10 @@ Page({
   },
 
   refreshPageData() {
+    if (!this.data.feedLoaded) {
+      this.setData({ pageState: 'loading' })
+    }
+
     const users = momentsService.getUsers()
     const currentUser = momentsService.getCurrentUser()
     const authorFilters = [{ key: 'all', label: '全部' }].concat(users.map((user) => ({
@@ -76,7 +82,7 @@ Page({
         reset: true
       })
 
-    Promise.all([
+    return Promise.all([
       feedRequest,
       momentsService.getMomentDraftsAsync()
     ]).then(([pageResult]) => {
@@ -87,15 +93,24 @@ Page({
         hasDrafts: momentsService.getMomentDrafts().length > 0,
         nextOffset: this.data.targetPostId ? momentsService.getMomentsFeed({}).length : pageResult.nextOffset,
         hasMore: this.data.targetPostId ? false : pageResult.hasMore,
-        feedLoaded: true
+        feedLoaded: true,
+        pageState: ''
       })
 
       this.refreshDateGroups()
       this.refreshFeed()
     }).catch(() => {
-      this.setData({ feedLoaded: true })
+      this.setData({
+        feedLoaded: true,
+        pageState: 'error'
+      })
       this.refreshFeed()
     })
+  },
+
+  onRetryLoad() {
+    this.setData({ pageState: 'loading' })
+    this.refreshPageData()
   },
 
   onLoadMore() {
@@ -103,25 +118,30 @@ Page({
       return
     }
 
-    this.setData({ loadingMore: true })
+    this.setData({
+      loadingMore: true,
+      loadMoreFailed: false
+    })
     momentsService.getMomentsFeedPageAsync({
       offset: this.data.nextOffset,
       pageSize: this.data.pageSize
     }).then((pageResult) => {
       this.setData({
         nextOffset: pageResult.nextOffset,
-        hasMore: pageResult.hasMore
+        hasMore: pageResult.hasMore,
+        loadMoreFailed: false
       })
       this.refreshDateGroups()
       this.refreshFeed()
     }).catch(() => {
-      wx.showToast({
-        title: '加载失败，请稍后重试',
-        icon: 'none'
-      })
+      this.setData({ loadMoreFailed: true })
     }).finally(() => {
       this.setData({ loadingMore: false })
     })
+  },
+
+  onRetryLoadMore() {
+    this.onLoadMore()
   },
 
   refreshFeed() {

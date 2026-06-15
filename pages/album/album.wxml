@@ -99,6 +99,9 @@
       </view>
     </view>
 
+    <async-page-state mode="{{pageState}}" message="{{pageState === 'error' ? '动态暂时没有加载成功' : '正在加载我们的动态...'}}" bind:retry="onRetryLoad"></async-page-state>
+
+    <block wx:if="{{!pageState}}">
     <view class="empty-box" wx:if="{{!feed.length}}">{{emptyText}}</view>
 
     <view class="post-card" wx:for="{{feed}}" wx:key="postId">
@@ -168,7 +171,9 @@
 
     <view class="feed-pagination" wx:if="{{feed.length && !targetPostId}}">
       <view wx:if="{{loadingMore}}">正在加载更多回忆...</view>
+      <view class="pagination-retry" wx:elif="{{loadMoreFailed}}" bindtap="onRetryLoadMore">加载失败，点这里重试</view>
       <view wx:elif="{{!hasMore && feedLoaded}}">已经看完啦</view>
     </view>
+    </block>
   </view>
 </scroll-view>

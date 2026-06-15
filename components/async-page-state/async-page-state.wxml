@@ -1,0 +1,10 @@
+<view class="state-box" wx:if="{{mode === 'loading'}}">
+  <view class="state-spinner"></view>
+  <view class="state-message">{{message || '正在加载...'}}</view>
+</view>
+
+<view class="state-box state-box-error" wx:elif="{{mode === 'error'}}">
+  <view class="state-error-mark">!</view>
+  <view class="state-message">{{message || '暂时没有加载成功'}}</view>
+  <button class="state-retry" bindtap="onRetry">{{retryText}}</button>
+</view>

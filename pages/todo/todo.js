@@ -21,7 +21,8 @@ Page({
     formTitle: '',
     formNote: '',
     formTarget: 'me',
-    formDueDate: ''
+    formDueDate: '',
+    pageState: ''
   },
 
   onLoad() {
@@ -33,6 +34,10 @@ Page({
   },
 
   refreshData() {
+    if (!this.data.todos.length) {
+      this.setData({ pageState: 'loading' })
+    }
+
     return todoService.getTodosAsync(this.data.activeFilter)
       .then((pageData) => {
         this.setData({
@@ -42,15 +47,18 @@ Page({
           todayPendingCount: pageData.todayPendingCount,
           totalPendingCount: pageData.totalPendingCount,
           couplePendingCount: pageData.couplePendingCount,
-          formTarget: this.normalizeFormTarget(this.data.formTarget, pageData.currentUser, pageData.partnerUser)
+          formTarget: this.normalizeFormTarget(this.data.formTarget, pageData.currentUser, pageData.partnerUser),
+          pageState: ''
         })
       })
       .catch(() => {
-        wx.showToast({
-          title: '待办加载失败',
-          icon: 'none'
-        })
+        this.setData({ pageState: 'error' })
       })
+  },
+
+  onRetryLoad() {
+    this.setData({ pageState: 'loading' })
+    this.refreshData()
   },
 
   normalizeFormTarget(formTarget, currentUser, partnerUser) {

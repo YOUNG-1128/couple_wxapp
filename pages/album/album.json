@@ -1,6 +1,7 @@
 {
   "usingComponents": {
     "navigation-bar": "/components/navigation-bar/navigation-bar",
-    "common-card": "/components/common-card/common-card"
+    "common-card": "/components/common-card/common-card",
+    "async-page-state": "/components/async-page-state/async-page-state"
   }
 }

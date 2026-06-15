@@ -22,6 +22,9 @@
       </view>
     </common-card>
 
+    <async-page-state mode="{{pageState}}" message="{{pageState === 'error' ? '足迹暂时没有加载成功' : '正在点亮足迹...'}}" bind:retry="onRetryLoad"></async-page-state>
+
+    <block wx:if="{{!pageState}}">
     <common-card>
       <view class="section-title">地图点亮</view>
       <map
@@ -93,6 +96,7 @@
         </view>
       </view>
     </common-card>
+    </block>
   </view>
 </scroll-view>
 

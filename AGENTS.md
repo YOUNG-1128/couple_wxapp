@@ -320,6 +320,7 @@
 - 页面 JSON 中通过 `usingComponents` 引入组件。
 - 自定义导航栏组件位于 `components/navigation-bar/`，适配胶囊按钮、安全区与返回事件。
 - 共享卡片组件位于 `components/common-card/`。
+- 统一异步页面状态组件位于 `components/async-page-state/`，用于展示初次加载、加载失败和重试入口。动态、信箱、待办、足迹页已经接入；业务操作结果仍使用 Toast。
 - 首页使用多个模块组件，例如 `home-love-days`、`home-anniversary`、`home-pending-actions`、`home-miss-button`、`home-couple-question`。
 - 组件与页面样式使用 `.wxss`，项目未使用 npm 前端构建链。
 

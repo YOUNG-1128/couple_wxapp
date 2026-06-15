@@ -593,3 +593,8 @@ page {
   font-size: 22rpx;
   text-align: center;
 }
+
+.pagination-retry {
+  color: #d86f83;
+  font-weight: 600;
+}

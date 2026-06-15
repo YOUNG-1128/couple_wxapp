@@ -18,6 +18,9 @@
     </view>
 
     <common-card>
+      <async-page-state mode="{{pageState}}" message="{{pageState === 'error' ? '信箱暂时没有打开成功' : '正在打开信箱...'}}" bind:retry="onRetryLoad"></async-page-state>
+
+      <block wx:if="{{!pageState}}">
       <view class="section-head">
         <view class="section-placeholder"></view>
         <view class="section-badge" wx:if="{{unreadIncomingCount > 0}}">{{unreadIncomingCount}}</view>
@@ -69,6 +72,7 @@
       </view>
 
       <view wx:else class="empty-text">{{activeList === 'archived' ? '归档里还没有信件' : '还没有历史信件，第一封信等你来写'}}</view>
+      </block>
     </common-card>
   </view>
 </scroll-view>

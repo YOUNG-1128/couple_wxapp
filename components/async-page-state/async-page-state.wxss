@@ -1,0 +1,59 @@
+.state-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 240rpx;
+  padding: 40rpx 24rpx;
+  box-sizing: border-box;
+}
+
+.state-spinner {
+  width: 38rpx;
+  height: 38rpx;
+  border: 5rpx solid #f3dfe4;
+  border-top-color: #d86f83;
+  border-radius: 50%;
+  animation: state-spin 0.9s linear infinite;
+}
+
+.state-error-mark {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 700;
+  line-height: 48rpx;
+  text-align: center;
+  background: #d86f83;
+}
+
+.state-message {
+  margin-top: 18rpx;
+  color: #8d6d77;
+  font-size: 25rpx;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.state-retry {
+  height: 64rpx;
+  margin-top: 22rpx;
+  padding: 0 30rpx;
+  border-radius: 32rpx;
+  color: #ffffff;
+  font-size: 24rpx;
+  line-height: 64rpx;
+  background: #d86f83;
+}
+
+.state-retry::after {
+  border: 0;
+}
+
+@keyframes state-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

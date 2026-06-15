@@ -11,7 +11,8 @@ Page({
     unreadIncomingCount: 0,
     showReader: false,
     readerReady: false,
-    readerLetter: null
+    readerLetter: null,
+    pageState: ''
   },
 
   onShow() {
@@ -19,7 +20,11 @@ Page({
   },
 
   refreshPageData() {
-    mailboxService.getMailboxPageDataAsync().then((pageData) => {
+    if (!this.data.history.length && !this.data.archived.length) {
+      this.setData({ pageState: 'loading' })
+    }
+
+    return mailboxService.getMailboxPageDataAsync().then((pageData) => {
       const unreadIncomingCount = pageData.history.filter((item) => item.isUnreadForMe).length
 
       this.setData({
@@ -28,9 +33,17 @@ Page({
         history: pageData.history,
         archived: pageData.archived,
         hasDrafts: pageData.drafts.length > 0,
-        unreadIncomingCount
+        unreadIncomingCount,
+        pageState: ''
       })
+    }).catch(() => {
+      this.setData({ pageState: 'error' })
     })
+  },
+
+  onRetryLoad() {
+    this.setData({ pageState: 'loading' })
+    this.refreshPageData()
   },
 
   onOpenCompose() {

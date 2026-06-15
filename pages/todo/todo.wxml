@@ -34,6 +34,9 @@
 
     <button class="new-todo-btn" bindtap="onOpenCreator">+ 新建待办</button>
 
+    <async-page-state mode="{{pageState}}" message="{{pageState === 'error' ? '待办暂时没有加载成功' : '正在整理待办...'}}" bind:retry="onRetryLoad"></async-page-state>
+
+    <block wx:if="{{!pageState}}">
     <view class="empty-box" wx:if="{{!todos.length}}">这里还没有待办，先写下一件想一起完成的小事吧</view>
 
     <view class="todo-card {{item.completed ? 'todo-card-completed' : ''}} {{item.isOverdue ? 'todo-card-overdue' : ''}}" wx:for="{{todos}}" wx:key="todoId">
@@ -69,6 +72,7 @@
         <button class="delete-btn" data-todo-id="{{item.todoId}}" bindtap="onDeleteTodo">删除</button>
       </view>
     </view>
+    </block>
   </view>
 </scroll-view>
 

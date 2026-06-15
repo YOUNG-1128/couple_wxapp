@@ -37,7 +37,8 @@ Page({
     selectedCity: null,
     locatingCity: false,
     savingFootprint: false,
-    removingFootprintId: ''
+    removingFootprintId: '',
+    pageState: ''
   },
 
   onShow() {
@@ -45,6 +46,10 @@ Page({
   },
 
   refreshPageData(activeCity = '') {
+    if (!this.data.footprints.length) {
+      this.setData({ pageState: 'loading' })
+    }
+
     return footprintService.getFootprintPageDataAsync(activeCity)
       .then((pageData) => {
         this.setData({
@@ -61,15 +66,18 @@ Page({
             latitude: pageData.center.latitude,
             longitude: pageData.center.longitude
           },
-          mapScale: pageData.center.scale || 4
+          mapScale: pageData.center.scale || 4,
+          pageState: ''
         })
       })
       .catch(() => {
-        wx.showToast({
-          title: '足迹加载失败',
-          icon: 'none'
-        })
+        this.setData({ pageState: 'error' })
       })
+  },
+
+  onRetryLoad() {
+    this.setData({ pageState: 'loading' })
+    this.refreshPageData(this.data.activeCity || '')
   },
 
   onOpenCreator() {
