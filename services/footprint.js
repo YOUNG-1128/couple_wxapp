@@ -252,6 +252,109 @@ function createFootprintAsync(payload) {
     })
 }
 
+function getFootprintById(footprintId) {
+  return (getState('footprints') || []).find((item) => item.footprintId === footprintId) || null
+}
+
+function updateFootprint(footprintId, payload = {}) {
+  const existing = getFootprintById(footprintId)
+
+  if (!existing || existing.sourceType !== 'manual') {
+    return null
+  }
+
+  const cityInfo = normalizeCity(payload.city, {
+    code: payload.cityCode,
+    name: payload.cityName,
+    province: payload.province,
+    country: payload.country,
+    latitude: payload.latitude,
+    longitude: payload.longitude,
+    source: 'manual'
+  })
+  const updated = {
+    ...existing,
+    title: payload.title || '',
+    city: cityInfo,
+    placeName: payload.placeName || '',
+    address: payload.address || '',
+    date: payload.date || '',
+    note: payload.note || '',
+    images: Array.isArray(payload.images) ? payload.images.slice(0, 4) : [],
+    updatedAt: new Date().toISOString()
+  }
+
+  updateState('footprints', (list) => {
+    const index = list.findIndex((item) => item.footprintId === footprintId)
+
+    if (index >= 0) {
+      list.splice(index, 1, updated)
+    }
+  })
+
+  return updated
+}
+
+function updateFootprintAsync(footprintId, payload) {
+  if (!canUseCloudFootprints()) {
+    return Promise.resolve(updateFootprint(footprintId, payload))
+  }
+
+  return callCloudFunction('updateFootprintManual', {
+    footprintId,
+    ...payload
+  }).then((result) => {
+    if (result.success !== true || !result.footprint) {
+      throw new Error(result.errorMessage || 'update_footprint_manual_failed')
+    }
+
+    updateState('footprints', (list) => {
+      const index = list.findIndex((item) => item.footprintId === footprintId)
+
+      if (index >= 0) {
+        list.splice(index, 1, result.footprint)
+      }
+    })
+
+    return result.footprint
+  })
+}
+
+function removeFootprint(footprintId) {
+  const existing = getFootprintById(footprintId)
+
+  if (!existing || existing.sourceType !== 'manual') {
+    return false
+  }
+
+  updateState('footprints', (list) => {
+    const index = list.findIndex((item) => item.footprintId === footprintId)
+
+    if (index >= 0) {
+      list.splice(index, 1)
+    }
+  })
+
+  return true
+}
+
+function removeFootprintAsync(footprintId) {
+  if (!canUseCloudFootprints()) {
+    return Promise.resolve(removeFootprint(footprintId))
+  }
+
+  return callCloudFunction('removeFootprintManual', {
+    footprintId
+  }).then((result) => {
+    if (result.success !== true) {
+      throw new Error(result.errorMessage || 'remove_footprint_manual_failed')
+    }
+
+    removeFootprint(footprintId)
+    return true
+  })
+}
+
 module.exports = {
   canUseCloudFootprints,
   getCurrentUserId,
@@ -261,5 +364,10 @@ module.exports = {
   resolveCityFromCoordinates,
   createFootprint,
   createFootprintAsync,
+  getFootprintById,
+  updateFootprint,
+  updateFootprintAsync,
+  removeFootprint,
+  removeFootprintAsync,
   DEFAULT_REGION
 }

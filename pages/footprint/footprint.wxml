@@ -65,7 +65,11 @@
               bindtap="onPreviewFootprintImage"
             ></image>
           </view>
-          <view class="view-all" wx:if="{{item.sourceType === 'post' && item.sourceId}}" data-post-id="{{item.sourceId}}" bindtap="onOpenLinkedPost">查看关联动态</view>
+          <view class="item-actions" wx:if="{{item.sourceType === 'manual'}}">
+            <view class="item-action" data-footprint-id="{{item.footprintId}}" bindtap="onEditFootprint">编辑</view>
+            <view class="item-action danger" data-footprint-id="{{item.footprintId}}" bindtap="onRemoveFootprint">删除</view>
+          </view>
+          <view class="view-all" wx:elif="{{item.sourceType === 'post' && item.sourceId}}" data-post-id="{{item.sourceId}}" bindtap="onOpenLinkedPost">查看关联动态</view>
         </view>
       </view>
     </common-card>
@@ -94,7 +98,7 @@
 
 <view class="creator-mask" wx:if="{{showCreator}}" bindtap="onCloseCreator">
   <view class="creator-panel" catchtap="noop">
-    <view class="panel-title">新增足迹</view>
+    <view class="panel-title">{{editingFootprintId ? '编辑足迹' : '新增足迹'}}</view>
 
     <button class="locate-btn" bindtap="onLocateCity" loading="{{locatingCity}}">自动识别当前城市</button>
 
@@ -131,7 +135,7 @@
 
     <view class="panel-actions">
       <button class="panel-btn ghost" bindtap="onCloseCreator">取消</button>
-      <button class="panel-btn" bindtap="onSaveFootprint" loading="{{savingFootprint}}">保存</button>
+      <button class="panel-btn" bindtap="onSaveFootprint" loading="{{savingFootprint}}">{{editingFootprintId ? '保存修改' : '保存'}}</button>
     </view>
   </view>
 </view>

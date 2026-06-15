@@ -26,6 +26,7 @@ Page({
     mapScale: 4,
 
     showCreator: false,
+    editingFootprintId: '',
     formTitle: '',
     formKeyword: '',
     formPlaceName: '',
@@ -35,7 +36,8 @@ Page({
     searchResults: [],
     selectedCity: null,
     locatingCity: false,
-    savingFootprint: false
+    savingFootprint: false,
+    removingFootprintId: ''
   },
 
   onShow() {
@@ -73,6 +75,32 @@ Page({
   onOpenCreator() {
     this.setData({
       showCreator: true,
+      editingFootprintId: '',
+      locatingCity: false
+    })
+  },
+
+  onEditFootprint(event) {
+    const footprintId = event.currentTarget.dataset.footprintId
+    const footprint = footprintService.getFootprintById(footprintId)
+
+    if (!footprint || footprint.sourceType !== 'manual') {
+      return
+    }
+
+    const city = footprint.cityInfo || footprint.city
+
+    this.setData({
+      showCreator: true,
+      editingFootprintId: footprintId,
+      formTitle: footprint.title || '',
+      formKeyword: city.name || '',
+      formPlaceName: footprint.placeName || '',
+      formDate: footprint.date || '',
+      formNote: footprint.note || '',
+      formImages: Array.isArray(footprint.images) ? footprint.images : [],
+      searchResults: [],
+      selectedCity: city,
       locatingCity: false
     })
   },
@@ -80,6 +108,7 @@ Page({
   onCloseCreator() {
     this.setData({
       showCreator: false,
+      editingFootprintId: '',
       formTitle: '',
       formKeyword: '',
       formPlaceName: '',
@@ -261,35 +290,46 @@ Page({
     }
 
     this.setData({ savingFootprint: true })
+    const editingFootprintId = this.data.editingFootprintId
     cloudStorageService.uploadFiles(this.data.formImages, {
       category: 'footprints',
       ownerId: footprintService.getCurrentUserId()
-    }).then((images) => footprintService.createFootprintAsync({
-      sourceType: 'manual',
-      sourceId: '',
-      title,
-      city: {
-        code: selectedCity.code,
-        name: selectedCity.name,
-        province: selectedCity.province,
-        country: selectedCity.country,
-        latitude: selectedCity.latitude,
-        longitude: selectedCity.longitude,
-        source: 'manual'
-      },
-      placeName,
-      address: '',
-      date,
-      note,
-      images
-    }))
+    }).then((images) => {
+      const payload = {
+        title,
+        city: {
+          code: selectedCity.code,
+          name: selectedCity.name,
+          province: selectedCity.province,
+          country: selectedCity.country,
+          latitude: selectedCity.latitude,
+          longitude: selectedCity.longitude,
+          source: 'manual'
+        },
+        placeName,
+        address: '',
+        date,
+        note,
+        images
+      }
+
+      if (editingFootprintId) {
+        return footprintService.updateFootprintAsync(editingFootprintId, payload)
+      }
+
+      return footprintService.createFootprintAsync({
+        sourceType: 'manual',
+        sourceId: '',
+        ...payload
+      })
+    })
       .then(() => {
         this.onCloseCreator()
         return this.refreshPageData(selectedCity.name)
       })
       .then(() => {
         wx.showToast({
-          title: '足迹已保存',
+          title: editingFootprintId ? '足迹已更新' : '足迹已保存',
           icon: 'success'
         })
       })
@@ -302,6 +342,45 @@ Page({
       .finally(() => {
         this.setData({ savingFootprint: false })
       })
+  },
+
+  onRemoveFootprint(event) {
+    const footprintId = event.currentTarget.dataset.footprintId
+
+    if (!footprintId || this.data.removingFootprintId) {
+      return
+    }
+
+    wx.showModal({
+      title: '删除这条足迹？',
+      content: '删除后无法恢复，关联动态不会受到影响。',
+      confirmText: '删除',
+      confirmColor: '#d86f83',
+      success: (res) => {
+        if (!res.confirm) {
+          return
+        }
+
+        this.setData({ removingFootprintId: footprintId })
+        footprintService.removeFootprintAsync(footprintId)
+          .then(() => this.refreshPageData(this.data.activeCity || ''))
+          .then(() => {
+            wx.showToast({
+              title: '足迹已删除',
+              icon: 'success'
+            })
+          })
+          .catch(() => {
+            wx.showToast({
+              title: '删除失败，请稍后重试',
+              icon: 'none'
+            })
+          })
+          .finally(() => {
+            this.setData({ removingFootprintId: '' })
+          })
+      }
+    })
   },
 
   onMarkerTap(event) {

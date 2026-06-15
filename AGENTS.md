@@ -175,6 +175,8 @@
 - 足迹：
   - `getFootprintPageData`
   - `createFootprintManual`
+  - `updateFootprintManual`
+  - `removeFootprintManual`
   - `createFootprintFromPost`
 - 待办：
   - `getTodos`
@@ -284,6 +286,8 @@
 编辑动态会保留原始发布时间和评论，并根据最新内容、图片与位置同步由该动态生成的关联足迹；清除位置时会删除关联足迹，重新添加有效位置时可以再次创建。
 
 删除动态时，只会一并删除 `sourceType: "post"` 且 `sourceId` 等于该动态 ID 的关联足迹，不会删除手动创建的足迹。当前删除动态仍不会自动清理动态图片对应的无引用云存储文件。
+
+足迹页支持编辑、删除 `sourceType: "manual"` 的手动足迹，相关云函数为 `updateFootprintManual`、`removeFootprintManual`。由动态生成的足迹仍通过编辑或删除关联动态维护，足迹页只提供跳回关联动态入口。删除手动足迹目前不会自动清理其图片对应的无引用云存储文件。
 
 ## 每日状态/心情云端同步
 

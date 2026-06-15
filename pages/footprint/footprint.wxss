@@ -115,6 +115,22 @@ page {
   font-size: 24rpx;
 }
 
+.item-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 28rpx;
+  margin-top: 18rpx;
+}
+
+.item-action {
+  color: #8d6d77;
+  font-size: 24rpx;
+}
+
+.item-action.danger {
+  color: #c84f67;
+}
+
 .empty-box {
   margin-top: 24rpx;
   padding: 34rpx 28rpx;
