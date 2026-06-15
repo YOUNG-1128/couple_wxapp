@@ -227,7 +227,8 @@ function decorateLetter(letter, currentUserId) {
     isUnreadForMe: unreadForMe,
     readState,
     readIcon,
-    noticeStatus: letter.noticeStatus || 'idle'
+    noticeStatus: letter.noticeStatus || 'idle',
+    isArchivedForMe: (letter.archivedByUserIds || []).includes(currentUserId)
   }
 }
 
@@ -308,7 +309,8 @@ function getMailboxPageData() {
     currentUser,
     partnerUser,
     drafts: sortByUpdatedAtDesc(letters.filter((item) => item.status === 'draft')),
-    history: sortBySentAtDesc(letters.filter((item) => item.status !== 'draft'))
+    history: sortBySentAtDesc(letters.filter((item) => item.status !== 'draft' && !item.isArchivedForMe)),
+    archived: sortBySentAtDesc(letters.filter((item) => item.status !== 'draft' && item.isArchivedForMe))
   }
 }
 
@@ -387,6 +389,7 @@ function getLatestUnreadIncomingLetter() {
       && item.status !== 'draft'
       && isVisible(item)
       && !item.readAt
+      && !(item.archivedByUserIds || []).includes(currentUser.userId)
     ))
 
   const latest = sortBySentAtDesc(unreadLetters)[0]
@@ -676,6 +679,61 @@ function removeDraftAsync(letterId) {
     .catch(() => false)
 }
 
+function setLetterArchived(letterId, archived) {
+  if (!letterId || typeof archived !== 'boolean') {
+    return false
+  }
+
+  const currentUser = getCurrentUser()
+  let updated = false
+
+  updateState('letters', (letters) => {
+    const letter = letters.find((item) => item.letterId === letterId)
+
+    if (
+      !letter
+      || letter.status === 'draft'
+      || (letter.fromUserId !== currentUser.userId && letter.toUserId !== currentUser.userId)
+    ) {
+      return
+    }
+
+    const archivedByUserIds = Array.isArray(letter.archivedByUserIds) ? letter.archivedByUserIds.slice() : []
+    const exists = archivedByUserIds.includes(currentUser.userId)
+
+    if (archived && !exists) {
+      archivedByUserIds.push(currentUser.userId)
+    }
+
+    if (!archived && exists) {
+      archivedByUserIds.splice(archivedByUserIds.indexOf(currentUser.userId), 1)
+    }
+
+    letter.archivedByUserIds = archivedByUserIds
+    letter.updatedAt = new Date().toISOString()
+    updated = true
+  })
+
+  return updated
+}
+
+function setLetterArchivedAsync(letterId, archived) {
+  if (!canUseCloudMailbox()) {
+    return Promise.resolve(setLetterArchived(letterId, archived))
+  }
+
+  return callCloudFunction('updateLetterArchiveStatus', {
+    letterId,
+    archived
+  }).then((result) => {
+    if (result.success !== true || !result.letter) {
+      throw new Error(result.errorMessage || 'update_letter_archive_failed')
+    }
+
+    return setLetterArchived(letterId, archived)
+  })
+}
+
 function getLetterDetailOnOpen(letterId) {
   refreshScheduledLetters()
 
@@ -812,6 +870,8 @@ module.exports = {
   saveDraftAsync,
   removeDraft,
   removeDraftAsync,
+  setLetterArchived,
+  setLetterArchivedAsync,
   getLetterDetailOnOpen,
   getLetterDetailOnOpenAsync,
   updateLetterNoticeStatus

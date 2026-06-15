@@ -5,6 +5,8 @@ Page({
     currentUser: null,
     partnerUser: null,
     history: [],
+    archived: [],
+    activeList: 'history',
     hasDrafts: false,
     unreadIncomingCount: 0,
     showReader: false,
@@ -24,6 +26,7 @@ Page({
         currentUser: pageData.currentUser,
         partnerUser: pageData.partnerUser,
         history: pageData.history,
+        archived: pageData.archived,
         hasDrafts: pageData.drafts.length > 0,
         unreadIncomingCount
       })
@@ -40,6 +43,42 @@ Page({
     wx.navigateTo({
       url: '/pages/mailbox-drafts/mailbox-drafts'
     })
+  },
+
+  onSelectList(event) {
+    const activeList = event.currentTarget.dataset.list
+
+    if (activeList === 'history' || activeList === 'archived') {
+      this.setData({ activeList })
+    }
+  },
+
+  onToggleArchive(event) {
+    const letterId = event.currentTarget.dataset.id
+    const archived = event.currentTarget.dataset.archived === true
+
+    if (!letterId) {
+      return
+    }
+
+    mailboxService.setLetterArchivedAsync(letterId, archived)
+      .then((updated) => {
+        if (!updated) {
+          throw new Error('archive_update_failed')
+        }
+
+        this.refreshPageData()
+        wx.showToast({
+          title: archived ? '已归档' : '已恢复',
+          icon: 'success'
+        })
+      })
+      .catch(() => {
+        wx.showToast({
+          title: '操作失败，请稍后重试',
+          icon: 'none'
+        })
+      })
   },
 
   onOpenHistoryDetail(event) {

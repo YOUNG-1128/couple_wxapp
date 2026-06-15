@@ -12,13 +12,18 @@
       </view>
     </view>
 
+    <view class="mailbox-tabs">
+      <view class="mailbox-tab {{activeList === 'history' ? 'mailbox-tab-active' : ''}}" data-list="history" bindtap="onSelectList">来往</view>
+      <view class="mailbox-tab {{activeList === 'archived' ? 'mailbox-tab-active' : ''}}" data-list="archived" bindtap="onSelectList">归档 {{archived.length}}</view>
+    </view>
+
     <common-card>
       <view class="section-head">
         <view class="section-placeholder"></view>
         <view class="section-badge" wx:if="{{unreadIncomingCount > 0}}">{{unreadIncomingCount}}</view>
       </view>
 
-      <view wx:if="{{history.length}}">
+      <view wx:if="{{activeList === 'history' && history.length}}">
         <view
           class="letter-item {{item.isIncoming ? 'letter-item-incoming' : 'letter-item-outgoing'}}"
           wx:for="{{history}}"
@@ -36,12 +41,34 @@
             <view class="letter-foot">
               <view class="letter-time">{{item.listTime}}</view>
               <view class="status-icon status-icon-{{item.readState}}">{{item.readIcon}}</view>
+              <view class="letter-archive-action" data-id="{{item.letterId}}" data-archived="{{true}}" catchtap="onToggleArchive">归档</view>
             </view>
           </view>
         </view>
       </view>
 
-      <view wx:else class="empty-text">还没有历史信件，第一封信等你来写</view>
+      <view wx:elif="{{activeList === 'archived' && archived.length}}">
+        <view
+          class="letter-item {{item.isIncoming ? 'letter-item-incoming' : 'letter-item-outgoing'}}"
+          wx:for="{{archived}}"
+          wx:key="letterId"
+          data-id="{{item.letterId}}"
+          bindtap="onOpenHistoryDetail"
+        >
+          <view class="avatar-wrap">
+            <image class="letter-avatar" src="{{item.isIncoming ? item.fromUser.avatarUrl : currentUser.avatarUrl}}" mode="aspectFill"></image>
+          </view>
+          <view class="letter-main {{item.isIncoming ? 'letter-main-incoming' : 'letter-main-outgoing'}}">
+            <view class="letter-summary">{{item.listText}}</view>
+            <view class="letter-foot">
+              <view class="letter-time">{{item.listTime}}</view>
+              <view class="letter-archive-action" data-id="{{item.letterId}}" data-archived="{{false}}" catchtap="onToggleArchive">恢复</view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view wx:else class="empty-text">{{activeList === 'archived' ? '归档里还没有信件' : '还没有历史信件，第一封信等你来写'}}</view>
     </common-card>
   </view>
 </scroll-view>

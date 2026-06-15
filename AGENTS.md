@@ -160,6 +160,7 @@
   - `getLetterDetailOnOpen`
   - `sendLetterSubscribeNotice`
   - `updateLetterNoticeStatus`
+  - `updateLetterArchiveStatus`
 - 动态/相册：
   - `getPostsFeed`
   - `publishPost`
@@ -342,6 +343,12 @@
 - `getPostsFeed` 支持 `offset` 与 `pageSize`，返回 `posts`、`hasMore` 和 `nextOffset`。
 - 小程序端通过 `getMomentsFeedPageAsync` 合并下一页数据；搜索、日期筛选和指定动态跳转保留原有展示行为。
 - 修改分页云函数后需要重新部署 `cloudfunctions/getPostsFeed`。
+
+## 信件个人归档
+
+- 非草稿信件可以由当前用户归档或恢复；归档只影响当前用户的信箱，不会删除信件或影响对方查看。
+- 信件通过 `archivedByUserIds` 保存双方各自的归档状态。
+- 客户端通过 `setLetterArchivedAsync` 调用 `updateLetterArchiveStatus` 云函数；新增云函数需要部署后才能对云端信件生效。
 
 ## 开发注意事项
 
