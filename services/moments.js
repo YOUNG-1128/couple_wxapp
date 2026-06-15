@@ -4,6 +4,7 @@ const relationshipService = require('./relationship')
 const { createTempId } = require('../utils/id')
 const { formatPostTime, formatCommentTime, toDateKey } = require('../utils/time')
 const { normalizeCity, createFootprintFromPost } = require('../utils/footprint')
+const { paginateMoments } = require('../utils/moment-pagination')
 
 function getUsers() {
   return getState('users')
@@ -187,6 +188,25 @@ function syncCloudPostsToLocal(posts = []) {
   return normalized
 }
 
+function mergeCloudPostsToLocal(posts = []) {
+  const normalized = posts.map(normalizeCloudPost)
+
+  updateState('posts', (statePosts) => {
+    normalized.forEach((post) => {
+      const index = statePosts.findIndex((item) => item.postId === post.postId)
+
+      if (index >= 0) {
+        statePosts.splice(index, 1, post)
+        return
+      }
+
+      statePosts.push(post)
+    })
+  })
+
+  return normalized
+}
+
 function syncCloudDraftsToLocal(drafts = []) {
   const currentUser = getCurrentUser()
   const normalized = drafts.map(normalizeCloudDraft)
@@ -222,6 +242,38 @@ function getMomentsFeedAsync(filters = {}) {
       return getMomentsFeed(filters)
     })
     .catch(() => getMomentsFeed(filters))
+}
+
+function getMomentsFeedPageAsync(options = {}) {
+  const offset = Math.max(0, Number(options.offset) || 0)
+  const pageSize = Math.max(1, Number(options.pageSize) || 10)
+  const reset = options.reset === true
+
+  if (!canUseCloudMoments()) {
+    return Promise.resolve(paginateMoments(getMomentsFeed(options.filters || {}), {
+      offset,
+      pageSize
+    }))
+  }
+
+  return callCloudFunction('getPostsFeed', {
+    offset,
+    pageSize
+  }).then((result) => {
+    if (result.success !== true) {
+      throw new Error(result.errorMessage || 'get_posts_feed_failed')
+    }
+
+    const posts = reset
+      ? syncCloudPostsToLocal(result.posts || [])
+      : mergeCloudPostsToLocal(result.posts || [])
+
+    return {
+      items: posts.map(normalizePost),
+      hasMore: result.hasMore === true,
+      nextOffset: Number(result.nextOffset) || offset + posts.length
+    }
+  })
 }
 
 function getPostById(postId) {
@@ -815,6 +867,7 @@ module.exports = {
   updateUserProfile,
   getMomentsFeed,
   getMomentsFeedAsync,
+  getMomentsFeedPageAsync,
   getPostById,
   getPostByIdAsync,
   createPost,

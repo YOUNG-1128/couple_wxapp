@@ -336,6 +336,13 @@
 - 客户端通过 `services/moments.js` 的 `removeCommentAsync` 调用 `removePostComment` 云函数。
 - `removePostComment` 会根据当前微信用户、情侣关系、动态和评论作者校验权限；部署后才能对真实云端数据生效。
 
+## 动态分页加载
+
+- 动态页普通列表首次加载 10 条，滚动到底部继续加载下一页，每页最多请求 20 条。
+- `getPostsFeed` 支持 `offset` 与 `pageSize`，返回 `posts`、`hasMore` 和 `nextOffset`。
+- 小程序端通过 `getMomentsFeedPageAsync` 合并下一页数据；搜索、日期筛选和指定动态跳转保留原有展示行为。
+- 修改分页云函数后需要重新部署 `cloudfunctions/getPostsFeed`。
+
 ## 开发注意事项
 
 - 不要假设所有功能都已经完全云端化。很多服务仍以 `mock/` 和 `services/local-state.js` 为基础。

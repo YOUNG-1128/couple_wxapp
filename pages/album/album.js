@@ -32,7 +32,12 @@ Page({
     activeCommentPostId: '',
     commentDraftMap: {},
     removingPostId: '',
-    removingCommentId: ''
+    removingCommentId: '',
+    pageSize: 10,
+    nextOffset: 0,
+    hasMore: true,
+    loadingMore: false,
+    feedLoaded: false
   },
 
   onLoad(options) {
@@ -63,31 +68,74 @@ Page({
       label: user.nickName
     })))
 
+    const feedRequest = this.data.targetPostId
+      ? momentsService.getMomentsFeedAsync({})
+      : momentsService.getMomentsFeedPageAsync({
+        offset: 0,
+        pageSize: this.data.pageSize,
+        reset: true
+      })
+
     Promise.all([
-      momentsService.getMomentsFeedAsync({}),
+      feedRequest,
       momentsService.getMomentDraftsAsync()
-    ]).finally(() => {
+    ]).then(([pageResult]) => {
       this.setData({
         users,
         currentUser,
         authorFilters,
-        hasDrafts: momentsService.getMomentDrafts().length > 0
+        hasDrafts: momentsService.getMomentDrafts().length > 0,
+        nextOffset: this.data.targetPostId ? momentsService.getMomentsFeed({}).length : pageResult.nextOffset,
+        hasMore: this.data.targetPostId ? false : pageResult.hasMore,
+        feedLoaded: true
       })
 
       this.refreshDateGroups()
       this.refreshFeed()
+    }).catch(() => {
+      this.setData({ feedLoaded: true })
+      this.refreshFeed()
+    })
+  },
+
+  onLoadMore() {
+    if (this.data.loadingMore || !this.data.hasMore || this.data.targetPostId) {
+      return
+    }
+
+    this.setData({ loadingMore: true })
+    momentsService.getMomentsFeedPageAsync({
+      offset: this.data.nextOffset,
+      pageSize: this.data.pageSize
+    }).then((pageResult) => {
+      this.setData({
+        nextOffset: pageResult.nextOffset,
+        hasMore: pageResult.hasMore
+      })
+      this.refreshDateGroups()
+      this.refreshFeed()
+    }).catch(() => {
+      wx.showToast({
+        title: '加载失败，请稍后重试',
+        icon: 'none'
+      })
+    }).finally(() => {
+      this.setData({ loadingMore: false })
     })
   },
 
   refreshFeed() {
     const hasActiveFilters = this.data.authorId !== 'all' || !!this.data.keyword || !!this.data.filterDateValue
-    const feed = momentsService.getMomentsFeed({
+    const allFeed = momentsService.getMomentsFeed({
       keyword: this.data.keyword,
       dateType: this.data.filterDateType,
       dateValue: this.data.filterDateValue,
       authorId: this.data.authorId,
       postId: this.data.targetPostId
     })
+    const feed = hasActiveFilters || this.data.targetPostId
+      ? allFeed
+      : allFeed.slice(0, this.data.nextOffset || this.data.pageSize)
 
     this.setData({
       feed,

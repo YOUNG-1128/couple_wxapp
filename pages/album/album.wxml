@@ -1,5 +1,5 @@
 <navigation-bar title="我们的动态" back="{{true}}" color="black" background="#FFFAF8"></navigation-bar>
-<scroll-view class="moments-scroll" type="list" scroll-y>
+<scroll-view class="moments-scroll" type="list" scroll-y lower-threshold="160" bindscrolltolower="onLoadMore">
   <view class="moments-page">
     <view class="search-entry-row">
       <view class="moments-slogan">记录我们的日常～</view>
@@ -164,6 +164,11 @@
         />
         <button class="comment-submit" data-post-id="{{item.postId}}" bindtap="onSubmitComment">发送</button>
       </view>
+    </view>
+
+    <view class="feed-pagination" wx:if="{{feed.length && !targetPostId}}">
+      <view wx:if="{{loadingMore}}">正在加载更多回忆...</view>
+      <view wx:elif="{{!hasMore && feedLoaded}}">已经看完啦</view>
     </view>
   </view>
 </scroll-view>
