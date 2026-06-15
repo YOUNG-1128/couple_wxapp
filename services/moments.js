@@ -65,14 +65,16 @@ function updateUserProfile(userId, patch) {
   return getUsers().find((user) => user.userId === userId) || null
 }
 
-function normalizeComment(comment) {
+function normalizeComment(comment, post) {
   const author = getUsers().find((user) => user.userId === comment.userId)
+  const currentUser = getCurrentUser()
 
   return {
     ...comment,
     userName: author ? author.nickName : comment.userName,
     userAvatar: author ? author.avatarUrl : comment.userAvatar,
-    displayTime: formatCommentTime(comment.createdAt)
+    displayTime: formatCommentTime(comment.createdAt),
+    canRemove: Boolean(currentUser && (comment.userId === currentUser.userId || post.authorId === currentUser.userId))
   }
 }
 
@@ -86,7 +88,7 @@ function normalizePost(post) {
     authorAvatar: author ? author.avatarUrl : post.authorAvatar,
     displayTime: formatPostTime(post.createdAt),
     location: buildDefaultLocation(post.location),
-    comments: (post.comments || []).map(normalizeComment),
+    comments: (post.comments || []).map((comment) => normalizeComment(comment, post)),
     canRemove: Boolean(currentUser && post.authorId === currentUser.userId)
   }
 }
@@ -754,6 +756,58 @@ function addCommentAsync(postId, payload) {
   })
 }
 
+function removeComment(postId, commentId) {
+  const currentUser = getCurrentUser()
+  let removed = false
+
+  updateState('posts', (posts) => {
+    const post = posts.find((item) => item.postId === postId)
+
+    if (!post || !currentUser || !Array.isArray(post.comments)) {
+      return
+    }
+
+    const index = post.comments.findIndex((comment) => comment.commentId === commentId)
+    const comment = post.comments[index]
+
+    if (index < 0 || !comment || (comment.userId !== currentUser.userId && post.authorId !== currentUser.userId)) {
+      return
+    }
+
+    post.comments.splice(index, 1)
+    post.updatedAt = new Date().toISOString()
+    removed = true
+  })
+
+  return removed
+}
+
+function removeCommentAsync(postId, commentId) {
+  if (!canUseCloudMoments()) {
+    return Promise.resolve(removeComment(postId, commentId))
+  }
+
+  return callCloudFunction('removePostComment', {
+    postId,
+    commentId
+  }).then((result) => {
+    if (result.success !== true || !result.post) {
+      throw new Error(result.errorMessage || 'remove_post_comment_failed')
+    }
+
+    const post = normalizeCloudPost(result.post)
+    updateState('posts', (posts) => {
+      const index = posts.findIndex((item) => item.postId === post.postId)
+
+      if (index >= 0) {
+        posts.splice(index, 1, post)
+      }
+    })
+
+    return true
+  })
+}
+
 module.exports = {
   getUsers,
   getCurrentUser,
@@ -778,7 +832,8 @@ module.exports = {
   updatePostAsync,
   publishMoment,
   publishMomentAsync,
-  addComment
-  ,
-  addCommentAsync
+  addComment,
+  addCommentAsync,
+  removeComment,
+  removeCommentAsync
 }

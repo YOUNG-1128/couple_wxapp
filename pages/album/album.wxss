@@ -486,6 +486,18 @@ page {
   font-size: 21rpx;
 }
 
+.comment-meta-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.comment-remove {
+  color: #c56f80;
+  font-size: 21rpx;
+}
+
 .comment-content {
   margin-top: 6rpx;
   color: #5d444d;

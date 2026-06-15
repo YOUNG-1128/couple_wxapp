@@ -31,7 +31,8 @@ Page({
     targetPostId: '',
     activeCommentPostId: '',
     commentDraftMap: {},
-    removingPostId: ''
+    removingPostId: '',
+    removingCommentId: ''
   },
 
   onLoad(options) {
@@ -444,6 +445,49 @@ Page({
         title: '留言失败',
         icon: 'none'
       })
+    })
+  },
+
+  onRemoveComment(event) {
+    const postId = event.currentTarget.dataset.postId
+    const commentId = event.currentTarget.dataset.commentId
+
+    if (!postId || !commentId || this.data.removingCommentId) {
+      return
+    }
+
+    wx.showModal({
+      title: '删除评论',
+      content: '评论删除后无法恢复，确定继续吗？',
+      confirmColor: '#e85d75',
+      success: (res) => {
+        if (!res.confirm) {
+          return
+        }
+
+        this.setData({ removingCommentId: commentId })
+        momentsService.removeCommentAsync(postId, commentId)
+          .then((removed) => {
+            if (!removed) {
+              throw new Error('comment_not_found_or_forbidden')
+            }
+
+            this.refreshFeed()
+            wx.showToast({
+              title: '评论已删除',
+              icon: 'success'
+            })
+          })
+          .catch(() => {
+            wx.showToast({
+              title: '删除失败',
+              icon: 'none'
+            })
+          })
+          .finally(() => {
+            this.setData({ removingCommentId: '' })
+          })
+      }
     })
   },
 

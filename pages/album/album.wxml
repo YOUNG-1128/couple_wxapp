@@ -132,7 +132,16 @@
           <view class="comment-body">
             <view class="comment-meta">
               <text class="comment-user">{{comment.userName}}</text>
-              <text class="comment-time">{{comment.displayTime}}</text>
+              <view class="comment-meta-actions">
+                <text class="comment-time">{{comment.displayTime}}</text>
+                <text
+                  class="comment-remove"
+                  wx:if="{{comment.canRemove}}"
+                  data-post-id="{{item.postId}}"
+                  data-comment-id="{{comment.commentId}}"
+                  bindtap="onRemoveComment"
+                >删除</text>
+              </view>
             </view>
             <view class="comment-content">{{comment.content}}</view>
           </view>

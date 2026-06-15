@@ -170,6 +170,7 @@
   - `getMomentDraftById`
   - `removeMomentDraft`
   - `addPostComment`
+  - `removePostComment`
 - 足迹：
   - `getFootprintPageData`
   - `createFootprintManual`
@@ -327,6 +328,13 @@
 - 当前已接入头像、动态/相册草稿与发布、信件草稿与发送、纪念日封面。
 - 云数据库应保存上传后返回的 `fileID`，不要保存 `wx.chooseImage` 返回的临时路径。
 - 删除业务数据时尚未自动清理无引用云文件，后续需要补充文件清理策略。
+
+## 动态评论删除
+
+- 评论作者可以删除自己的评论，动态作者可以删除自己动态下的评论。
+- 其他用户不能删除伴侣动态下由伴侣发布的评论。
+- 客户端通过 `services/moments.js` 的 `removeCommentAsync` 调用 `removePostComment` 云函数。
+- `removePostComment` 会根据当前微信用户、情侣关系、动态和评论作者校验权限；部署后才能对真实云端数据生效。
 
 ## 开发注意事项
 
