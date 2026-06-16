@@ -8,6 +8,13 @@ const readStateService = require('./home-read-state')
 const relationshipService = require('./relationship')
 const { toDateKey } = require('../utils/time')
 const { buildHomePendingActions } = require('../utils/pending-actions')
+const {
+  buildLetterPendingAction,
+  buildMissSignalPendingAction,
+  buildQuestionPendingAction,
+  buildQuestionResultPendingAction,
+  buildTodoPendingAction
+} = require('../utils/pending-action-items')
 
 function getFallbackCreatedAt(date = new Date()) {
   return date.toISOString()
@@ -20,62 +27,28 @@ function getPendingActions() {
 
   const unreadLetter = mailboxService.getLatestUnreadIncomingLetter()
   if (unreadLetter) {
-    actions.push({
-      id: `mailbox-${unreadLetter.letterId}`,
-      type: 'mailbox',
-      title: '你收到一封新信',
-      subtitle: unreadLetter.title || unreadLetter.content || `${unreadLetter.fromUser.nickName} 给你写了一封信`,
-      status: 'pending',
-      actionText: '去查看',
-      targetPage: '/pages/mailbox/mailbox',
-      createdAt: unreadLetter.sentAt || unreadLetter.createdAt || unreadLetter.updatedAt
-    })
+    actions.push(buildLetterPendingAction(unreadLetter))
   }
 
   const unreadMissSignal = companionData.missHistory.find((item) => item.type === 'received' && item.readStatus === 'unread')
   if (unreadMissSignal) {
-    actions.push({
-      id: `miss-${unreadMissSignal.id}`,
-      type: 'miss_signal',
-      title: '收到一个想你信号',
-      subtitle: unreadMissSignal.message,
-      status: 'pending',
-      actionText: '去回应',
-      targetPage: '/pages/companion/companion',
-      targetSection: 'missHistory',
-      createdAt: unreadMissSignal.createdAt || unreadMissSignal.time
-    })
+    actions.push(buildMissSignalPendingAction(unreadMissSignal))
   }
 
   if (!questionData.myAnswered) {
-    actions.push({
-      id: `question-${questionData.questionId}`,
-      type: 'question',
-      title: '今天的问题你还没回答',
-      subtitle: questionData.questionText,
-      status: 'pending',
-      actionText: '去回答',
-      targetPage: '/pages/daily-question/daily-question',
-      targetSection: 'question',
+    actions.push(buildQuestionPendingAction({
+      questionId: questionData.questionId,
+      questionText: questionData.questionText,
       createdAt: getFallbackCreatedAt()
-    })
+    }))
   }
 
   const todayTodos = todoService.getTodayPendingTodos(2)
   todayTodos.forEach((todo) => {
-    actions.push({
-      id: `todo-${todo.todoId}`,
-      type: 'todo',
-      title: todo.title,
-      subtitle: todo.dueDate ? `今日待办 · ${todo.dueDate}` : '今日待办',
-      status: 'pending',
-      actionText: '去完成',
-      targetPage: '/pages/todo/todo',
-      createdAt: todo.createdAt
-    })
+    actions.push(buildTodoPendingAction(todo))
   })
 
-  return actions
+  return actions.filter(Boolean)
 }
 
 function getPendingActionsAsync() {
@@ -101,56 +74,24 @@ function getPendingActionsAsync() {
     const currentUserId = relationship.currentUser ? relationship.currentUser.userId : ''
 
     if (unreadLetter) {
-      actions.push({
-        id: `mailbox-${unreadLetter.letterId}`,
-        type: 'mailbox',
-        title: '你收到一封新信',
-        subtitle: unreadLetter.title || unreadLetter.content || `${unreadLetter.fromUser.nickName} 给你写了一封信`,
-        status: 'pending',
-        actionText: '去查看',
-        targetPage: '/pages/mailbox/mailbox',
-        createdAt: unreadLetter.sentAt || unreadLetter.createdAt || unreadLetter.updatedAt
-      })
+      actions.push(buildLetterPendingAction(unreadLetter))
     }
 
     if (unreadMissSignal) {
-      actions.push({
-        id: `miss-${unreadMissSignal.id}`,
-        type: 'miss_signal',
-        title: '收到一个想你信号',
-        subtitle: unreadMissSignal.message,
-        status: 'pending',
-        actionText: '去回应',
-        targetPage: '/pages/companion/companion',
-        targetSection: 'missHistory',
-        createdAt: unreadMissSignal.createdAt || unreadMissSignal.time
-      })
+      actions.push(buildMissSignalPendingAction(unreadMissSignal))
     }
 
     if (!questionData.myAnswered) {
-      actions.push({
-        id: `question-${questionData.questionId}`,
-        type: 'question',
-        title: '今天的问题你还没回答',
-        subtitle: questionData.questionText,
-        status: 'pending',
-        actionText: '去回答',
-        targetPage: '/pages/daily-question/daily-question',
-        targetSection: 'question',
+      actions.push(buildQuestionPendingAction({
+        questionId: questionData.questionId,
+        questionText: questionData.questionText,
         createdAt: getFallbackCreatedAt()
-      })
+      }))
     } else if (questionData.partnerAnswered && questionData.analysisReady && questionData.hasUnreadResult) {
-      actions.push({
-        id: `question-result-${questionData.questionId}`,
-        type: 'question_result',
-        title: 'TA 已经回答今天的问题',
-        subtitle: '去看彼此答案和 AI 观察',
-        status: 'pending',
-        actionText: '去查看',
-        targetPage: '/pages/daily-question/daily-question',
-        targetSection: 'result',
+      actions.push(buildQuestionResultPendingAction({
+        questionId: questionData.questionId,
         createdAt: questionData.analysisGeneratedAt || getFallbackCreatedAt()
-      })
+      }))
     }
 
     buildHomePendingActions({
@@ -164,19 +105,10 @@ function getPendingActionsAsync() {
     }).forEach((item) => actions.push(item))
 
     ;(todayTodos || []).forEach((todo) => {
-      actions.push({
-        id: `todo-${todo.todoId}`,
-        type: 'todo',
-        title: todo.title,
-        subtitle: todo.dueDate ? `今日待办 · ${todo.dueDate}` : '今日待办',
-        status: 'pending',
-        actionText: '去完成',
-        targetPage: '/pages/todo/todo',
-        createdAt: todo.createdAt
-      })
+      actions.push(buildTodoPendingAction(todo))
     })
 
-    return actions
+    return actions.filter(Boolean)
   }).catch(() => getPendingActions())
 }
 
