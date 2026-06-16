@@ -8,6 +8,7 @@ const coupleService = require('../../services/couple')
 const authService = require('../../services/auth')
 const momentsService = require('../../services/moments')
 const cloudStorageService = require('../../services/cloud-storage')
+const { mergeHomeTasks } = require('../../utils/home-tasks')
 const {
   calculateLoveDays,
   formatRelationshipDate,
@@ -670,26 +671,10 @@ Page({
   },
 
   buildTodayTasks(todos, pendingActions) {
-    const todoTasks = (todos || []).map((todo) => ({
-      id: `todo-${todo.todoId}`,
-      type: 'todo',
-      title: todo.title,
-      subtitle: todo.dueDate ? `今日待办 · ${todo.dueDate}` : '今日待办',
-      actionText: '去完成',
-      targetPage: '/pages/todo/todo'
-    }))
-
-    const interactiveTasks = (pendingActions || []).map((item) => ({
-      id: item.id,
-      type: item.type,
-      title: item.title,
-      subtitle: item.subtitle,
-      actionText: item.actionText || '去处理',
-      targetPage: item.targetPage,
-      targetSection: item.targetSection || ''
-    }))
-
-    return [...interactiveTasks, ...todoTasks]
+    return mergeHomeTasks({
+      todos,
+      pendingActions
+    })
   },
 
   onTaskTap(event) {
