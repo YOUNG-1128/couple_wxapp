@@ -1,4 +1,6 @@
 const todoService = require('../../services/todo')
+const readStateService = require('../../services/home-read-state')
+const { getLatestVisibleAt } = require('../../utils/pending-actions')
 
 Page({
   data: {
@@ -49,6 +51,7 @@ Page({
           formTarget: this.normalizeFormTarget(this.data.formTarget, pageData.currentUser, pageData.partnerUser),
           pageState: ''
         })
+        this.markPartnerCoupleTodosSeen(pageData)
       })
       .catch(() => {
         this.setData({ pageState: 'error' })
@@ -58,6 +61,22 @@ Page({
   onRetryLoad() {
     this.setData({ pageState: 'loading' })
     this.refreshData()
+  },
+
+  markPartnerCoupleTodosSeen(pageData) {
+    const currentUserId = pageData && pageData.currentUser ? pageData.currentUser.userId : ''
+    const latestPartnerCoupleTodoAt = getLatestVisibleAt(
+      ((pageData && pageData.todos) || []).filter((todo) => {
+        return todo.type === 'couple'
+          && todo.createdByUserId
+          && todo.createdByUserId !== currentUserId
+      }),
+      'createdAt'
+    )
+
+    if (currentUserId && latestPartnerCoupleTodoAt) {
+      readStateService.markSeen('couple-todos', currentUserId, latestPartnerCoupleTodoAt)
+    }
   },
 
   normalizeFormTarget(formTarget, currentUser, partnerUser) {

@@ -48,6 +48,7 @@ exports.main = async (event) => {
       coupleId: currentUser.coupleId,
       ownerType: payload.ownerType,
       ownerUserId: payload.ownerUserId,
+      createdByUserId: currentUser.userId,
       title: payload.title,
       note: payload.note,
       dueDate: payload.dueDate,

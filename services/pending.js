@@ -2,6 +2,12 @@ const companionService = require('./companion')
 const mailboxService = require('./mailbox')
 const questionService = require('./question')
 const todoService = require('./todo')
+const anniversaryService = require('./anniversary')
+const momentsService = require('./moments')
+const readStateService = require('./home-read-state')
+const relationshipService = require('./relationship')
+const { toDateKey } = require('../utils/time')
+const { buildHomePendingActions } = require('../utils/pending-actions')
 
 function getFallbackCreatedAt(date = new Date()) {
   return date.toISOString()
@@ -77,9 +83,22 @@ function getPendingActionsAsync() {
     mailboxService.getLatestUnreadIncomingLetterAsync(),
     companionService.getLatestReceivedMissSignalAsync(),
     todoService.getTodayPendingTodosAsync(2),
-    questionService.getQuestionDataAsync()
-  ]).then(([unreadLetter, unreadMissSignal, todayTodos, questionData]) => {
+    questionService.getQuestionDataAsync(),
+    anniversaryService.getAnniversaryPageDataAsync(),
+    momentsService.getMomentsFeedPageAsync({ offset: 0, pageSize: 10, reset: true }).catch(() => ({ items: [] })),
+    todoService.getTodosAsync('all')
+  ]).then(([
+    unreadLetter,
+    unreadMissSignal,
+    todayTodos,
+    questionData,
+    anniversaryPageData,
+    momentsPageData,
+    todoPageData
+  ]) => {
     const actions = []
+    const relationship = relationshipService.getRelationshipContext()
+    const currentUserId = relationship.currentUser ? relationship.currentUser.userId : ''
 
     if (unreadLetter) {
       actions.push({
@@ -133,6 +152,16 @@ function getPendingActionsAsync() {
         createdAt: questionData.analysisGeneratedAt || getFallbackCreatedAt()
       })
     }
+
+    buildHomePendingActions({
+      currentUserId,
+      today: toDateKey(new Date()),
+      anniversaries: (anniversaryPageData && anniversaryPageData.list) || [],
+      posts: (momentsPageData && momentsPageData.items) || [],
+      todos: (todoPageData && todoPageData.todos) || [],
+      lastSeenPostAt: readStateService.getLastSeenAt('posts', currentUserId),
+      lastSeenCoupleTodoAt: readStateService.getLastSeenAt('couple-todos', currentUserId)
+    }).forEach((item) => actions.push(item))
 
     ;(todayTodos || []).forEach((todo) => {
       actions.push({

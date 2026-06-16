@@ -1,5 +1,7 @@
 const momentsService = require('../../services/moments')
+const readStateService = require('../../services/home-read-state')
 const { toDateKey } = require('../../utils/time')
+const { getLatestVisibleAt } = require('../../utils/pending-actions')
 
 Page({
   data: {
@@ -99,6 +101,7 @@ Page({
 
       this.refreshDateGroups()
       this.refreshFeed()
+      this.markPartnerPostsSeen()
     }).catch(() => {
       this.setData({
         feedLoaded: true,
@@ -106,6 +109,18 @@ Page({
       })
       this.refreshFeed()
     })
+  },
+
+  markPartnerPostsSeen() {
+    const currentUser = momentsService.getCurrentUser()
+    const latestPartnerPostAt = getLatestVisibleAt(
+      momentsService.getMomentsFeed({}).filter((post) => currentUser && post.authorId !== currentUser.userId),
+      'createdAt'
+    )
+
+    if (currentUser && latestPartnerPostAt) {
+      readStateService.markSeen('posts', currentUser.userId, latestPartnerPostAt)
+    }
   },
 
   onRetryLoad() {
