@@ -87,9 +87,6 @@
       <view class="target-chip {{formTarget === currentUser.userId ? 'target-chip-active' : ''}}" data-target="{{currentUser.userId}}" bindtap="onSelectTarget">
         {{currentUser.nickName || '我'}}的待办
       </view>
-      <view class="target-chip {{formTarget === partnerUser.userId ? 'target-chip-active' : ''}}" data-target="{{partnerUser.userId}}" bindtap="onSelectTarget">
-        {{partnerUser.nickName || 'TA'}}的待办
-      </view>
       <view class="target-chip {{formTarget === 'couple' ? 'target-chip-active' : ''}}" data-target="couple" bindtap="onSelectTarget">
         情侣待办
       </view>

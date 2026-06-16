@@ -1,4 +1,5 @@
 const cloud = require('wx-server-sdk')
+const { normalizeCreateTodoInput } = require('./todo-input')
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
@@ -39,23 +40,17 @@ exports.main = async (event) => {
       throw new Error('couple_not_bound')
     }
 
-    const title = ((event && event.title) || '').trim()
-    if (!title) {
-      throw new Error('title_required')
-    }
-
-    const ownerType = event && event.ownerType === 'couple' ? 'couple' : 'user'
-    const ownerUserId = ownerType === 'user' ? ((event && event.ownerUserId) || currentUser.userId) : ''
+    const payload = normalizeCreateTodoInput(event, currentUser.userId)
     const now = new Date().toISOString()
 
     const todo = {
       todoId: createTodoId(),
       coupleId: currentUser.coupleId,
-      ownerType,
-      ownerUserId,
-      title,
-      note: (event && event.note) || '',
-      dueDate: (event && event.dueDate) || '',
+      ownerType: payload.ownerType,
+      ownerUserId: payload.ownerUserId,
+      title: payload.title,
+      note: payload.note,
+      dueDate: payload.dueDate,
       status: 'pending',
       completedAt: null,
       createdAt: now,

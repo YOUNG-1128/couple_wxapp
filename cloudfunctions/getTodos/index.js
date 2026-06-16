@@ -1,4 +1,5 @@
 const cloud = require('wx-server-sdk')
+const { canAccessTodo } = require('./todo-access')
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
@@ -41,7 +42,7 @@ exports.main = async () => {
 
     return {
       success: true,
-      todos: todoRes.data || []
+      todos: (todoRes.data || []).filter((todo) => canAccessTodo(todo, currentUser.userId))
     }
   } catch (error) {
     return {

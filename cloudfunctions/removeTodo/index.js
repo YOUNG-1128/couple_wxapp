@@ -1,4 +1,5 @@
 const cloud = require('wx-server-sdk')
+const { canManageTodo } = require('./todo-access')
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
@@ -48,6 +49,10 @@ exports.main = async (event) => {
 
     if (!todo || !todo._id) {
       throw new Error('todo_not_found')
+    }
+
+    if (!canManageTodo(todo, currentUser.userId)) {
+      throw new Error('todo_forbidden')
     }
 
     await db.collection(TODO_COLLECTION).doc(todo._id).remove()

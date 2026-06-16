@@ -7,7 +7,6 @@ Page({
     filters: [
       { key: 'all', label: '全部' },
       { key: 'me', label: '我的' },
-      { key: 'partner', label: 'TA 的' },
       { key: 'couple', label: '情侣待办' }
     ],
     activeFilter: 'all',
@@ -66,12 +65,6 @@ Page({
       return 'couple'
     }
 
-    const allowed = [currentUser && currentUser.userId, partnerUser && partnerUser.userId].filter(Boolean)
-
-    if (allowed.includes(formTarget)) {
-      return formTarget
-    }
-
     return currentUser && currentUser.userId ? currentUser.userId : 'me'
   },
 
@@ -103,7 +96,13 @@ Page({
     }
 
     todoService.toggleTodoStatusAsync(todoId, todo.completed ? 'pending' : 'done')
-      .then(() => this.refreshData())
+      .then((updated) => {
+        if (!updated) {
+          throw new Error('todo_forbidden')
+        }
+
+        return this.refreshData()
+      })
       .catch(() => {
         wx.showToast({
           title: '更新失败',
@@ -212,7 +211,13 @@ Page({
         }
 
         todoService.removeTodoAsync(todoId)
-          .then(() => this.refreshData())
+          .then((removed) => {
+            if (!removed) {
+              throw new Error('todo_forbidden')
+            }
+
+            return this.refreshData()
+          })
           .then(() => {
             wx.showToast({
               title: '已删除',

@@ -11,7 +11,8 @@ const {
   getTodoDateState,
   formatDueDateLabel,
   countPendingTodos,
-  countCouplePending
+  countCouplePending,
+  canAccessTodo
 } = require('../utils/todo')
 const { toDateKey } = require('../utils/time')
 
@@ -93,7 +94,8 @@ function decorateTodo(todo, context) {
 function getTodoPageData(filterKey = 'all') {
   const context = getTodoContext()
   const allTodos = getState('todos')
-  const visibleTodos = allTodos.filter((todo) => !todo.completed)
+  const accessibleTodos = allTodos.filter((todo) => canAccessTodo(todo, context.currentUser.userId))
+  const visibleTodos = accessibleTodos.filter((todo) => !todo.completed)
   const todos = visibleTodos
     .filter((todo) => matchTodoFilter(todo, filterKey, context.currentUser.userId, context.partnerUser ? context.partnerUser.userId : ''))
     .map((todo) => decorateTodo(todo, context))
@@ -105,23 +107,28 @@ function getTodoPageData(filterKey = 'all') {
     currentUser: context.currentUser,
     partnerUser: context.partnerUser,
     todos: sorted,
-    todayPendingCount: countTodayPending(allTodos),
-    totalPendingCount: countPendingTodos(allTodos),
-    couplePendingCount: countCouplePending(allTodos),
+    todayPendingCount: countTodayPending(accessibleTodos),
+    totalPendingCount: countPendingTodos(accessibleTodos),
+    couplePendingCount: countCouplePending(accessibleTodos),
     latestPendingTodos: sortTodos(visibleTodos).slice(0, 2)
   }
 }
 
 function createTodo(payload) {
   const now = new Date().toISOString()
+  const context = getTodoContext()
+  const ownerId = payload.type === 'personal' ? context.currentUser.userId : null
+  const participants = payload.type === 'couple'
+    ? [context.currentUser && context.currentUser.userId, context.partnerUser && context.partnerUser.userId].filter(Boolean)
+    : [ownerId]
 
   const todo = {
     todoId: createTempId('todo'),
     title: payload.title,
     note: payload.note || '',
     type: payload.type,
-    ownerId: payload.type === 'personal' ? payload.ownerId : null,
-    participants: payload.type === 'couple' ? getState('users').map((user) => user.userId) : [payload.ownerId],
+    ownerId,
+    participants,
     dueDate: payload.dueDate || '',
     completed: false,
     completedAt: null,
@@ -141,7 +148,7 @@ function toggleTodo(todoId) {
   updateState('todos', (todos) => {
     const todo = todos.find((item) => item.todoId === todoId)
 
-    if (!todo) {
+    if (!todo || !canAccessTodo(todo, getTodoContext().currentUser.userId)) {
       return
     }
 
@@ -155,8 +162,11 @@ function toggleTodo(todoId) {
 
 function getTodayPendingTodos(limit = 3) {
   const today = toDateKey(new Date())
+  const context = getTodoContext()
 
-  return sortTodos(getState('todos').filter((todo) => !todo.completed && todo.dueDate === today)).slice(0, limit)
+  return sortTodos(getState('todos')
+    .filter((todo) => canAccessTodo(todo, context.currentUser.userId) && !todo.completed && todo.dueDate === today))
+    .slice(0, limit)
 }
 
 function syncCloudTodosToLocal(todos = []) {
@@ -200,7 +210,7 @@ function createTodoAsync(payload) {
   }
 
   const ownerType = payload.type === 'couple' ? 'couple' : 'user'
-  const ownerUserId = ownerType === 'user' ? payload.ownerId : ''
+  const ownerUserId = ownerType === 'user' ? getTodoContext().currentUser.userId : ''
 
   return callCloudFunction('createTodo', {
     title: payload.title,
@@ -245,19 +255,23 @@ function toggleTodoStatusAsync(todoId, nextStatus) {
 }
 
 function removeTodo(todoId) {
+  let removed = false
+
   updateState('todos', (todos) => {
     const index = todos.findIndex((todo) => todo.todoId === todoId)
 
-    if (index >= 0) {
+    if (index >= 0 && canAccessTodo(todos[index], getTodoContext().currentUser.userId)) {
       todos.splice(index, 1)
+      removed = true
     }
   })
+
+  return removed
 }
 
 function removeTodoAsync(todoId) {
   if (!canUseCloudTodos()) {
-    removeTodo(todoId)
-    return Promise.resolve(true)
+    return Promise.resolve(removeTodo(todoId))
   }
 
   return callCloudFunction('removeTodo', {
@@ -285,8 +299,11 @@ function getTodayPendingTodosAsync(limit = 3) {
 
       const normalized = syncCloudTodosToLocal(result.todos || [])
       const today = toDateKey(new Date())
+      const context = getTodoContext()
 
-      return sortTodos(normalized.filter((todo) => !todo.completed && todo.dueDate === today)).slice(0, limit)
+      return sortTodos(normalized
+        .filter((todo) => canAccessTodo(todo, context.currentUser.userId) && !todo.completed && todo.dueDate === today))
+        .slice(0, limit)
     })
     .catch(() => getTodayPendingTodos(limit))
 }
@@ -295,6 +312,7 @@ module.exports = {
   getTodoPageData,
   createTodo,
   toggleTodo,
+  removeTodo,
   getTodayPendingTodos,
   canUseCloudTodos,
   getTodosAsync,

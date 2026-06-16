@@ -14,7 +14,7 @@ function getTodoTypeLabel(todo, currentUserId, partnerUserId) {
   }
 
   if (todo.ownerId === partnerUserId) {
-    return 'TA 的待办'
+    return '个人待办'
   }
 
   return '个人待办'
@@ -34,6 +34,10 @@ function getTodoAvatarUsers(todo, users) {
 }
 
 function matchTodoFilter(todo, filterKey, currentUserId, partnerUserId) {
+  if (!canAccessTodo(todo, currentUserId)) {
+    return false
+  }
+
   if (filterKey === 'all') {
     return true
   }
@@ -42,15 +46,19 @@ function matchTodoFilter(todo, filterKey, currentUserId, partnerUserId) {
     return todo.type === 'personal' && todo.ownerId === currentUserId
   }
 
-  if (filterKey === 'partner') {
-    return todo.type === 'personal' && todo.ownerId === partnerUserId
-  }
-
   if (filterKey === 'couple') {
     return todo.type === 'couple'
   }
 
   return true
+}
+
+function canAccessTodo(todo, currentUserId) {
+  if (!todo || !currentUserId) {
+    return false
+  }
+
+  return todo.type === 'couple' || todo.ownerId === currentUserId
 }
 
 function sortTodos(todos) {
@@ -158,5 +166,6 @@ module.exports = {
   getTodoDateState,
   formatDueDateLabel,
   countPendingTodos,
-  countCouplePending
+  countCouplePending,
+  canAccessTodo
 }
