@@ -106,6 +106,19 @@ Page({
     this.setData({ scrollIntoView: 'footprint-list-section' })
   },
 
+  scrollToMapSection() {
+    this.setData({ scrollIntoView: '' })
+
+    if (typeof wx !== 'undefined' && typeof wx.nextTick === 'function') {
+      wx.nextTick(() => {
+        this.setData({ scrollIntoView: 'footprint-map-section' })
+      })
+      return
+    }
+
+    this.setData({ scrollIntoView: 'footprint-map-section' })
+  },
+
   onRetryLoad() {
     this.setData({ pageState: 'loading' })
     this.refreshPageData(this.data.activeCity || '')
@@ -456,6 +469,9 @@ Page({
 
   onViewAll() {
     this.refreshPageData('')
+      .then(() => {
+        this.scrollToMapSection()
+      })
   },
 
   onOpenLinkedPost(event) {

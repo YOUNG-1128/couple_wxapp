@@ -84,3 +84,13 @@ test('点击 marker 后页面会滚动到足迹列表区域', () => {
   assert.match(js, /scrollToListSection/)
   assert.match(js, /scrollIntoView: 'footprint-list-section'/)
 })
+
+test('查看全部后页面会滚回地图总览区域', () => {
+  const wxml = fs.readFileSync(path.join(__dirname, '../pages/footprint/footprint.wxml'), 'utf8')
+  const js = fs.readFileSync(path.join(__dirname, '../pages/footprint/footprint.js'), 'utf8')
+
+  assert.match(wxml, /id="footprint-map-section"/)
+  assert.match(js, /scrollToMapSection/)
+  assert.match(js, /scrollIntoView: 'footprint-map-section'/)
+  assert.match(js, /onViewAll\(\)[\s\S]*scrollToMapSection/)
+})

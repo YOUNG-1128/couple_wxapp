@@ -25,6 +25,7 @@
     <async-page-state mode="{{pageState}}" message="{{pageState === 'error' ? '足迹暂时没有加载成功' : '正在点亮足迹...'}}" bind:retry="onRetryLoad"></async-page-state>
 
     <block wx:if="{{!pageState}}">
+    <view id="footprint-map-section">
     <common-card>
       <view class="section-title">地图点亮</view>
       <map
@@ -37,6 +38,7 @@
       ></map>
       <view class="map-tip">可以手动缩放和拖动地图，点击 marker 查看对应城市的足迹。</view>
     </common-card>
+    </view>
 
     <view id="footprint-list-section">
     <common-card>
