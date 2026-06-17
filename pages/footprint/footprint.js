@@ -8,7 +8,8 @@ const {
 } = require('../../utils/footprint-images')
 const {
   buildMapMarkers,
-  buildMapSelectionState
+  buildMapSelectionState,
+  buildCenteredScrollTop
 } = require('../../utils/footprint')
 
 Page({
@@ -22,6 +23,7 @@ Page({
     activeCity: '',
     selectedFootprintId: '',
     scrollIntoView: '',
+    scrollTop: 0,
     listTitle: '全部足迹',
     relatedPostsTitle: '',
     emptyText: '还没有点亮的地方，去记录第一次共同足迹吧',
@@ -117,6 +119,40 @@ Page({
     }
 
     this.setData({ scrollIntoView: 'footprint-map-section' })
+  },
+
+  centerSelectedFootprintCard(footprintId) {
+    if (!footprintId || typeof wx === 'undefined' || typeof wx.createSelectorQuery !== 'function') {
+      return
+    }
+
+    const query = wx.createSelectorQuery()
+
+    query.select('#footprint-scroll-view').boundingClientRect()
+    query.select(`#footprint-item-${footprintId}`).boundingClientRect()
+    query.selectViewport().scrollOffset()
+    query.exec((res) => {
+      const containerRect = res && res[0]
+      const itemRect = res && res[1]
+      const viewport = res && res[2]
+
+      if (!containerRect || !itemRect || !viewport) {
+        return
+      }
+
+      const nextScrollTop = buildCenteredScrollTop({
+        currentScrollTop: this.data.scrollTop || viewport.scrollTop || 0,
+        containerTop: containerRect.top,
+        containerHeight: containerRect.height,
+        itemTop: itemRect.top,
+        itemHeight: itemRect.height
+      })
+
+      this.setData({
+        scrollIntoView: '',
+        scrollTop: nextScrollTop
+      })
+    })
   },
 
   onRetryLoad() {
@@ -465,6 +501,9 @@ Page({
     const city = (footprint.cityInfo && footprint.cityInfo.name) || footprint.city || ''
 
     this.refreshPageData(city, footprintId)
+      .then(() => {
+        this.centerSelectedFootprintCard(footprintId)
+      })
   },
 
   onViewAll() {

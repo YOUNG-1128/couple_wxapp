@@ -172,6 +172,19 @@ function buildMapCityViewport(footprints, activeCity = '') {
   }
 }
 
+function buildCenteredScrollTop({
+  currentScrollTop = 0,
+  containerTop = 0,
+  containerHeight = 0,
+  itemTop = 0,
+  itemHeight = 0
+} = {}) {
+  const itemOffsetInScroll = itemTop - containerTop + currentScrollTop
+  const targetScrollTop = itemOffsetInScroll - ((containerHeight - itemHeight) / 2)
+
+  return Math.max(0, Math.round(targetScrollTop))
+}
+
 function searchCityOrPlace(keyword, places) {
   const value = (keyword || '').trim().toLowerCase()
 
@@ -305,6 +318,7 @@ module.exports = {
   buildMapMarkers,
   buildMapCityViewport,
   buildMapSelectionState,
+  buildCenteredScrollTop,
   sortFootprintsByDateDesc,
   groupFootprintsByCity,
   searchCityOrPlace,

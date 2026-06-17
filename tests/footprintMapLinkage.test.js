@@ -5,7 +5,8 @@ const test = require('node:test')
 const {
   buildMapMarkers,
   buildMapSelectionState,
-  buildMapCityViewport
+  buildMapCityViewport,
+  buildCenteredScrollTop
 } = require('../utils/footprint')
 
 const sampleFootprints = [
@@ -93,4 +94,26 @@ test('查看全部后页面会滚回地图总览区域', () => {
   assert.match(js, /scrollToMapSection/)
   assert.match(js, /scrollIntoView: 'footprint-map-section'/)
   assert.match(js, /onViewAll\(\)[\s\S]*scrollToMapSection/)
+})
+
+test('可以计算让选中足迹尽量靠近列表中部的滚动位置', () => {
+  const nextScrollTop = buildCenteredScrollTop({
+    currentScrollTop: 240,
+    containerTop: 100,
+    containerHeight: 500,
+    itemTop: 420,
+    itemHeight: 120
+  })
+
+  assert.equal(nextScrollTop, 370)
+})
+
+test('点击足迹卡片后会尝试把该卡片滚动到可视区域中部附近', () => {
+  const wxml = fs.readFileSync(path.join(__dirname, '../pages/footprint/footprint.wxml'), 'utf8')
+  const js = fs.readFileSync(path.join(__dirname, '../pages/footprint/footprint.js'), 'utf8')
+
+  assert.match(wxml, /id="footprint-scroll-view"/)
+  assert.match(wxml, /id="footprint-item-\{\{item\.footprintId\}\}"/)
+  assert.match(js, /centerSelectedFootprintCard/)
+  assert.match(js, /scrollTop:/)
 })

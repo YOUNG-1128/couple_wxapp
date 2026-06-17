@@ -1,5 +1,5 @@
 <navigation-bar title="我们的足迹" back="{{true}}" color="black" background="#FFFAF8"></navigation-bar>
-<scroll-view class="footprint-scroll" type="list" scroll-y scroll-into-view="{{scrollIntoView}}">
+<scroll-view id="footprint-scroll-view" class="footprint-scroll" type="list" scroll-y scroll-into-view="{{scrollIntoView}}" scroll-top="{{scrollTop}}">
   <view class="footprint-page">
     <common-card featured="{{true}}">
       <view class="hero-row">
@@ -50,7 +50,7 @@
       <view class="empty-box" wx:if="{{!footprints.length}}">{{emptyText}}</view>
 
       <view wx:else>
-        <view class="footprint-item {{item.footprintId === selectedFootprintId ? 'footprint-item-active' : ''}}" wx:for="{{footprints}}" wx:key="footprintId" data-footprint-id="{{item.footprintId}}" bindtap="onSelectFootprint">
+        <view id="footprint-item-{{item.footprintId}}" class="footprint-item {{item.footprintId === selectedFootprintId ? 'footprint-item-active' : ''}}" wx:for="{{footprints}}" wx:key="footprintId" data-footprint-id="{{item.footprintId}}" bindtap="onSelectFootprint">
           <view class="item-head">
             <view class="item-title">{{item.title || (item.city + '的足迹')}}</view>
             <view class="item-date" wx:if="{{item.date}}">{{item.date}}</view>
