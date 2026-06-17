@@ -1,5 +1,5 @@
 <navigation-bar title="我们的足迹" back="{{true}}" color="black" background="#FFFAF8"></navigation-bar>
-<scroll-view class="footprint-scroll" type="list" scroll-y>
+<scroll-view class="footprint-scroll" type="list" scroll-y scroll-into-view="{{scrollIntoView}}">
   <view class="footprint-page">
     <common-card featured="{{true}}">
       <view class="hero-row">
@@ -38,6 +38,7 @@
       <view class="map-tip">可以手动缩放和拖动地图，点击 marker 查看对应城市的足迹。</view>
     </common-card>
 
+    <view id="footprint-list-section">
     <common-card>
       <view class="list-head">
         <view class="section-title">{{listTitle}}</view>
@@ -76,6 +77,7 @@
         </view>
       </view>
     </common-card>
+    </view>
 
     <common-card wx:if="{{activeCity}}">
       <view class="list-head">

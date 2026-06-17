@@ -74,3 +74,13 @@ test('足迹页模板包含选中态和卡片点击事件', () => {
   assert.match(js, /onSelectFootprint/)
   assert.match(wxss, /\.footprint-item-active/)
 })
+
+test('点击 marker 后页面会滚动到足迹列表区域', () => {
+  const wxml = fs.readFileSync(path.join(__dirname, '../pages/footprint/footprint.wxml'), 'utf8')
+  const js = fs.readFileSync(path.join(__dirname, '../pages/footprint/footprint.js'), 'utf8')
+
+  assert.match(wxml, /scroll-into-view="\{\{scrollIntoView\}\}"/)
+  assert.match(wxml, /id="footprint-list-section"/)
+  assert.match(js, /scrollToListSection/)
+  assert.match(js, /scrollIntoView: 'footprint-list-section'/)
+})

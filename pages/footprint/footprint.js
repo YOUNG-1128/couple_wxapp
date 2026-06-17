@@ -21,6 +21,7 @@ Page({
     relatedPosts: [],
     activeCity: '',
     selectedFootprintId: '',
+    scrollIntoView: '',
     listTitle: '全部足迹',
     relatedPostsTitle: '',
     emptyText: '还没有点亮的地方，去记录第一次共同足迹吧',
@@ -90,6 +91,19 @@ Page({
       .catch(() => {
         this.setData({ pageState: 'error' })
       })
+  },
+
+  scrollToListSection() {
+    this.setData({ scrollIntoView: '' })
+
+    if (typeof wx !== 'undefined' && typeof wx.nextTick === 'function') {
+      wx.nextTick(() => {
+        this.setData({ scrollIntoView: 'footprint-list-section' })
+      })
+      return
+    }
+
+    this.setData({ scrollIntoView: 'footprint-list-section' })
   },
 
   onRetryLoad() {
@@ -417,6 +431,9 @@ Page({
     }
 
     this.refreshPageData(city)
+      .then(() => {
+        this.scrollToListSection()
+      })
   },
 
   onSelectFootprint(event) {
