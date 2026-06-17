@@ -6,6 +6,10 @@ const {
   appendFootprintImages,
   removeFootprintImage
 } = require('../../utils/footprint-images')
+const {
+  buildMapMarkers,
+  buildMapSelectionState
+} = require('../../utils/footprint')
 
 Page({
   data: {
@@ -16,6 +20,7 @@ Page({
     footprints: [],
     relatedPosts: [],
     activeCity: '',
+    selectedFootprintId: '',
     listTitle: '全部足迹',
     relatedPostsTitle: '',
     emptyText: '还没有点亮的地方，去记录第一次共同足迹吧',
@@ -45,28 +50,40 @@ Page({
     this.refreshPageData(this.data.activeCity || '')
   },
 
-  refreshPageData(activeCity = '') {
+  refreshPageData(activeCity = '', selectedFootprintId = '') {
     if (!this.data.footprints.length) {
       this.setData({ pageState: 'loading' })
     }
 
     return footprintService.getFootprintPageDataAsync(activeCity)
       .then((pageData) => {
+        const selectionState = selectedFootprintId
+          ? buildMapSelectionState(pageData.allFootprints || pageData.footprints, selectedFootprintId)
+          : null
+        const nextActiveCity = selectionState && selectionState.activeCity
+          ? selectionState.activeCity
+          : pageData.activeCity
+        const { markers } = buildMapMarkers(pageData.allFootprints || pageData.footprints, nextActiveCity)
+        const nextCenter = selectionState && selectionState.center
+          ? selectionState.center
+          : pageData.center
+
         this.setData({
           cityCount: pageData.cityCount,
           footprintCount: pageData.footprintCount,
-          markers: pageData.markers,
+          markers,
           markerCityMap: pageData.markerCityMap,
           footprints: pageData.footprints,
           relatedPosts: pageData.relatedPosts,
-          activeCity: pageData.activeCity,
+          activeCity: nextActiveCity,
+          selectedFootprintId: selectionState ? selectionState.selectedFootprintId : '',
           listTitle: pageData.listTitle,
           relatedPostsTitle: pageData.relatedPostsTitle,
           mapCenter: {
-            latitude: pageData.center.latitude,
-            longitude: pageData.center.longitude
+            latitude: nextCenter.latitude,
+            longitude: nextCenter.longitude
           },
-          mapScale: pageData.center.scale || 4,
+          mapScale: nextCenter.scale || pageData.center.scale || 4,
           pageState: ''
         })
       })
@@ -400,6 +417,24 @@ Page({
     }
 
     this.refreshPageData(city)
+  },
+
+  onSelectFootprint(event) {
+    const footprintId = event.currentTarget.dataset.footprintId
+
+    if (!footprintId) {
+      return
+    }
+
+    const footprint = footprintService.getFootprintById(footprintId)
+
+    if (!footprint) {
+      return
+    }
+
+    const city = (footprint.cityInfo && footprint.cityInfo.name) || footprint.city || ''
+
+    this.refreshPageData(city, footprintId)
   },
 
   onViewAll() {

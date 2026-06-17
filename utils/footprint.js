@@ -70,7 +70,7 @@ function getCityCount(footprints) {
   return Object.keys(groupFootprintsByCity(footprints)).length
 }
 
-function buildMapMarkers(footprints) {
+function buildMapMarkers(footprints, activeCity = '') {
   const groups = groupFootprintsByCity(footprints)
   const cities = Object.keys(groups)
   const markerCityMap = {}
@@ -79,6 +79,7 @@ function buildMapMarkers(footprints) {
     const cityFootprints = sortFootprintsByDateDesc(groups[city])
     const top = cityFootprints[0]
     const markerId = index + 1
+    const isActive = city === activeCity
 
     markerCityMap[markerId] = city
 
@@ -86,13 +87,13 @@ function buildMapMarkers(footprints) {
       id: markerId,
       latitude: top.latitude,
       longitude: top.longitude,
-      width: 28,
-      height: 28,
+      width: isActive ? 34 : 28,
+      height: isActive ? 34 : 28,
       callout: {
         content: `${city} · ${cityFootprints.length} 条足迹`,
         display: 'BYCLICK',
-        color: '#6a4f58',
-        bgColor: '#fff0f3',
+        color: isActive ? '#c84f67' : '#6a4f58',
+        bgColor: isActive ? '#ffe2e8' : '#fff0f3',
         borderRadius: 14,
         padding: 8,
         fontSize: 12
@@ -103,6 +104,28 @@ function buildMapMarkers(footprints) {
   return {
     markers,
     markerCityMap
+  }
+}
+
+function buildMapSelectionState(footprints, footprintId) {
+  const decoratedFootprints = sortFootprintsByDateDesc(footprints || [])
+  const selectedFootprint = decoratedFootprints.find((item) => item.footprintId === footprintId)
+
+  if (!selectedFootprint) {
+    return {
+      activeCity: '',
+      selectedFootprintId: '',
+      center: null
+    }
+  }
+
+  return {
+    activeCity: selectedFootprint.city,
+    selectedFootprintId: selectedFootprint.footprintId,
+    center: {
+      latitude: selectedFootprint.latitude,
+      longitude: selectedFootprint.longitude
+    }
   }
 }
 
@@ -237,6 +260,7 @@ function createFootprintFromPost(post) {
 module.exports = {
   getCityCount,
   buildMapMarkers,
+  buildMapSelectionState,
   sortFootprintsByDateDesc,
   groupFootprintsByCity,
   searchCityOrPlace,

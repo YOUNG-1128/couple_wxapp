@@ -120,7 +120,7 @@ function getPostsByCityFromList(posts = [], cityName = '') {
 
 function buildPageData(allFootprints = [], allPosts = [], activeCity = '') {
   const sortedFootprints = sortFootprintsByDateDesc(allFootprints || [])
-  const { markers, markerCityMap } = buildMapMarkers(sortedFootprints)
+  const { markers, markerCityMap } = buildMapMarkers(sortedFootprints, activeCity)
   const cityCount = getCityCount(sortedFootprints)
   const footprintCount = sortedFootprints.length
   const grouped = groupFootprintsByCity(sortedFootprints)

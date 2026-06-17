@@ -145,6 +145,15 @@ page {
 .footprint-item {
   padding: 22rpx 0;
   border-bottom: 2rpx solid #f7e7e8;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.footprint-item-active {
+  margin: 0 -16rpx;
+  padding: 22rpx 16rpx;
+  border-radius: 20rpx;
+  background: #fff2f5;
+  box-shadow: inset 0 0 0 2rpx #f2c6d0;
 }
 
 .footprint-item:last-child {
