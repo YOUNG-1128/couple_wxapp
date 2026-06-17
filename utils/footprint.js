@@ -1,6 +1,10 @@
 const { createTempId } = require('./id')
 const { toDateKey } = require('./time')
 
+const OVERVIEW_MAP_SCALE = 4
+const CITY_MAP_SCALE = 9
+const FOOTPRINT_MAP_SCALE = 12
+
 function normalizeCity(city, fallback = {}) {
   if (city && typeof city === 'object' && !Array.isArray(city)) {
     return {
@@ -124,8 +128,47 @@ function buildMapSelectionState(footprints, footprintId) {
     selectedFootprintId: selectedFootprint.footprintId,
     center: {
       latitude: selectedFootprint.latitude,
-      longitude: selectedFootprint.longitude
+      longitude: selectedFootprint.longitude,
+      scale: FOOTPRINT_MAP_SCALE
     }
+  }
+}
+
+function buildMapCityViewport(footprints, activeCity = '') {
+  const decoratedFootprints = sortFootprintsByDateDesc(footprints || [])
+
+  if (!activeCity) {
+    const firstFootprint = decoratedFootprints[0]
+
+    if (!firstFootprint) {
+      return {
+        latitude: 31.2304,
+        longitude: 121.4737,
+        scale: OVERVIEW_MAP_SCALE
+      }
+    }
+
+    return {
+      latitude: firstFootprint.latitude,
+      longitude: firstFootprint.longitude,
+      scale: OVERVIEW_MAP_SCALE
+    }
+  }
+
+  const cityFootprint = decoratedFootprints.find((item) => item.city === activeCity)
+
+  if (!cityFootprint) {
+    return {
+      latitude: 31.2304,
+      longitude: 121.4737,
+      scale: OVERVIEW_MAP_SCALE
+    }
+  }
+
+  return {
+    latitude: cityFootprint.latitude,
+    longitude: cityFootprint.longitude,
+    scale: CITY_MAP_SCALE
   }
 }
 
@@ -260,6 +303,7 @@ function createFootprintFromPost(post) {
 module.exports = {
   getCityCount,
   buildMapMarkers,
+  buildMapCityViewport,
   buildMapSelectionState,
   sortFootprintsByDateDesc,
   groupFootprintsByCity,

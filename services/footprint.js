@@ -4,6 +4,7 @@ const { formatPostTime } = require('../utils/time')
 const {
   getCityCount,
   buildMapMarkers,
+  buildMapCityViewport,
   sortFootprintsByDateDesc,
   groupFootprintsByCity,
   searchCities,
@@ -126,9 +127,7 @@ function buildPageData(allFootprints = [], allPosts = [], activeCity = '') {
   const grouped = groupFootprintsByCity(sortedFootprints)
   const filteredFootprints = activeCity ? (grouped[activeCity] || []) : sortedFootprints
   const relatedPosts = getPostsByCityFromList(allPosts, activeCity)
-  const center = markers.length
-    ? { latitude: markers[0].latitude, longitude: markers[0].longitude, scale: 4 }
-    : DEFAULT_REGION
+  const center = buildMapCityViewport(sortedFootprints, activeCity)
 
   return {
     allFootprints: sortedFootprints,

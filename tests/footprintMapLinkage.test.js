@@ -4,7 +4,8 @@ const path = require('node:path')
 const test = require('node:test')
 const {
   buildMapMarkers,
-  buildMapSelectionState
+  buildMapSelectionState,
+  buildMapCityViewport
 } = require('../utils/footprint')
 
 const sampleFootprints = [
@@ -50,6 +51,17 @@ test('点击足迹后会生成地图中心、城市和足迹选中态', () => {
   assert.equal(selection.selectedFootprintId, 'fp-hangzhou-1')
   assert.equal(selection.center.latitude, 30.2741)
   assert.equal(selection.center.longitude, 120.1551)
+  assert.equal(selection.center.scale, 12)
+})
+
+test('城市和总览使用固定层级缩放', () => {
+  const cityViewport = buildMapCityViewport(sampleFootprints, '上海')
+  const overviewViewport = buildMapCityViewport(sampleFootprints, '')
+
+  assert.equal(cityViewport.latitude, 31.2304)
+  assert.equal(cityViewport.longitude, 121.4737)
+  assert.equal(cityViewport.scale, 9)
+  assert.equal(overviewViewport.scale, 4)
 })
 
 test('足迹页模板包含选中态和卡片点击事件', () => {
